@@ -91,8 +91,6 @@ export default function Gallery() {
     setTimeout(() => setCopied(false), 2000);
   };
 
-  const images = galleryImages[activeCategory] || [];
-
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-[#070b14] text-slate-900 dark:text-slate-100 transition-colors duration-300 flex flex-col justify-between">
       <Header />
