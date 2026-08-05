@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { Menu, X, ChevronDown, Search, LogIn, Clock, Globe, Sun, Moon, Shield } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -12,6 +12,8 @@ export default function Header() {
   const [currentTime, setCurrentTime] = useState(new Date());
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState(null);
+  const [hoveredNav, setHoveredNav] = useState(null);
+  const location = useLocation();
 
   useEffect(() => {
     const timer = setInterval(() => setCurrentTime(new Date()), 1000);
@@ -87,6 +89,14 @@ export default function Header() {
   const formatTime = (date) => {
     return date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
   };
+
+  // Determine active nav index based on pathname
+  const activeNavIndex = menuItems.findIndex(item => {
+    if (item.href === '/Home' || item.href === '/') {
+      return location.pathname === '/' || location.pathname === '/Home';
+    }
+    return location.pathname.startsWith(item.href);
+  });
 
   return (
     <header className="w-full relative z-50">
@@ -173,25 +183,6 @@ export default function Header() {
             </Link>
           </motion.div>
 
-          {/* Quick Role Access Pills */}
-          <div className="hidden lg:flex items-center gap-2 bg-slate-100 dark:bg-slate-800 p-1.5 rounded-xl border border-slate-200 dark:border-slate-700 text-xs font-bold">
-            <motion.div whileHover={{ scale: 1.04 }}>
-              <Link to={createPageUrl('EntrepreneurOnboarding')} className="px-3.5 py-1.5 rounded-lg bg-[#0f2942] text-white shadow-sm hover:bg-[#153a5c] transition-colors block">
-                Borrower Application
-              </Link>
-            </motion.div>
-            <motion.div whileHover={{ scale: 1.04 }}>
-              <Link to={createPageUrl('BankOfficerConsole')} className="px-3.5 py-1.5 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors block">
-                Bank Portal
-              </Link>
-            </motion.div>
-            <motion.div whileHover={{ scale: 1.04 }}>
-              <Link to={createPageUrl('AdminDashboard')} className="px-3.5 py-1.5 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors block">
-                Admin Portal
-              </Link>
-            </motion.div>
-          </div>
-
           <button 
             type="button"
             className="lg:hidden p-2 rounded bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200"
@@ -202,88 +193,115 @@ export default function Header() {
         </div>
       </div>
 
-      {/* Main White Navigation Bar */}
-      <nav className="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 shadow-sm transition-colors">
+      {/* Main White Navigation Bar with Animated Pill Switcher */}
+      <nav className="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 shadow-sm transition-colors py-2">
         <div className="max-w-7xl mx-auto px-4">
-          <div className="hidden md:flex items-center justify-center relative py-1">
-            <div className="flex items-center justify-center space-x-1 sm:space-x-2">
+          <div className="hidden md:flex items-center justify-center relative">
+            
+            {/* Pill Container Bar */}
+            <div className="flex items-center justify-center gap-1 bg-slate-100/90 dark:bg-slate-800/90 p-1.5 rounded-full border border-slate-200 dark:border-slate-700/80 shadow-inner">
               {menuItems.map((item, index) => {
                 const isTopExternal = item.href.startsWith('http');
+                const isSelected = hoveredNav !== null ? hoveredNav === index : (activeNavIndex === index || (activeNavIndex === -1 && index === 0));
+
                 return (
                   <div 
                     key={index}
                     className="relative"
-                    onMouseEnter={() => setActiveDropdown(index)}
-                    onMouseLeave={() => setActiveDropdown(null)}
+                    onMouseEnter={() => {
+                      setActiveDropdown(index);
+                      setHoveredNav(index);
+                    }}
+                    onMouseLeave={() => {
+                      setActiveDropdown(null);
+                      setHoveredNav(null);
+                    }}
                   >
+                    {/* Animated Sliding Pill Background */}
+                    {isSelected && (
+                      <motion.div
+                        layoutId="headerNavPill"
+                        transition={{ type: 'spring', stiffness: 450, damping: 32 }}
+                        className="absolute inset-0 bg-red-800 dark:bg-amber-500 rounded-full shadow-md z-0"
+                      />
+                    )}
+
                     {isTopExternal ? (
                       <a
                         href={item.href}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex items-center gap-1 px-3.5 py-2.5 text-slate-800 dark:text-slate-100 text-xs font-extrabold tracking-wide transition-all rounded-lg hover:bg-amber-50 dark:hover:bg-slate-800 hover:text-red-800 dark:hover:text-amber-400"
+                        className={`relative z-10 flex items-center gap-1 px-4 py-2 text-xs font-black tracking-wide transition-colors rounded-full ${
+                          isSelected 
+                            ? 'text-white dark:text-slate-950 font-black' 
+                            : 'text-slate-700 dark:text-slate-300 hover:text-slate-950 dark:hover:text-white'
+                        }`}
                       >
                         <span>{item.label}</span>
-                        {item.dropdown && <ChevronDown size={12} className="text-slate-500 dark:text-slate-400" />}
+                        {item.dropdown && <ChevronDown size={12} className={isSelected ? 'text-white dark:text-slate-950' : 'text-slate-500'} />}
                       </a>
                     ) : (
                       <Link
                         to={item.href}
-                        className="flex items-center gap-1 px-3.5 py-2.5 text-slate-800 dark:text-slate-100 text-xs font-extrabold tracking-wide transition-all rounded-lg hover:bg-amber-50 dark:hover:bg-slate-800 hover:text-red-800 dark:hover:text-amber-400"
+                        className={`relative z-10 flex items-center gap-1 px-4 py-2 text-xs font-black tracking-wide transition-colors rounded-full ${
+                          isSelected 
+                            ? 'text-white dark:text-slate-950 font-black' 
+                            : 'text-slate-700 dark:text-slate-300 hover:text-slate-950 dark:hover:text-white'
+                        }`}
                       >
                         <span>{item.label}</span>
-                        {item.dropdown && <ChevronDown size={12} className="text-slate-500 dark:text-slate-400" />}
+                        {item.dropdown && <ChevronDown size={12} className={isSelected ? 'text-white dark:text-slate-950' : 'text-slate-500'} />}
                       </Link>
                     )}
                   
-                  <AnimatePresence>
-                    {item.dropdown && activeDropdown === index && (
-                      <motion.div
-                        initial={{ opacity: 0, y: 10, scale: 0.96 }}
-                        animate={{ opacity: 1, y: 0, scale: 1 }}
-                        exit={{ opacity: 0, y: 5, scale: 0.96 }}
-                        transition={{ duration: 0.15 }}
-                        className="absolute top-full left-0 bg-white dark:bg-slate-900 shadow-2xl rounded-xl min-w-[240px] z-50 p-2 border border-slate-200 dark:border-slate-800"
-                      >
-                        {item.dropdown.map((subItem, subIndex) => {
-                          const targetHref = typeof subItem === 'string' ? '#' : subItem.href;
-                          const isExternal = targetHref.startsWith('http');
-                          const labelText = typeof subItem === 'string' ? subItem : subItem.label;
+                    <AnimatePresence>
+                      {item.dropdown && activeDropdown === index && (
+                        <motion.div
+                          initial={{ opacity: 0, y: 10, scale: 0.96 }}
+                          animate={{ opacity: 1, y: 0, scale: 1 }}
+                          exit={{ opacity: 0, y: 5, scale: 0.96 }}
+                          transition={{ duration: 0.15 }}
+                          className="absolute top-full left-0 bg-white dark:bg-slate-900 shadow-2xl rounded-2xl min-w-[240px] z-50 p-2 border border-slate-200 dark:border-slate-800 mt-2"
+                        >
+                          {item.dropdown.map((subItem, subIndex) => {
+                            const targetHref = typeof subItem === 'string' ? '#' : subItem.href;
+                            const isExternal = targetHref.startsWith('http');
+                            const labelText = typeof subItem === 'string' ? subItem : subItem.label;
 
-                          return isExternal ? (
-                            <a
-                              key={subIndex}
-                              href={targetHref}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="block px-3.5 py-2 text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-red-800 dark:hover:text-amber-400 hover:bg-amber-50 dark:hover:bg-slate-800 rounded-lg transition-colors border-b border-slate-100 dark:border-slate-800 last:border-0"
-                            >
-                              {labelText}
-                            </a>
-                          ) : (
-                            <Link
-                              key={subIndex}
-                              to={targetHref}
-                              onClick={() => setActiveDropdown(null)}
-                              className="block px-3.5 py-2 text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-red-800 dark:hover:text-amber-400 hover:bg-amber-50 dark:hover:bg-slate-800 rounded-lg transition-colors border-b border-slate-100 dark:border-slate-800 last:border-0"
-                            >
-                              {labelText}
-                            </Link>
-                          );
-                        })}
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </div>
-              );
-            })}
+                            return isExternal ? (
+                              <a
+                                key={subIndex}
+                                href={targetHref}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="block px-3.5 py-2 text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-red-800 dark:hover:text-amber-400 hover:bg-amber-50 dark:hover:bg-slate-800 rounded-xl transition-colors border-b border-slate-100 dark:border-slate-800 last:border-0"
+                              >
+                                {labelText}
+                              </a>
+                            ) : (
+                              <Link
+                                key={subIndex}
+                                to={targetHref}
+                                onClick={() => setActiveDropdown(null)}
+                                className="block px-3.5 py-2 text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-red-800 dark:hover:text-amber-400 hover:bg-amber-50 dark:hover:bg-slate-800 rounded-xl transition-colors border-b border-slate-100 dark:border-slate-800 last:border-0"
+                              >
+                                {labelText}
+                              </Link>
+                            );
+                          })}
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+                );
+              })}
             </div>
 
             <motion.button 
               whileHover={{ scale: 1.1, rotate: 90 }}
               transition={{ duration: 0.2 }}
               type="button" 
-              className="absolute right-0 p-2 text-slate-700 dark:text-slate-300 hover:text-red-800 dark:hover:text-amber-400 hover:bg-amber-50 dark:hover:bg-slate-800 rounded-lg transition-colors"
+              className="absolute right-0 p-2 text-slate-700 dark:text-slate-300 hover:text-red-800 dark:hover:text-amber-400 hover:bg-amber-50 dark:hover:bg-slate-800 rounded-full transition-colors"
             >
               <Search size={16} />
             </motion.button>

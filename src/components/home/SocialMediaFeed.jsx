@@ -1,9 +1,24 @@
 import React, { useState } from 'react';
 import { useCMS } from '../CMSContext';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Twitter, Youtube, Linkedin, Heart, Share2, Play, ExternalLink, Sparkles, X } from 'lucide-react';
+import { 
+  Twitter, 
+  Youtube, 
+  Linkedin, 
+  Heart, 
+  Share2, 
+  Play, 
+  ExternalLink, 
+  Sparkles, 
+  X, 
+  MessageCircle, 
+  Repeat, 
+  CheckCircle2,
+  Bookmark,
+  Building2
+} from 'lucide-react';
 
-export default function SocialMediaFeed({ theme = 'mockup1' }) {
+export default function SocialMediaFeed() {
   const { cmsData } = useCMS();
   const posts = cmsData.socialPosts || [];
   const [activeTab, setActiveTab] = useState('all');
@@ -31,101 +46,131 @@ export default function SocialMediaFeed({ theme = 'mockup1' }) {
     setTimeout(() => setCopiedId(null), 2000);
   };
 
-  const isMockup1 = theme === 'mockup1';
+  const platformBadge = (platform) => {
+    switch (platform) {
+      case 'twitter':
+        return {
+          name: 'X (Twitter)',
+          icon: Twitter,
+          color: 'text-sky-500 bg-sky-50 dark:bg-sky-950/50 border-sky-200 dark:border-sky-800',
+          btnBg: 'bg-sky-500 text-white'
+        };
+      case 'youtube':
+        return {
+          name: 'YouTube',
+          icon: Youtube,
+          color: 'text-red-600 bg-red-50 dark:bg-red-950/50 border-red-200 dark:border-red-800',
+          btnBg: 'bg-red-600 text-white'
+        };
+      case 'linkedin':
+        return {
+          name: 'LinkedIn',
+          icon: Linkedin,
+          color: 'text-blue-600 bg-blue-50 dark:bg-blue-950/50 border-blue-200 dark:border-blue-800',
+          btnBg: 'bg-blue-600 text-white'
+        };
+      default:
+        return {
+          name: 'Social',
+          icon: Building2,
+          color: 'text-slate-600 bg-slate-100',
+          btnBg: 'bg-slate-800 text-white'
+        };
+    }
+  };
 
   return (
-    <section className="py-16 px-4 relative overflow-hidden bg-gradient-to-b from-slate-50 via-teal-50/20 to-slate-50 text-slate-900 border-t border-slate-200">
+    <section className="py-20 px-4 relative overflow-hidden bg-slate-50 dark:bg-[#070b14] text-slate-900 dark:text-slate-100 transition-colors duration-300 border-t border-slate-200 dark:border-slate-800">
+      
       {/* Background glowing accents */}
-      <div className="absolute top-1/4 -left-20 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none"></div>
-      <div className="absolute bottom-1/4 -right-20 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl pointer-events-none"></div>
+      <div className="absolute top-1/4 -left-20 w-96 h-96 bg-amber-400/10 rounded-full blur-3xl pointer-events-none"></div>
+      <div className="absolute bottom-1/4 -right-20 w-96 h-96 bg-red-600/10 rounded-full blur-3xl pointer-events-none"></div>
 
       <div className="max-w-7xl mx-auto relative z-10">
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">
-          <div>
-            <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider mb-3 ${
-              isMockup1 ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/30' : 'bg-indigo-100 text-indigo-800'
-            }`}>
-              <Sparkles className="w-3.5 h-3.5" /> Real-time Social Connect
-            </div>
-            <h2 className={`text-3xl md:text-4xl font-extrabold tracking-tight ${
-              isMockup1 ? 'text-white' : 'text-slate-900'
-            }`}>
-              MUDRA Live Social Media Hub
-            </h2>
-            <p className={`mt-2 text-sm max-w-xl ${isMockup1 ? 'text-slate-400' : 'text-slate-600'}`}>
-              Stay updated with official announcements, videos, success stories & policy updates directly from MUDRA India channels.
-            </p>
+        
+        {/* Centered Uniform Header */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="text-center mb-12"
+        >
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-red-100 dark:bg-red-950/60 border border-red-300 dark:border-red-800 text-red-900 dark:text-amber-300 text-xs font-black tracking-wider uppercase mb-3">
+            <Sparkles className="w-3.5 h-3.5 text-red-700 dark:text-amber-400" />
+            <span>REAL-TIME SOCIAL CONNECT</span>
           </div>
 
-          {/* Social Platform Tabs */}
-          <div className={`flex items-center p-1.5 rounded-xl border backdrop-blur-md ${
-            isMockup1 ? 'bg-slate-800/80 border-slate-700' : 'bg-white shadow-md border-slate-200'
-          }`}>
-            <button
-              onClick={() => setActiveTab('all')}
-              className={`px-4 py-2 rounded-lg text-xs font-semibold transition-all ${
-                activeTab === 'all'
-                  ? isMockup1 ? 'bg-cyan-500 text-slate-950 font-bold' : 'bg-indigo-600 text-white'
-                  : isMockup1 ? 'text-slate-400 hover:text-white' : 'text-slate-600 hover:text-slate-900'
-              }`}
-            >
-              All Feeds
-            </button>
-            <button
-              onClick={() => setActiveTab('twitter')}
-              className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-semibold transition-all ${
-                activeTab === 'twitter'
-                  ? isMockup1 ? 'bg-sky-500 text-white' : 'bg-sky-600 text-white'
-                  : isMockup1 ? 'text-slate-400 hover:text-white' : 'text-slate-600 hover:text-slate-900'
-              }`}
-            >
-              <Twitter className="w-3.5 h-3.5" /> X (Twitter)
-            </button>
-            <button
-              onClick={() => setActiveTab('youtube')}
-              className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-semibold transition-all ${
-                activeTab === 'youtube'
-                  ? 'bg-red-600 text-white'
-                  : isMockup1 ? 'text-slate-400 hover:text-white' : 'text-slate-600 hover:text-slate-900'
-              }`}
-            >
-              <Youtube className="w-3.5 h-3.5" /> YouTube
-            </button>
-            <button
-              onClick={() => setActiveTab('linkedin')}
-              className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-semibold transition-all ${
-                activeTab === 'linkedin'
-                  ? 'bg-blue-600 text-white'
-                  : isMockup1 ? 'text-slate-400 hover:text-white' : 'text-slate-600 hover:text-slate-900'
-              }`}
-            >
-              <Linkedin className="w-3.5 h-3.5" /> LinkedIn
-            </button>
-          </div>
-        </div>
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-slate-900 dark:text-white mb-4 tracking-tight">
+            MUDRA Live Social Media Hub
+          </h2>
 
-        {/* Popular Hashtags */}
-        <div className="flex items-center flex-wrap gap-2 mb-8 text-xs">
-          <span className={`font-semibold ${isMockup1 ? 'text-slate-400' : 'text-slate-500'}`}>Trending Tags:</span>
-          {['#MUDRA2', '#AtmanirbharBharat', '#WomenEntrepreneurs', '#SkillIndia', '#MSMEIndia'].map((tag) => (
-            <button
-              key={tag}
-              onClick={() => setActiveHashtag(activeHashtag === tag ? '' : tag)}
-              className={`px-3 py-1 rounded-full border transition-all ${
-                activeHashtag === tag
-                  ? 'bg-gradient-to-r from-teal-500 to-cyan-500 text-slate-950 font-bold border-cyan-400'
-                  : isMockup1
-                    ? 'bg-slate-800/60 border-slate-700 text-slate-300 hover:border-slate-500'
-                    : 'bg-white border-slate-200 text-slate-700 hover:border-slate-300 shadow-sm'
-              }`}
-            >
-              {tag}
-            </button>
-          ))}
+          <div className="w-32 h-1.5 bg-gradient-to-r from-red-700 via-amber-500 to-red-700 mx-auto rounded-full mb-6"></div>
+
+          <p className="text-slate-600 dark:text-slate-300 max-w-3xl mx-auto text-sm md:text-base font-semibold leading-relaxed mb-8">
+            Stay updated with official announcements, videos, success stories & policy updates directly from MUDRA India verified social channels.
+          </p>
+
+          {/* Centered Social Platform Tabs */}
+          <div className="inline-flex items-center gap-1.5 p-1.5 rounded-full border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 shadow-md flex-wrap justify-center">
+            {[
+              { id: 'all', label: 'All Feeds' },
+              { id: 'twitter', label: 'X (Twitter)', icon: Twitter },
+              { id: 'youtube', label: 'YouTube', icon: Youtube },
+              { id: 'linkedin', label: 'LinkedIn', icon: Linkedin }
+            ].map((tab) => {
+              const isSelected = activeTab === tab.id;
+              const TabIcon = tab.icon;
+              return (
+                <button
+                  key={tab.id}
+                  type="button"
+                  onClick={() => setActiveTab(tab.id)}
+                  className={`relative z-10 px-4 py-2 rounded-full text-xs font-extrabold transition-colors flex items-center gap-1.5 ${
+                    isSelected
+                      ? 'text-white dark:text-slate-950 font-black'
+                      : 'text-slate-700 dark:text-slate-300 hover:text-slate-950 dark:hover:text-white'
+                  }`}
+                >
+                  {isSelected && (
+                    <motion.div
+                      layoutId="socialActivePill"
+                      transition={{ type: 'spring', stiffness: 450, damping: 32 }}
+                      className="absolute inset-0 bg-red-800 dark:bg-amber-400 rounded-full shadow-md z-[-1]"
+                    />
+                  )}
+                  {TabIcon && <TabIcon className="w-3.5 h-3.5" />}
+                  <span>{tab.label}</span>
+                </button>
+              );
+            })}
+          </div>
+        </motion.div>
+
+        {/* Popular Hashtags Filter */}
+        <div className="flex items-center justify-center flex-wrap gap-2 mb-10 text-xs">
+          <span className="font-extrabold text-slate-500 dark:text-slate-400 mr-1">Trending Topics:</span>
+          {['#MUDRA2', '#AtmanirbharBharat', '#WomenEntrepreneurs', '#SkillIndia', '#MSMEIndia'].map((tag) => {
+            const isTagSelected = activeHashtag === tag;
+            return (
+              <button
+                key={tag}
+                type="button"
+                onClick={() => setActiveHashtag(isTagSelected ? '' : tag)}
+                className={`px-3.5 py-1.5 rounded-full border text-xs font-extrabold transition-all ${
+                  isTagSelected
+                    ? 'bg-red-800 text-white border-red-700 shadow-md scale-105'
+                    : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:border-amber-400 dark:hover:border-amber-500 shadow-sm'
+                }`}
+              >
+                {tag}
+              </button>
+            );
+          })}
           {activeHashtag && (
             <button
+              type="button"
               onClick={() => setActiveHashtag('')}
-              className="text-red-400 hover:text-red-300 font-medium ml-2 underline"
+              className="text-xs font-black text-red-700 dark:text-amber-400 hover:underline ml-2"
             >
               Clear Filter
             </button>
@@ -133,112 +178,115 @@ export default function SocialMediaFeed({ theme = 'mockup1' }) {
         </div>
 
         {/* Grid of Feed Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7">
           {filteredPosts.map((post) => {
             const currentLikes = likesMap[post.id] || post.likes;
+            const meta = platformBadge(post.platform);
+            const IconComponent = meta.icon;
+
             return (
               <motion.div
                 key={post.id}
                 initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                whileHover={{ y: -6 }}
                 transition={{ duration: 0.3 }}
-                className={`rounded-2xl p-6 border flex flex-col justify-between transition-all duration-300 ${
-                  isMockup1
-                    ? 'bg-white border-teal-200/80 shadow-md hover:shadow-xl hover:border-teal-400'
-                    : 'bg-white border-slate-200 shadow-md hover:shadow-xl hover:border-indigo-300'
-                }`}
+                className="bg-white dark:bg-slate-900 rounded-3xl p-6 border-2 border-slate-200 dark:border-slate-800 shadow-xl hover:border-amber-400 dark:hover:border-amber-500/60 transition-all flex flex-col justify-between"
               >
                 <div>
-                  {/* Card Header */}
+                  {/* Card Header: Author Profile & Platform Icon */}
                   <div className="flex items-center justify-between mb-4">
                     <div className="flex items-center gap-3">
-                      <img
-                        src={post.avatar}
-                        alt={post.author}
-                        className="w-10 h-10 rounded-full bg-slate-100 border border-slate-200 p-0.5 object-cover"
-                      />
+                      <div className="relative">
+                        <img
+                          src={post.avatar}
+                          alt={post.author}
+                          className="w-11 h-11 rounded-2xl bg-amber-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 p-0.5 object-cover shadow-sm"
+                        />
+                        <div className="absolute -bottom-1 -right-1 bg-blue-600 text-white rounded-full p-0.5 shadow-sm">
+                          <CheckCircle2 size={10} />
+                        </div>
+                      </div>
                       <div>
-                        <h4 className="font-bold text-sm leading-snug text-slate-900">
-                          {post.author}
+                        <h4 className="font-extrabold text-sm text-slate-900 dark:text-white leading-snug flex items-center gap-1">
+                          <span>{post.author}</span>
                         </h4>
-                        <p className="text-xs text-slate-500">
+                        <p className="text-[11px] text-slate-500 dark:text-slate-400 font-bold">
                           {post.handle} • {post.date}
                         </p>
                       </div>
                     </div>
 
-                    <div className="p-2 rounded-lg bg-slate-100 dark:bg-slate-700/50">
-                      {post.platform === 'twitter' && <Twitter className="w-4 h-4 text-sky-400" />}
-                      {post.platform === 'youtube' && <Youtube className="w-4 h-4 text-red-500" />}
-                      {post.platform === 'linkedin' && <Linkedin className="w-4 h-4 text-blue-500" />}
+                    <div className={`p-2.5 rounded-xl border ${meta.color} shadow-sm`}>
+                      <IconComponent size={16} />
                     </div>
                   </div>
 
-                  {/* Post Content */}
-                  <p className={`text-xs md:text-sm leading-relaxed mb-4 whitespace-pre-line ${
-                    isMockup1 ? 'text-slate-300' : 'text-slate-700'
-                  }`}>
+                  {/* Post Content Paragraph */}
+                  <p className="text-xs sm:text-sm text-slate-800 dark:text-slate-200 font-semibold leading-relaxed mb-4 whitespace-pre-line">
                     {post.content}
                   </p>
 
-                  {/* Media / Video Thumbnail */}
+                  {/* Media / Video Attachment */}
                   {post.platform === 'youtube' ? (
                     <div
                       onClick={() => setSelectedVideo(post)}
-                      className="relative rounded-xl overflow-hidden cursor-pointer group mb-4 border border-slate-700"
+                      className="relative rounded-2xl overflow-hidden cursor-pointer group mb-4 border border-slate-200 dark:border-slate-700 shadow-md"
                     >
                       <img
                         src={post.thumbnail || post.media}
                         alt={post.videoTitle || 'YouTube Video'}
-                        className="w-full h-44 object-cover group-hover:scale-105 transition-transform duration-300"
+                        className="w-full h-48 object-cover group-hover:scale-108 transition-transform duration-500"
                       />
-                      <div className="absolute inset-0 bg-black/40 group-hover:bg-black/30 transition-colors flex items-center justify-center">
-                        <div className="w-12 h-12 rounded-full bg-red-600 text-white flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                      <div className="absolute inset-0 bg-slate-950/40 group-hover:bg-slate-950/30 transition-colors flex items-center justify-center">
+                        <div className="w-13 h-13 w-12 h-12 rounded-2xl bg-red-600 text-white flex items-center justify-center shadow-xl group-hover:scale-110 transition-transform">
                           <Play className="w-6 h-6 fill-current ml-1" />
                         </div>
                       </div>
-                      <div className="absolute bottom-2 right-2 px-2 py-0.5 rounded bg-black/70 text-white text-[10px] font-mono">
+                      <div className="absolute bottom-3 right-3 px-2.5 py-1 rounded-lg bg-slate-950/80 backdrop-blur-md text-amber-300 text-[10px] font-black tracking-wider">
                         {post.videoDuration || 'VIDEO'}
                       </div>
                     </div>
                   ) : post.media ? (
-                    <div className="rounded-xl overflow-hidden mb-4 border border-slate-700/50">
+                    <div className="rounded-2xl overflow-hidden mb-4 border border-slate-200 dark:border-slate-800 shadow-md">
                       <img
                         src={post.media}
                         alt="Post media"
-                        className="w-full h-44 object-cover hover:scale-105 transition-transform duration-300"
+                        className="w-full h-48 object-cover hover:scale-105 transition-transform duration-500"
                       />
                     </div>
                   ) : null}
                 </div>
 
-                {/* Footer Engagement Actions */}
-                <div className={`pt-3 border-t flex items-center justify-between text-xs ${
-                  isMockup1 ? 'border-slate-700/60 text-slate-400' : 'border-slate-100 text-slate-500'
-                }`}>
+                {/* Footer Engagement Metrics Bar */}
+                <div className="pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs text-slate-600 dark:text-slate-400 font-bold">
                   <button
+                    type="button"
                     onClick={() => handleLike(post.id, post.likes)}
-                    className="flex items-center gap-1.5 hover:text-red-400 transition-colors group"
+                    className="flex items-center gap-1.5 hover:text-red-600 dark:hover:text-amber-400 transition-colors group px-2 py-1 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800"
                   >
-                    <Heart className="w-4 h-4 group-hover:fill-red-400" />
-                    <span>{currentLikes}</span>
+                    <Heart size={15} className="group-hover:fill-red-600 dark:group-hover:fill-amber-400 transition-colors text-slate-500 dark:text-slate-400" />
+                    <span>{currentLikes.toLocaleString()}</span>
                   </button>
 
                   <button
+                    type="button"
                     onClick={() => handleShare(post.id)}
-                    className="flex items-center gap-1.5 hover:text-cyan-400 transition-colors relative"
+                    className="flex items-center gap-1.5 hover:text-red-700 dark:hover:text-amber-400 transition-colors px-2 py-1 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800"
                   >
-                    <Share2 className="w-4 h-4" />
-                    <span>{copiedId === post.id ? 'Copied Link!' : 'Share'}</span>
+                    <Share2 size={15} />
+                    <span>{copiedId === post.id ? 'Copied!' : post.retweets || 'Share'}</span>
                   </button>
 
                   <a
-                    href="https://twitter.com"
+                    href="https://www.mudra.org.in"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-1 hover:underline"
+                    className="flex items-center gap-1 text-red-800 dark:text-amber-400 hover:underline font-extrabold px-2 py-1"
                   >
-                    View Original <ExternalLink className="w-3 h-3" />
+                    <span>View Post</span>
+                    <ExternalLink size={13} />
                   </a>
                 </div>
               </motion.div>
@@ -254,25 +302,27 @@ export default function SocialMediaFeed({ theme = 'mockup1' }) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[99999] bg-black/80 backdrop-blur-md flex items-center justify-center p-4"
+            className="fixed inset-0 z-[99999] bg-slate-950/85 backdrop-blur-md flex items-center justify-center p-4"
             onClick={() => setSelectedVideo(null)}
           >
             <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
-              className="bg-slate-900 rounded-2xl overflow-hidden max-w-3xl w-full border border-slate-700 shadow-2xl relative"
+              initial={{ scale: 0.9, opacity: 0, y: 20 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.9, opacity: 0, y: 20 }}
+              className="bg-slate-900 rounded-3xl overflow-hidden max-w-3xl w-full border-2 border-slate-800 shadow-2xl relative"
               onClick={e => e.stopPropagation()}
             >
               <div className="p-4 bg-slate-800 border-b border-slate-700 flex items-center justify-between">
-                <h3 className="text-white font-bold text-sm flex items-center gap-2">
-                  <Youtube className="w-5 h-5 text-red-500" /> {selectedVideo.videoTitle || selectedVideo.author}
+                <h3 className="text-white font-extrabold text-sm flex items-center gap-2">
+                  <Youtube className="w-5 h-5 text-red-600" /> 
+                  <span>{selectedVideo.videoTitle || selectedVideo.author}</span>
                 </h3>
                 <button
+                  type="button"
                   onClick={() => setSelectedVideo(null)}
-                  className="p-1 rounded-lg text-slate-400 hover:text-white hover:bg-slate-700"
+                  className="w-8 h-8 rounded-full bg-slate-700 text-white hover:bg-red-700 flex items-center justify-center transition-colors"
                 >
-                  <X className="w-5 h-5" />
+                  <X size={16} />
                 </button>
               </div>
 
@@ -286,7 +336,7 @@ export default function SocialMediaFeed({ theme = 'mockup1' }) {
                 ></iframe>
               </div>
 
-              <div className="p-4 text-xs text-slate-300">
+              <div className="p-5 text-xs text-slate-300 font-semibold bg-slate-900">
                 <p>{selectedVideo.content}</p>
               </div>
             </motion.div>

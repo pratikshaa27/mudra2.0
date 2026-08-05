@@ -167,9 +167,10 @@ const initialCMSData = {
       handle: '@MudraLtd',
       avatar: 'https://api.dicebear.com/7.x/bottts/svg?seed=mudra',
       date: '2 hours ago',
-      content: '🚀 Empowering MSMEs across India! Over 45 Crore loan accounts sanctioned under Pradhan Mantri MUDRA Yojana. Apply digitally via MUDRA 2.0 portal with zero collateral! #MUDRA2 #FinancialInclusion #AtmanirbharBharat',
-      likes: 1240,
-      retweets: 432,
+      content: '🚀 Empowering MSMEs across India! Over 50 Crore loan accounts sanctioned under Pradhan Mantri MUDRA Yojana. Apply digitally via MUDRA 2.0 portal with zero collateral! #MUDRA2 #FinancialInclusion #AtmanirbharBharat',
+      likes: 1420,
+      retweets: 482,
+      comments: 98,
       media: 'https://images.unsplash.com/photo-1556761175-5973dc0f32e7?auto=format&fit=crop&w=800&q=80'
     },
     {
@@ -182,6 +183,7 @@ const initialCMSData = {
       content: '📹 WATCH: How Priya Sharma transformed her Varanasi handloom unit into a global export brand with MUDRA Tarun Loan. #SuccessStory #WomenInBusiness',
       likes: 3890,
       retweets: 910,
+      comments: 312,
       videoTitle: 'MUDRA Success Story - EcoWeave Organics Varanasi',
       videoDuration: '3:45',
       thumbnail: 'https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?auto=format&fit=crop&w=800&q=80',
@@ -194,10 +196,53 @@ const initialCMSData = {
       handle: 'MUDRA Bank Official',
       avatar: 'https://api.dicebear.com/7.x/bottts/svg?seed=linkedin',
       date: '2 days ago',
-      content: 'We are excited to introduce the Tarun Plus scheme expanding collateral-free micro credit up to ₹20 Lakhs for proven MSME leaders. Partnering with SIDBI, CGTMSE, and NCGTC to guarantee credit access.',
+      content: 'We are excited to introduce the TarunPlus scheme expanding collateral-free micro credit up to ₹20 Lakhs for proven MSME leaders. Partnering with SIDBI, CGTMSE, and NCGTC to guarantee credit access.',
       likes: 2850,
       retweets: 310,
+      comments: 154,
       media: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=800&q=80'
+    },
+    {
+      id: 'sp4',
+      platform: 'twitter',
+      author: 'Ministry of MSME',
+      handle: '@minmsme',
+      avatar: 'https://api.dicebear.com/7.x/bottts/svg?seed=minmsme',
+      date: '3 days ago',
+      content: 'Zero processing fee and collateral-free funding up to ₹50,000 under PMMY Shishu scheme for street vendors, artisans, and micro startups! #SkillIndia #WomenEntrepreneurs',
+      likes: 2190,
+      retweets: 640,
+      comments: 112,
+      media: 'https://images.unsplash.com/photo-1590682680695-43b964a3ae17?auto=format&fit=crop&w=800&q=80'
+    },
+    {
+      id: 'sp5',
+      platform: 'youtube',
+      author: 'MUDRA Official Channel',
+      handle: '@MUDRAIndiaYoutube',
+      avatar: 'https://api.dicebear.com/7.x/bottts/svg?seed=youtube',
+      date: '4 days ago',
+      content: '🎥 Step-by-Step Guide: How to apply for Kishore Loan (up to ₹5 Lakhs) via Udyamimitra digital portal in under 15 minutes. #MSMEIndia #MUDRA2',
+      likes: 5120,
+      retweets: 1240,
+      comments: 480,
+      videoTitle: 'How to Apply for MUDRA Kishore Loan Online',
+      videoDuration: '5:12',
+      thumbnail: 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=800&q=80',
+      videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ'
+    },
+    {
+      id: 'sp6',
+      platform: 'linkedin',
+      author: 'SIDBI (Small Industries Development Bank of India)',
+      handle: '@SIDBIOfficial',
+      avatar: 'https://api.dicebear.com/7.x/bottts/svg?seed=sidbi',
+      date: '5 days ago',
+      content: 'Over 70% of MUDRA loan beneficiaries are women micro-entrepreneurs across 700+ districts! SIDBI refinancing support continues to fuel grassroot economic growth. #AtmanirbharBharat',
+      likes: 3410,
+      retweets: 520,
+      comments: 210,
+      media: 'https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=800&q=80'
     }
   ]
 };
