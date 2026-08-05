@@ -8,12 +8,14 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import PageNotFound from './lib/PageNotFound';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
+import { CMSProvider } from '@/components/CMSContext';
 
 const { Pages, Layout, mainPage } = pagesConfig;
 const mainPageKey = mainPage ?? Object.keys(Pages)[0];
 const MainPage = mainPageKey ? Pages[mainPageKey] : <></>;
 
-const LayoutWrapper = ({ children, currentPageName }) => Layout ?
+const LayoutWrapper = ({ children, currentPageName }) =>
+  Layout ?
   <Layout currentPageName={currentPageName}>{children}</Layout>
   : <>{children}</>;
 
@@ -42,7 +44,7 @@ const StartupWarningModal = ({ onClose }) => (
           onClick={onClose}
           className="rounded-xl bg-[#0f2942] px-5 py-2.5 text-xs font-extrabold text-white hover:bg-[#153a5c] shadow-md transition-all"
         >
-          I Understand & Acknowledge
+          I Understand &amp; Acknowledge
         </button>
       </div>
     </div>
@@ -113,9 +115,6 @@ const AuthenticatedApp = () => {
     </Routes>
   );
 };
-
-
-import { CMSProvider } from '@/components/CMSContext';
 
 function App() {
   const [showStartupWarning, setShowStartupWarning] = useState(false);

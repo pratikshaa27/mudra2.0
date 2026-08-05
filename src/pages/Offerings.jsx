@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ShieldCheck, IndianRupee, Sparkles, ArrowRight, CheckCircle2, FileText, Zap, Award, HelpCircle } from 'lucide-react';
+import { ShieldCheck, Sparkles, ArrowRight, CheckCircle2, FileText, Zap } from 'lucide-react';
 import Header from '../components/home/Header';
 import Footer from '../components/home/Footer';
 import ChatBot from '../components/ChatBot';

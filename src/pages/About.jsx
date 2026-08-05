@@ -10,11 +10,9 @@ import {
   Eye, 
   ShieldCheck, 
   Briefcase, 
-  TrendingUp, 
   BookOpen, 
   Layers, 
   ChevronRight,
-  ExternalLink,
   Sparkles
 } from 'lucide-react';
 import Header from '../components/home/Header';

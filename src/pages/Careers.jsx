@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Download, ChevronRight, FileText, ShieldAlert, Sparkles, Search, Filter, CheckCircle2 } from 'lucide-react';
+import { Download, ChevronRight, FileText, ShieldAlert, Search, CheckCircle2 } from 'lucide-react';
 import Header from '../components/home/Header';
 import Footer from '../components/home/Footer';
 import ChatBot from '../components/ChatBot';

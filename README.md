@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Pradhan Mantri MUDRA Yojana (PMMY) Portal & MUDRA Ltd. Refinance Application
 
 A modern, high-performance web application for **Micro Units Development & Refinance Agency Ltd. (MUDRA)** under the **Department of Financial Services, Ministry of Finance, Government of India**.
@@ -65,3 +66,6 @@ npm run dev
 VITE_BASE44_APP_ID=your_app_id
 VITE_BASE44_APP_BASE_URL=your_backend_url
 ```
+=======
+# mudra
+>>>>>>> upstream/main

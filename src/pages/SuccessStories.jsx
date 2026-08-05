@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Sparkles, Award, MapPin, IndianRupee, Briefcase, UserCheck } from 'lucide-react';
+import { Sparkles, Award, MapPin, IndianRupee, UserCheck } from 'lucide-react';
 import Header from '../components/home/Header';
 import Footer from '../components/home/Footer';
 import ChatBot from '../components/ChatBot';
