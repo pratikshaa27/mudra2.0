@@ -1,0 +1,81 @@
+{
+  "name": "LoanApplication",
+  "type": "object",
+  "properties": {
+    "applicantName": {
+      "type": "string",
+      "description": "Full name of the applicant"
+    },
+    "email": {
+      "type": "string",
+      "format": "email",
+      "description": "Email address"
+    },
+    "phone": {
+      "type": "string",
+      "description": "Contact phone number"
+    },
+    "address": {
+      "type": "string",
+      "description": "Residential address"
+    },
+    "loanAmount": {
+      "type": "number",
+      "description": "Requested loan amount in rupees"
+    },
+    "loanPurpose": {
+      "type": "string",
+      "enum": [
+        "business_expansion",
+        "equipment_purchase",
+        "working_capital",
+        "inventory",
+        "other"
+      ],
+      "description": "Purpose of the loan"
+    },
+    "monthlyIncome": {
+      "type": "number",
+      "description": "Monthly income in rupees"
+    },
+    "employmentStatus": {
+      "type": "string",
+      "enum": [
+        "self_employed",
+        "salaried",
+        "business_owner",
+        "unemployed"
+      ],
+      "description": "Employment status"
+    },
+    "businessType": {
+      "type": "string",
+      "description": "Type of business or employment"
+    },
+    "experienceYears": {
+      "type": "number",
+      "description": "Years of business/work experience"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "submitted",
+        "under_review",
+        "approved",
+        "rejected"
+      ],
+      "default": "submitted",
+      "description": "Application status"
+    }
+  },
+  "required": [
+    "applicantName",
+    "email",
+    "phone",
+    "address",
+    "loanAmount",
+    "loanPurpose",
+    "monthlyIncome",
+    "employmentStatus"
+  ]
+}
