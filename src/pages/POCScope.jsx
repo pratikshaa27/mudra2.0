@@ -2,7 +2,7 @@ import React from 'react';
 import { RoleProvider } from '../components/RoleContext';
 import MUDRA2Layout from '../components/mudra2/MUDRA2Layout';
 import { motion } from 'framer-motion';
-import { FileCheck, CheckCircle, Rocket, Target, Users } from 'lucide-react';
+import { FileCheck, CheckCircle, Rocket, Target, Users, Briefcase } from 'lucide-react';
 
 function POCScopeContent() {
   const achievements = [

@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { CheckCircle, ArrowRight, Home, FileText } from 'lucide-react';
+import { CheckCircle, Home, FileText } from 'lucide-react';
 import { createPageUrl } from '@/utils';
 import Header from '../components/home/Header';
 import Footer from '../components/home/Footer';

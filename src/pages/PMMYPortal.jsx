@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Home, FileText, Target, Database, Upload, TrendingUp, Users, BookOpen, ChevronRight, Lock } from 'lucide-react';
+import { Home, FileText, Target, Database, Upload, TrendingUp, Users, BookOpen, ChevronRight } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { RoleProvider } from '../components/RoleContext';
 import MUDRA2Layout from '../components/mudra2/MUDRA2Layout';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { Briefcase, User, FileText, CheckCircle, XCircle, Clock, AlertTriangle, TrendingUp, Award } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';

@@ -2,8 +2,7 @@ import React, { useState } from 'react';
 import { RoleProvider } from '../components/RoleContext';
 import MUDRA2Layout from '../components/mudra2/MUDRA2Layout';
 import { motion } from 'framer-motion';
-import { Lightbulb, CheckCircle, IndianRupee, Calendar, TrendingUp, Sparkles } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { Lightbulb, CheckCircle, TrendingUp, Sparkles } from 'lucide-react';
 
 function LoanRecommendationsContent() {
   const [showComparison, setShowComparison] = useState(false);
@@ -103,13 +102,13 @@ function LoanRecommendationsContent() {
 
         {/* Compare Options */}
         <div className="text-center mb-6">
-          <Button
+          <button
+            type="button"
             onClick={() => setShowComparison(!showComparison)}
-            variant="outline"
-            className="border-2"
+            className="px-4 py-2 border-2 border-slate-300 hover:bg-slate-50 text-slate-800 font-bold text-xs rounded-xl transition-colors"
           >
             {showComparison ? 'Hide' : 'Show'} All Loan Options Comparison
-          </Button>
+          </button>
         </div>
 
         {/* Comparison Table */}

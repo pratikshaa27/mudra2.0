@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { LogOut, TrendingUp, Users, Activity, Clock } from 'lucide-react';
+import { TrendingUp, Users, Activity } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
-import { PieChart, Pie, BarChart, Bar, LineChart, Line, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Cell } from 'recharts';
+import { PieChart, Pie, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Cell } from 'recharts';
 import DashboardFilters from '../components/admin/DashboardFilters';
-import ExportButtons from '../components/admin/ExportButtons';
 import RecentApplications from '../components/admin/RecentApplications';
 import PerformanceMetrics from '../components/admin/PerformanceMetrics';
 import SectorDistribution from '../components/admin/SectorDistribution';
@@ -15,11 +14,13 @@ import InteractiveMap from '../components/admin/InteractiveMap';
 import YearComparison from '../components/admin/YearComparison';
 import AdminNavbar from '../components/admin/AdminNavbar';
 import DrillDownChart from '../components/admin/DrillDownChart';
+import HomepageCMS from '../components/admin/HomepageCMS';
 
 export default function AdminDashboard() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [autoRefresh, setAutoRefresh] = useState(false);
   const [lastUpdated, setLastUpdated] = useState(new Date());
+  const [activeAdminTab, setActiveAdminTab] = useState('analytics'); // 'analytics' or 'cms'
   const [filters, setFilters] = useState({ dateRange: '30days', state: 'all', scheme: 'all' });
   const navigate = useNavigate();
 
@@ -160,33 +161,53 @@ export default function AdminDashboard() {
 
       {/* Header */}
       <div className="bg-gradient-to-r from-red-700 to-red-800 text-white py-3">
-        <div className="max-w-7xl mx-auto px-4">
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="flex justify-between items-center"
-          >
-            <div>
-              <h1 className="text-2xl font-bold mb-1">Analytics Dashboard</h1>
-              <p className="text-red-100 text-sm">Real-time PMMY performance metrics and insights</p>
-            </div>
-            <ExportButtons />
-          </motion.div>
+        <div className="max-w-7xl mx-auto px-4 flex justify-between items-center">
+          <div>
+            <h1 className="text-2xl font-bold mb-1">MUDRA Admin & CMS Portal</h1>
+            <p className="text-red-100 text-sm">Real-time PMMY analytics, policy controls & dynamic homepage CMS</p>
+          </div>
+
+          <div className="flex items-center gap-2 bg-red-900/60 p-1 rounded-xl border border-red-500/40">
+            <button
+              onClick={() => setActiveAdminTab('analytics')}
+              className={`px-4 py-2 rounded-lg text-xs font-bold transition-all ${
+                activeAdminTab === 'analytics'
+                  ? 'bg-white text-red-800 shadow-md'
+                  : 'text-red-100 hover:text-white'
+              }`}
+            >
+              📊 Performance Analytics
+            </button>
+            <button
+              onClick={() => setActiveAdminTab('cms')}
+              className={`px-4 py-2 rounded-lg text-xs font-bold transition-all ${
+                activeAdminTab === 'cms'
+                  ? 'bg-amber-400 text-slate-950 shadow-md'
+                  : 'text-red-100 hover:text-white'
+              }`}
+            >
+              ✨ Homepage CMS Manager
+            </button>
+          </div>
         </div>
       </div>
 
       {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-4 py-4">
-        {/* Filters */}
-        <DashboardFilters 
-          onFilterChange={handleFilterChange}
-          onRefresh={handleRefresh}
-          autoRefresh={autoRefresh}
-          setAutoRefresh={setAutoRefresh}
-        />
+      <div className="max-w-7xl mx-auto px-4 py-6">
+        {activeAdminTab === 'cms' ? (
+          <HomepageCMS />
+        ) : (
+          <>
+            {/* Filters */}
+            <DashboardFilters 
+              onFilterChange={handleFilterChange}
+              onRefresh={handleRefresh}
+              autoRefresh={autoRefresh}
+              setAutoRefresh={setAutoRefresh}
+            />
 
-        {/* Pending Approvals Alert */}
-        <PendingApprovals />
+            {/* Pending Approvals Alert */}
+            <PendingApprovals />
 
         {/* Performance Metrics */}
         <div className="my-4">
@@ -225,7 +246,7 @@ export default function AdminDashboard() {
 
         {/* Interactive Map */}
         <div className="mb-4">
-          <InteractiveMap filters={filters} />
+          <InteractiveMap filters={filters} onStateClick={(st) => setFilters(prev => ({ ...prev, state: st }))} />
         </div>
 
         {/* Charts Row 1 */}
@@ -322,6 +343,8 @@ export default function AdminDashboard() {
         <div className="mt-4">
           <RecentApplications />
         </div>
+          </>
+        )}
       </div>
     </div>
   );

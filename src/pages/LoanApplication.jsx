@@ -8,9 +8,6 @@ import { FileText, Loader, Brain, TrendingUp, TrendingDown, Info, CheckCircle, A
 import Header from '../components/home/Header';
 import Footer from '../components/home/Footer';
 import ChatBot from '../components/ChatBot';
-import { Button } from '@/components/ui/button';
-import { Progress } from '@/components/ui/progress';
-import { Input } from '@/components/ui/input';
 import DocumentUploader from '../components/DocumentUploader';
 
 export default function LoanApplication() {
@@ -277,51 +274,55 @@ export default function LoanApplication() {
                 <div className="grid md:grid-cols-2 gap-8">
                   <div>
                     <label className="block text-sm font-bold text-gray-800 mb-3">Full Name *</label>
-                    <Input
+                    <input
                       {...register('applicantName', { required: 'Required' })}
                       placeholder="Enter your full name"
-                      className="h-12 text-base border-2 focus:border-red-600"
+                      className="w-full h-12 px-4 text-base border-2 border-gray-300 rounded-xl focus:border-red-600 focus:outline-none"
                     />
                     {errors.applicantName && <p className="text-red-600 text-sm mt-2 font-medium">{errors.applicantName.message}</p>}
                   </div>
 
                   <div>
                     <label className="block text-sm font-semibold text-gray-700 mb-2">Email Address *</label>
-                    <Input
+                    <input
                       type="email"
                       {...register('email', { required: 'Required' })}
                       placeholder="your@email.com"
+                      className="w-full h-12 px-4 text-base border-2 border-gray-300 rounded-xl focus:border-red-600 focus:outline-none"
                     />
                     {errors.email && <p className="text-red-600 text-sm mt-1">{errors.email.message}</p>}
                   </div>
 
                   <div>
                     <label className="block text-sm font-semibold text-gray-700 mb-2">Phone Number *</label>
-                    <Input
+                    <input
                       type="tel"
                       {...register('phone', { required: 'Required' })}
                       placeholder="10-digit phone"
+                      className="w-full h-12 px-4 text-base border-2 border-gray-300 rounded-xl focus:border-red-600 focus:outline-none"
                     />
                     {errors.phone && <p className="text-red-600 text-sm mt-1">{errors.phone.message}</p>}
                   </div>
 
                   <div>
                     <label className="block text-sm font-semibold text-gray-700 mb-2">Monthly Income (₹) *</label>
-                    <Input
+                    <input
                       type="number"
                       {...register('monthlyIncome', { required: 'Required', min: 5000 })}
                       placeholder="Enter monthly income"
+                      className="w-full h-12 px-4 text-base border-2 border-gray-300 rounded-xl focus:border-red-600 focus:outline-none"
                     />
                     {errors.monthlyIncome && <p className="text-red-600 text-sm mt-1">{errors.monthlyIncome.message}</p>}
                   </div>
 
                   <div>
                     <label className="block text-sm font-semibold text-gray-700 mb-2">Existing EMI (₹)</label>
-                    <Input
+                    <input
                       type="number"
                       {...register('existingEMI')}
                       placeholder="Current EMI obligations"
                       defaultValue="0"
+                      className="w-full h-12 px-4 text-base border-2 border-gray-300 rounded-xl focus:border-red-600 focus:outline-none"
                     />
                   </div>
 
@@ -329,7 +330,7 @@ export default function LoanApplication() {
                     <label className="block text-sm font-semibold text-gray-700 mb-2">Completed Skill India Training? *</label>
                     <select
                       {...register('hasTraining')}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-red-700"
+                      className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:outline-none focus:border-red-700 text-base"
                     >
                       <option value="yes">Yes - Completed Training</option>
                       <option value="no">No - Not Yet</option>
@@ -344,13 +345,14 @@ export default function LoanApplication() {
                   </p>
                 </div>
 
-                <Button
+                <button
+                  type="button"
                   onClick={handleStepOneSubmit}
-                  className="w-full bg-gradient-to-r from-red-700 to-red-800 hover:from-red-800 hover:to-red-900 py-7 text-lg font-bold shadow-xl hover:shadow-2xl transition-all rounded-xl"
+                  className="w-full bg-gradient-to-r from-red-700 to-red-800 hover:from-red-800 hover:to-red-900 py-4 text-white text-lg font-bold shadow-xl hover:shadow-2xl transition-all rounded-xl flex items-center justify-center gap-2"
                 >
                   Calculate My Credit Score
-                  <ArrowRight className="ml-2" size={22} />
-                </Button>
+                  <ArrowRight size={22} />
+                </button>
               </div>
             </motion.div>
           )}
@@ -391,8 +393,10 @@ export default function LoanApplication() {
                   </div>
 
                 <div className="max-w-2xl mx-auto mb-6">
-                  <Progress value={(creditScore / 900) * 100} className="h-4" />
-                  <div className="flex justify-between text-xs text-gray-500 mt-2">
+                  <div className="w-full bg-slate-200 rounded-full h-4 overflow-hidden">
+                    <div className="bg-gradient-to-r from-blue-500 to-green-500 h-full rounded-full transition-all duration-500" style={{ width: `${(creditScore / 900) * 100}%` }}></div>
+                  </div>
+                  <div className="flex justify-between text-xs text-gray-500 mt-2 font-mono">
                     <span>300</span>
                     <span>600</span>
                     <span>900</span>
@@ -410,8 +414,8 @@ export default function LoanApplication() {
                       <p className="text-base text-gray-800 leading-relaxed">
                         Your score is <strong className="text-blue-700 text-lg">{getScoreGrade(creditScore).toLowerCase()}</strong> based on your 
                         {watch('hasTraining') === 'yes' ? ' completed training, ' : ' profile, '}
-                        steady income of <strong className="text-green-700">₹{parseFloat(watch('monthlyIncome')).toLocaleString('en-IN')}/month</strong>, 
-                        and {parseFloat(watch('existingEMI') || 0) < 5000 ? 'manageable' : 'existing'} liabilities.
+                        steady income of <strong className="text-green-700">₹{parseFloat(String(watch('monthlyIncome') || '0')).toLocaleString('en-IN')}/month</strong>, 
+                        and {parseFloat(String(watch('existingEMI') || '0')) < 5000 ? 'manageable' : 'existing'} liabilities.
                       </p>
                     </div>
                   </div>
@@ -460,21 +464,22 @@ export default function LoanApplication() {
 
               {/* Navigation */}
               <div className="flex gap-4">
-                <Button
+                <button
+                  type="button"
                   onClick={() => setCurrentStep(1)}
-                  variant="outline"
-                  className="flex items-center gap-2 px-6 py-6 text-base border-2 hover:border-gray-400 rounded-xl"
+                  className="flex items-center gap-2 px-6 py-4 text-base border-2 border-slate-300 hover:bg-slate-50 text-slate-800 font-semibold rounded-xl transition-colors"
                 >
                   <ArrowLeft size={18} />
                   Back to Edit
-                </Button>
-                <Button
+                </button>
+                <button
+                  type="button"
                   onClick={() => setCurrentStep(3)}
-                  className="flex-1 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 py-7 text-lg font-bold shadow-xl hover:shadow-2xl rounded-xl"
+                  className="flex-1 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 py-4 text-white text-lg font-bold shadow-xl hover:shadow-2xl rounded-xl flex items-center justify-center gap-2 transition-all"
                 >
                   Continue to Upload Documents
-                  <ArrowRight className="ml-2" size={22} />
-                </Button>
+                  <ArrowRight size={22} />
+                </button>
               </div>
               </motion.div>
               )}
@@ -553,22 +558,23 @@ export default function LoanApplication() {
               </div>
 
               <div className="flex gap-4">
-                <Button
+                <button
+                  type="button"
                   onClick={() => setCurrentStep(2)}
-                  variant="outline"
-                  className="px-8 py-6 text-base border-2 hover:border-gray-400 rounded-xl"
+                  className="px-8 py-4 text-base border-2 border-slate-300 hover:bg-slate-50 text-slate-800 font-semibold rounded-xl flex items-center justify-center gap-2 transition-colors"
                 >
-                  <ArrowLeft size={18} className="mr-2" />
+                  <ArrowLeft size={18} />
                   Back
-                </Button>
-                <Button
+                </button>
+                <button
+                  type="button"
                   onClick={() => setCurrentStep(4)}
-                  className="flex-1 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 py-7 text-lg font-bold shadow-xl hover:shadow-2xl rounded-xl"
+                  className="flex-1 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 py-4 text-white text-lg font-bold shadow-xl hover:shadow-2xl rounded-xl flex items-center justify-center gap-2 disabled:opacity-50 transition-all"
                   disabled={!documents.aadharDoc || !documents.panDoc || !documents.bankStatement}
                 >
                   Continue to Application Form
-                  <ArrowRight className="ml-2" size={22} />
-                </Button>
+                  <ArrowRight size={22} />
+                </button>
               </div>
               </motion.div>
               )}
@@ -594,13 +600,13 @@ export default function LoanApplication() {
                   </div>
                 </div>
                 <div className="flex gap-2">
-                  <Button
+                  <button
+                    type="button"
                     onClick={() => setCurrentStep(2)}
-                    variant="outline"
-                    className="bg-white/20 backdrop-blur-sm border-white/30 text-white hover:bg-white/30 font-semibold px-4 py-2 text-sm"
+                    className="bg-white/20 backdrop-blur-sm border border-white/30 text-white hover:bg-white/30 font-semibold px-4 py-2 text-sm rounded-xl transition-colors"
                   >
                     View Score Details
-                  </Button>
+                  </button>
                   <div className={`px-4 py-2 rounded-lg font-bold text-sm ${
                     documents.aadharDoc && documents.panDoc && documents.bankStatement 
                       ? 'bg-green-500 text-white' 
@@ -713,15 +719,14 @@ export default function LoanApplication() {
 
                 {/* Submit Button */}
                 <div className="flex gap-4 pt-8">
-                  <Button
+                  <button
                     type="button"
                     onClick={() => setCurrentStep(3)}
-                    variant="outline"
-                    className="px-8 py-6 text-base border-2 hover:border-gray-400 rounded-xl"
+                    className="px-8 py-4 text-base border-2 border-slate-300 hover:bg-slate-50 text-slate-800 font-semibold rounded-xl flex items-center justify-center gap-2 transition-colors"
                   >
-                    <ArrowLeft size={18} className="mr-2" />
+                    <ArrowLeft size={18} />
                     Back
-                  </Button>
+                  </button>
                   <button
                     type="submit"
                     disabled={isSubmitting}

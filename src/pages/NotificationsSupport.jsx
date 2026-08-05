@@ -3,8 +3,6 @@ import { RoleProvider } from '../components/RoleContext';
 import MUDRA2Layout from '../components/mudra2/MUDRA2Layout';
 import { motion } from 'framer-motion';
 import { Bell, MessageSquare, Mail, Phone, HelpCircle, TrendingUp, CheckCircle } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Textarea } from '@/components/ui/textarea';
 
 function NotificationsSupportContent() {
   const [activeTab, setActiveTab] = useState('notifications');
@@ -138,19 +136,19 @@ function NotificationsSupportContent() {
                     <Phone className="text-blue-600 mx-auto mb-2" size={32} />
                     <div className="font-semibold text-gray-800">Helpline</div>
                     <div className="text-sm text-gray-600 mb-2">1800-180-MUDRA</div>
-                    <Button size="sm" className="bg-blue-600">Call Now</Button>
+                    <button type="button" className="px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-lg transition-colors">Call Now</button>
                   </div>
                   <div className="bg-green-50 rounded-lg p-4 text-center">
                     <MessageSquare className="text-green-600 mx-auto mb-2" size={32} />
                     <div className="font-semibold text-gray-800">WhatsApp Support</div>
                     <div className="text-sm text-gray-600 mb-2">+91-9876543210</div>
-                    <Button size="sm" className="bg-green-600">Chat</Button>
+                    <button type="button" className="px-3 py-1 bg-green-600 hover:bg-green-700 text-white text-xs font-bold rounded-lg transition-colors">Chat</button>
                   </div>
                   <div className="bg-orange-50 rounded-lg p-4 text-center">
                     <Mail className="text-orange-600 mx-auto mb-2" size={32} />
                     <div className="font-semibold text-gray-800">Email Support</div>
                     <div className="text-sm text-gray-600 mb-2">support@mudra.org.in</div>
-                    <Button size="sm" className="bg-orange-600">Email</Button>
+                    <button type="button" className="px-3 py-1 bg-orange-600 hover:bg-orange-700 text-white text-xs font-bold rounded-lg transition-colors">Email</button>
                   </div>
                 </div>
 
@@ -176,7 +174,7 @@ function NotificationsSupportContent() {
                 <div>
                   <h4 className="font-bold text-gray-800 mb-3">Raise a Support Ticket</h4>
                   <div className="space-y-3">
-                    <select className="w-full px-3 py-2 border border-gray-300 rounded-lg">
+                    <select className="w-full px-3 py-2 border border-gray-300 rounded-lg text-xs">
                       <option>Select Issue Type</option>
                       <option>Application Status Query</option>
                       <option>Document Upload Issue</option>
@@ -184,8 +182,8 @@ function NotificationsSupportContent() {
                       <option>EMI Payment Problem</option>
                       <option>Other</option>
                     </select>
-                    <Textarea placeholder="Describe your issue in detail..." className="h-24" />
-                    <Button className="w-full bg-cyan-700">Submit Ticket</Button>
+                    <textarea placeholder="Describe your issue in detail..." className="w-full p-3 border border-gray-300 rounded-lg text-xs h-24 resize-none focus:outline-none focus:border-cyan-600" />
+                    <button type="button" className="w-full py-2.5 bg-cyan-700 hover:bg-cyan-800 text-white text-xs font-bold rounded-lg transition-colors">Submit Ticket</button>
                   </div>
                 </div>
               </div>

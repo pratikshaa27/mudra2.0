@@ -145,13 +145,36 @@ export const themes = {
 
 export const ThemeProvider = ({ children }) => {
   const [currentTheme, setCurrentTheme] = useState('red');
+  const [isDarkMode, setIsDarkMode] = useState(false);
 
   useEffect(() => {
     const savedTheme = localStorage.getItem('mudra-theme');
     if (savedTheme && themes[savedTheme]) {
       setCurrentTheme(savedTheme);
     }
+    const savedDarkMode = localStorage.getItem('mudra-dark-mode');
+    if (savedDarkMode === 'true') {
+      setIsDarkMode(true);
+      document.documentElement.classList.add('dark');
+    } else {
+      setIsDarkMode(false);
+      document.documentElement.classList.remove('dark');
+    }
   }, []);
+
+  const toggleDarkMode = () => {
+    setIsDarkMode((prev) => {
+      const next = !prev;
+      if (next) {
+        document.documentElement.classList.add('dark');
+        localStorage.setItem('mudra-dark-mode', 'true');
+      } else {
+        document.documentElement.classList.remove('dark');
+        localStorage.setItem('mudra-dark-mode', 'false');
+      }
+      return next;
+    });
+  };
 
   useEffect(() => {
     if (currentTheme === 'none') {
@@ -178,7 +201,15 @@ export const ThemeProvider = ({ children }) => {
   }, [currentTheme]);
 
   return (
-    <ThemeContext.Provider value={{ currentTheme, setCurrentTheme, theme: currentTheme === 'none' ? themes.red : themes[currentTheme] }}>
+    <ThemeContext.Provider 
+      value={{ 
+        currentTheme, 
+        setCurrentTheme, 
+        isDarkMode, 
+        toggleDarkMode, 
+        theme: currentTheme === 'none' ? themes.red : themes[currentTheme] 
+      }}
+    >
       {children}
     </ThemeContext.Provider>
   );

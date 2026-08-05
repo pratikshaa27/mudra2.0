@@ -2,7 +2,7 @@ import React from 'react';
 import { RoleProvider } from '../components/RoleContext';
 import MUDRA2Layout from '../components/mudra2/MUDRA2Layout';
 import { motion } from 'framer-motion';
-import { AlertTriangle, CheckCircle, AlertCircle, XCircle, Shield, TrendingUp } from 'lucide-react';
+import { CheckCircle, AlertCircle, XCircle, Shield, TrendingUp } from 'lucide-react';
 
 function FraudAlertsContent() {
   const alerts = [

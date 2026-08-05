@@ -1,9 +1,7 @@
 import React from 'react';
 import { RoleProvider } from '../components/RoleContext';
 import MUDRA2Layout from '../components/mudra2/MUDRA2Layout';
-import { motion } from 'framer-motion';
-import { Wallet, CheckCircle, Clock, AlertCircle, TrendingUp, Download } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { Wallet, Clock, AlertCircle, TrendingUp, Download } from 'lucide-react';
 
 function LoanPassbookContent() {
   const loanDetails = {
@@ -93,9 +91,9 @@ function LoanPassbookContent() {
               <div className="text-sm text-gray-700">Due on: {nextEMI.dueDate}</div>
               <div className="text-xs text-gray-600 mt-1">⏰ {daysUntilDue} days remaining</div>
               
-              <Button className="mt-4 bg-orange-600 hover:bg-orange-700">
+              <button type="button" className="mt-4 px-4 py-2 bg-orange-600 hover:bg-orange-700 text-white rounded-xl text-xs font-bold transition-colors">
                 Pay EMI Now
-              </Button>
+              </button>
             </div>
           </div>
         </div>
@@ -104,10 +102,10 @@ function LoanPassbookContent() {
         <div className="bg-white rounded-lg shadow-md p-6 mb-6">
           <div className="flex items-center justify-between mb-4">
             <h3 className="font-bold text-gray-800">EMI Schedule (Next 5 months)</h3>
-            <Button variant="outline" size="sm">
-              <Download size={16} className="mr-2" />
+            <button type="button" className="px-3 py-1.5 border border-slate-300 hover:bg-slate-50 text-slate-700 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-colors">
+              <Download size={16} />
               Download Full Schedule
-            </Button>
+            </button>
           </div>
           
           <div className="overflow-x-auto">

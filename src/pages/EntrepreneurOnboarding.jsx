@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { RoleProvider } from '../components/RoleContext';
 import MUDRA2Layout from '../components/mudra2/MUDRA2Layout';
 import { motion } from 'framer-motion';
-import { CheckCircle, MapPin, Phone, User, Briefcase, Home as HomeIcon, TrendingUp, FileText } from 'lucide-react';
+import { CheckCircle, MapPin, Phone, User, Briefcase, TrendingUp, FileText } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { createPageUrl } from '@/utils';
@@ -96,8 +96,33 @@ function EntrepreneurOnboardingContent() {
               animate={{ opacity: 1, x: 0 }}
               className="space-y-4"
             >
-              <h3 className="text-lg font-bold text-gray-800">Mobile Number Verification</h3>
-              <p className="text-sm text-gray-600">Enter your mobile number to receive an OTP</p>
+              <div className="flex items-center justify-between">
+                <div>
+                  <h3 className="text-lg font-bold text-gray-800">Mobile Number Verification</h3>
+                  <p className="text-sm text-gray-600">Enter your mobile number to receive an OTP</p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setFormData({
+                      phone: '9876543210',
+                      otp: '123456',
+                      fullName: 'Sita Devi',
+                      aadhar: '4589-2314-9981',
+                      address: 'Plot 42, Green Park',
+                      district: 'Nashik',
+                      state: 'Maharashtra',
+                      sector: 'Handicrafts & Textiles',
+                      businessName: 'Devi Weaving Handicrafts',
+                      experience: '5'
+                    });
+                    setOtpSent(true);
+                  }}
+                  className="px-3 py-1.5 rounded bg-amber-100 hover:bg-amber-200 border border-amber-300 text-xs font-bold text-amber-900 transition-colors"
+                >
+                  ⚡ Auto-Fill Demo Data
+                </button>
+              </div>
               
               <Input
                 placeholder="Enter 10-digit mobile number"
@@ -107,12 +132,12 @@ function EntrepreneurOnboardingContent() {
               />
               
               {!otpSent ? (
-                <Button onClick={() => setOtpSent(true)} className="w-full bg-red-700">
+                <Button onClick={() => setOtpSent(true)} className="w-full bg-[#0f2942] hover:bg-[#153a5c]">
                   Send OTP
                 </Button>
               ) : (
                 <>
-                  <div className="bg-green-50 border border-green-200 rounded p-3 text-sm text-green-800">
+                  <div className="bg-green-50 border border-green-200 rounded p-3 text-sm text-green-800 font-semibold">
                     ✓ OTP sent to {formData.phone}
                   </div>
                   <Input
@@ -121,7 +146,7 @@ function EntrepreneurOnboardingContent() {
                     onChange={(e) => setFormData({...formData, otp: e.target.value})}
                     maxLength={6}
                   />
-                  <Button onClick={() => setStep(2)} className="w-full bg-red-700">
+                  <Button onClick={() => setStep(2)} className="w-full bg-[#0f2942] hover:bg-[#153a5c]">
                     Verify & Continue
                   </Button>
                 </>

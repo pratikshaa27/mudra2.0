@@ -8,32 +8,43 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import PageNotFound from './lib/PageNotFound';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
+import { CMSProvider } from '@/components/CMSContext';
 
 const { Pages, Layout, mainPage } = pagesConfig;
 const mainPageKey = mainPage ?? Object.keys(Pages)[0];
 const MainPage = mainPageKey ? Pages[mainPageKey] : <></>;
 
-const LayoutWrapper = ({ children, currentPageName }) => Layout ?
+const LayoutWrapper = ({ children, currentPageName }) =>
+  Layout ?
   <Layout currentPageName={currentPageName}>{children}</Layout>
   : <>{children}</>;
 
 const StartupWarningModal = ({ onClose }) => (
-  <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/40 backdrop-blur-sm p-4">
-    <div className="w-full max-w-2xl rounded-xl bg-white p-6 shadow-2xl border border-red-200">
-      <h2 className="text-2xl font-bold text-red-700 mb-4">Beware !!!</h2>
-      <p className="text-gray-800 leading-relaxed mb-6">
-        MUDRA Ltd., Mumbai does not sanction individual MUDRA loans and such loans
-        can be availed from Banks/ NBFCs/ MFIs. There are no agents or middleman
-        engaged by MUDRA for availing such loans. The borrowers are advised to keep
-        away from persons posing as agents/facilitators of MUDRA/ PMMY.
+  <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-slate-950/60 backdrop-blur-md p-4">
+    <div className="w-full max-w-xl rounded-2xl bg-white p-6 sm:p-8 shadow-2xl border border-amber-300 relative animate-in fade-in zoom-in duration-200">
+      <div className="flex items-center gap-3 border-b border-slate-100 pb-4 mb-4">
+        <div className="w-10 h-10 rounded-xl bg-amber-100 border border-amber-300 flex items-center justify-center text-amber-800 font-extrabold shrink-0">
+          <span className="text-xl">⚠️</span>
+        </div>
+        <div>
+          <h2 className="text-lg font-black text-[#0f2942] tracking-tight">Official Statutory Advisory Notice</h2>
+          <p className="text-xs text-amber-800 font-semibold">Government of India • MUDRA Ltd. (SIDBI Entity)</p>
+        </div>
+      </div>
+
+      <p className="text-xs sm:text-sm text-slate-700 leading-relaxed mb-6">
+        <strong>MUDRA Ltd., Mumbai</strong> does not sanction individual MUDRA loans directly. All loans under Pradhan Mantri MUDRA Yojana (PMMY) are sanctioned exclusively through <strong>Banks, MFIs, and NBFCs</strong>.
+        MUDRA Ltd. does not engage any agents or middlemen. Borrowers are strictly advised not to pay any money or process fees to individuals posing as official MUDRA facilitators.
       </p>
-      <div className="flex justify-end">
+
+      <div className="flex items-center justify-between pt-2 border-t border-slate-100">
+        <span className="text-[11px] text-slate-500 font-medium">Toll-Free Helpline: 1800-180-1111</span>
         <button
           type="button"
           onClick={onClose}
-          className="rounded-md bg-red-700 px-4 py-2 text-sm font-semibold text-white hover:bg-red-800 transition-colors"
+          className="rounded-xl bg-[#0f2942] px-5 py-2.5 text-xs font-extrabold text-white hover:bg-[#153a5c] shadow-md transition-all"
         >
-          Close
+          I Understand &amp; Acknowledge
         </button>
       </div>
     </div>
@@ -41,18 +52,19 @@ const StartupWarningModal = ({ onClose }) => (
 );
 
 const FloatingWarningNotice = ({ onExpand }) => (
-  <div className="fixed bottom-4 left-4 z-[9998] w-[min(92vw,380px)] rounded-lg border border-red-200 bg-white/95 p-4 shadow-xl backdrop-blur-sm">
-    <p className="text-sm font-bold text-red-700 mb-2">Beware !!!</p>
-    <p className="text-xs text-gray-800 leading-relaxed mb-3">
-      MUDRA Ltd., Mumbai does not sanction individual MUDRA loans. Stay away from
-      persons posing as agents/facilitators of MUDRA/ PMMY.
-    </p>
+  <div className="fixed bottom-4 left-4 z-[9998] w-[min(92vw,360px)] rounded-xl border border-slate-200 bg-white/95 p-3.5 shadow-2xl backdrop-blur-md flex items-center justify-between gap-3">
+    <div>
+      <p className="text-xs font-bold text-[#0f2942]">Official Advisory</p>
+      <p className="text-[11px] text-slate-600 truncate max-w-[200px]">
+        MUDRA loans are sanctioned via Banks only.
+      </p>
+    </div>
     <button
       type="button"
       onClick={onExpand}
-      className="rounded-md bg-red-700 px-3 py-1.5 text-xs font-semibold text-white hover:bg-red-800 transition-colors"
+      className="rounded-lg bg-amber-500 hover:bg-amber-600 px-3 py-1.5 text-[11px] font-bold text-slate-950 transition-colors shrink-0"
     >
-      View Full Warning
+      Read Advisory
     </button>
   </div>
 );
@@ -63,8 +75,8 @@ const AuthenticatedApp = () => {
   // Show loading spinner while checking app public settings or auth
   if (isLoadingPublicSettings || isLoadingAuth) {
     return (
-      <div className="fixed inset-0 flex items-center justify-center">
-        <div className="w-8 h-8 border-4 border-slate-200 border-t-slate-800 rounded-full animate-spin"></div>
+      <div className="fixed inset-0 flex items-center justify-center bg-slate-50">
+        <div className="w-10 h-10 border-4 border-slate-200 border-t-[#0f2942] rounded-full animate-spin"></div>
       </div>
     );
   }
@@ -104,9 +116,8 @@ const AuthenticatedApp = () => {
   );
 };
 
-
 function App() {
-  const [showStartupWarning, setShowStartupWarning] = useState(true);
+  const [showStartupWarning, setShowStartupWarning] = useState(false);
 
   useEffect(() => {
     if (!showStartupWarning) return undefined;
@@ -120,23 +131,25 @@ function App() {
   }, [showStartupWarning]);
 
   return (
-    <AuthProvider>
-      <QueryClientProvider client={queryClientInstance}>
-        <Router>
-          <div className={showStartupWarning ? 'pointer-events-none select-none' : ''}>
-            <NavigationTracker />
-            <AuthenticatedApp />
-          </div>
-          {showStartupWarning && (
-            <StartupWarningModal onClose={() => setShowStartupWarning(false)} />
-          )}
-          {!showStartupWarning && (
-            <FloatingWarningNotice onExpand={() => setShowStartupWarning(true)} />
-          )}
-        </Router>
-        <Toaster />
-      </QueryClientProvider>
-    </AuthProvider>
+    <CMSProvider>
+      <AuthProvider>
+        <QueryClientProvider client={queryClientInstance}>
+          <Router>
+            <div>
+              <NavigationTracker />
+              <AuthenticatedApp />
+            </div>
+            {showStartupWarning && (
+              <StartupWarningModal onClose={() => setShowStartupWarning(false)} />
+            )}
+            {!showStartupWarning && (
+              <FloatingWarningNotice onExpand={() => setShowStartupWarning(true)} />
+            )}
+          </Router>
+          <Toaster />
+        </QueryClientProvider>
+      </AuthProvider>
+    </CMSProvider>
   )
 }
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { LogOut, Home, BarChart3, Users, Settings, Clock } from 'lucide-react';
+import { LogOut, Home, Clock } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { RoleProvider } from '../components/RoleContext';
 import MUDRA2Layout from '../components/mudra2/MUDRA2Layout';
 import { motion } from 'framer-motion';
-import { Shield, Lock, Database, Eye, TrendingUp, CheckCircle } from 'lucide-react';
+import { Shield, Lock, Database, Eye, TrendingUp } from 'lucide-react';
 
 function AuditLogsContent() {
   const [filterRole, setFilterRole] = useState('all');

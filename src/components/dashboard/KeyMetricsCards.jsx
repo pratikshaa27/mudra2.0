@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { TrendingUp, TrendingDown, Users, Zap } from 'lucide-react';
+import { TrendingUp, TrendingDown, Users } from 'lucide-react';
 
 const metrics = [
   {

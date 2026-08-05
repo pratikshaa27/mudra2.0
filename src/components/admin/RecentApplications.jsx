@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { base44 } from '@/api/base44Client';
-import { Search, Eye } from 'lucide-react';
+import { Search } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 
 export default function RecentApplications() {

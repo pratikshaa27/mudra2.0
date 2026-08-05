@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { base44 } from '@/api/base44Client';
 import { AlertCircle, CheckCircle, XCircle } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 
 export default function PendingApprovals() {
   const [pendingCount, setPendingCount] = useState(0);

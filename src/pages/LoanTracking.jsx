@@ -2,9 +2,7 @@ import React, { useState } from 'react';
 import { RoleProvider } from '../components/RoleContext';
 import MUDRA2Layout from '../components/mudra2/MUDRA2Layout';
 import { motion } from 'framer-motion';
-import { FileText, CheckCircle, Clock, Send, TrendingUp, Bell, Mail, MessageSquare } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import { FileText, CheckCircle, Clock, TrendingUp, Bell, Mail, MessageSquare } from 'lucide-react';
 
 function LoanTrackingContent() {
   const [notificationPrefs, setNotificationPrefs] = useState({

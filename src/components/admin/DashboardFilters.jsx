@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Calendar, Filter, RefreshCw } from 'lucide-react';
+import { Filter, RefreshCw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 export default function DashboardFilters({ onFilterChange, onRefresh, autoRefresh, setAutoRefresh }) {

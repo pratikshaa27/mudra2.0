@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Upload, File, CheckCircle, X, Loader2, AlertCircle } from 'lucide-react';
+import { Upload, CheckCircle, X, Loader2, AlertCircle } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
-import { Button } from '@/components/ui/button';
 
 const ALLOWED_TYPES = {
   'image/jpeg': { ext: 'JPG/JPEG', icon: '🖼️' },
