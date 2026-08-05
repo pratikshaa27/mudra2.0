@@ -4,11 +4,7 @@ from typing import List, Dict, Any
 
 class DocumentIngester:
     def __init__(self, pdf_dir: str = "public/pdf"):
-        # Primary directory public/pdf, fallback to pdf
-        if not os.path.exists(pdf_dir) and os.path.exists("pdf"):
-            self.pdf_dir = "pdf"
-        else:
-            self.pdf_dir = pdf_dir
+        self.pdf_dir = pdf_dir
 
     def extract_text_from_file(self, filepath: str) -> str:
         """Extract text from PDF file with fast page sampling and robust fallback."""
