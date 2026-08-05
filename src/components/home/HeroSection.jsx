@@ -45,7 +45,8 @@ const slides = [
       "Funding the unfunded for ease of credit to Small businesses",
       "70% of beneficiaries are women entrepreneurs"
     ],
-    image: pmModiImage
+    bg: "from-[#ff6800] via-[#e65c00] to-[#c94b00]",
+    image: "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/6978c66565209a38e92b1aa2/39d1e2421_image.png"
   },
   {
     title: "50+ Crore Loans",
@@ -54,7 +55,8 @@ const slides = [
       "Empowering micro enterprises across India",
       "Supporting first-generation entrepreneurs"
     ],
-    image: pmModiImage
+    // bg: "from-orange-600 via-orange-500 to-orange-700",
+    // image: "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=500&q=80"
   },
   {
     title: "10 Years of MUDRA",
@@ -63,7 +65,8 @@ const slides = [
       "Transforming lives through accessible credit",
       "Building an entrepreneurial India"
     ],
-    image: pmModiImage
+    bg: "from-orange-700 via-orange-600 to-orange-800",
+    image: "https://images.unsplash.com/photo-1625246333195-78d9c38ad449?w=500&q=80"
   }
 ];
 
@@ -96,12 +99,12 @@ export default function HeroSection() {
 
   return (
     <section className="relative overflow-hidden">
-      
+
       {/* Light Sky Blue Top Border Accent Strip */}
-      <div className="h-3 bg-[#b4d5e0] dark:bg-slate-800 transition-colors w-full"></div>
+      <div className="h-3 bg-[#b4d5e0] dark:bg-[#0e263d] transition-colors w-full"></div>
 
       {/* Main Orange Background Hero Canvas Container */}
-      <div className="relative min-h-[520px] md:min-h-[580px] py-10 md:py-14 flex items-center overflow-hidden bg-gradient-to-br from-[#ff6800] via-[#e65c00] to-[#c94b00] dark:from-[#c94b00] dark:via-[#9e3700] dark:to-[#070b14] text-white">
+      <div className="relative min-h-[520px] md:min-h-[580px] py-10 md:py-14 flex items-center overflow-hidden bg-gradient-to-br from-[#ff6800] via-[#e65c00] to-[#c94b00] dark:from-[#c94b00] dark:via-[#9e3700] dark:to-[#0e263d] text-white">
         <AnimatePresence mode="wait">
           <motion.div
             key={currentSlide}
@@ -109,16 +112,16 @@ export default function HeroSection() {
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.98 }}
             transition={{ duration: 0.6 }}
-            className="absolute inset-0 bg-gradient-to-br from-[#ff6800] via-[#e65c00] to-[#c94b00] dark:from-[#c94b00] dark:via-[#9e3700] dark:to-[#070b14] transition-colors duration-300"
+            className={`absolute inset-0 bg-gradient-to-br ${slides[currentSlide].bg || 'from-[#ff6800] via-[#e65c00] to-[#c94b00] dark:from-[#c94b00] dark:via-[#9e3700] dark:to-[#0e263d]'} transition-colors duration-500`}
           >
             {/* Glowing Accent Orbs */}
             <div className="absolute inset-0 pointer-events-none opacity-50">
-              <motion.div 
+              <motion.div
                 animate={{ scale: [1, 1.2, 1], opacity: [0.4, 0.7, 0.4] }}
                 transition={{ repeat: Infinity, duration: 6, ease: "easeInOut" }}
                 className="absolute top-0 right-0 w-[550px] h-[550px] bg-amber-300/30 rounded-full blur-3xl -translate-y-1/3 translate-x-1/3"
               />
-              <motion.div 
+              <motion.div
                 animate={{ scale: [1.2, 1, 1.2], opacity: [0.3, 0.6, 0.3] }}
                 transition={{ repeat: Infinity, duration: 7, ease: "easeInOut" }}
                 className="absolute bottom-0 left-0 w-[450px] h-[450px] bg-[#b4d5e0]/30 rounded-full blur-3xl translate-y-1/3 -translate-x-1/3"
@@ -127,20 +130,20 @@ export default function HeroSection() {
 
             <div className="relative max-w-7xl mx-auto px-4 sm:px-6 h-full flex items-center py-6">
               <div className="flex flex-col md:flex-row items-center justify-between w-full gap-8">
-                
+
                 {/* Floating 10 YEARS OF MUDRA Seal Badge */}
-                <motion.div 
+                <motion.div
                   initial={{ opacity: 0, x: -40 }}
                   animate={{ opacity: 1, x: 0, y: [0, -8, 0] }}
-                  transition={{ 
+                  transition={{
                     x: { duration: 0.5 },
                     y: { repeat: Infinity, duration: 4, ease: "easeInOut" }
                   }}
                   whileHover={{ scale: 1.08, rotate: 2 }}
-                  className="hidden md:flex flex-col items-center bg-white text-slate-950 rounded-2xl p-6 shadow-2xl border-2 border-amber-300 shrink-0 cursor-pointer"
+                  className="hidden md:flex flex-col items-center bg-white text-[#0e263d] rounded-2xl p-6 shadow-2xl border-2 border-amber-300 shrink-0 cursor-pointer"
                 >
                   <Award size={46} className="mb-1 text-[#ff6800] drop-shadow-md" />
-                  <span className="font-black text-3xl leading-none text-slate-950">10</span>
+                  <span className="font-black text-3xl leading-none text-[#0e263d]">10</span>
                   <span className="text-[11px] font-black tracking-widest uppercase mt-1 text-slate-700">YEARS OF</span>
                   <span className="font-black text-lg tracking-wider text-[#ff6800]">MUDRA</span>
                 </motion.div>
@@ -151,12 +154,12 @@ export default function HeroSection() {
                     initial={{ opacity: 0, y: -15 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.1 }}
-                    className="inline-flex items-center gap-2 bg-slate-950 text-amber-300 px-4 py-1.5 rounded-full text-xs font-black tracking-wider uppercase mb-4 shadow-xl border border-slate-800"
+                    className="inline-flex items-center gap-2 bg-[#0e263d] text-amber-300 px-4 py-1.5 rounded-full text-xs font-black tracking-wider uppercase mb-4 shadow-xl border border-[#183957]"
                   >
                     <ShieldCheck size={14} className="text-amber-400" />
                     <span>GOVERNMENT OF INDIA INITIATIVE</span>
                   </motion.div>
-                  
+
                   <motion.h2
                     initial={{ opacity: 0, y: 25 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -191,23 +194,25 @@ export default function HeroSection() {
 
                 </div>
 
-                {/* Right Image: Hon'ble Prime Minister */}
-                <motion.div 
-                  initial={{ opacity: 0, x: 40, scale: 0.95 }}
-                  animate={{ opacity: 1, x: 0, scale: 1 }}
-                  transition={{ delay: 0.3, duration: 0.5 }}
-                  whileHover={{ scale: 1.04, rotate: 1 }}
-                  className="hidden md:block shrink-0 cursor-pointer"
-                >
-                  <div className="relative">
-                    <div className="absolute -inset-1 bg-white rounded-3xl blur opacity-60 animate-pulse"></div>
-                    <img 
-                      src={pmModiImage}
-                      alt="Hon'ble Prime Minister Narendra Modi"
-                      className="relative w-60 h-72 object-cover rounded-2xl shadow-2xl border-4 border-white bg-white"
-                    />
-                  </div>
-                </motion.div>
+                {/* Right Image */}
+                {slides[currentSlide].image && (
+                  <motion.div
+                    initial={{ opacity: 0, x: 40, scale: 0.95 }}
+                    animate={{ opacity: 1, x: 0, scale: 1 }}
+                    transition={{ delay: 0.3, duration: 0.5 }}
+                    whileHover={{ scale: 1.04, rotate: 1 }}
+                    className="block shrink-0 cursor-pointer"
+                  >
+                    <div className="relative">
+                      <div className="absolute -inset-1 bg-white rounded-3xl blur opacity-60 animate-pulse"></div>
+                      <img
+                        src={slides[currentSlide].image}
+                        alt={slides[currentSlide].title}
+                        className="relative w-48 h-56 sm:w-60 sm:h-72 object-cover rounded-2xl shadow-2xl border-4 border-white bg-white"
+                      />
+                    </div>
+                  </motion.div>
+                )}
 
               </div>
             </div>
@@ -215,22 +220,22 @@ export default function HeroSection() {
         </AnimatePresence>
 
         {/* Slide Controls */}
-        <motion.button 
+        <motion.button
           whileHover={{ scale: 1.15 }}
           whileTap={{ scale: 0.9 }}
           type="button"
           onClick={prevSlide}
-          className="absolute left-4 top-1/2 -translate-y-1/2 bg-slate-950/70 hover:bg-slate-950 text-white p-2.5 rounded-full transition-all shadow-lg border border-slate-700"
+          className="absolute left-4 top-1/2 -translate-y-1/2 bg-[#0e263d]/70 hover:bg-[#0e263d] text-white p-2.5 rounded-full transition-all shadow-lg border border-[#183957]"
         >
           <ChevronLeft size={22} />
         </motion.button>
 
-        <motion.button 
+        <motion.button
           whileHover={{ scale: 1.15 }}
           whileTap={{ scale: 0.9 }}
           type="button"
           onClick={nextSlide}
-          className="absolute right-4 top-1/2 -translate-y-1/2 bg-slate-950/70 hover:bg-slate-950 text-white p-2.5 rounded-full transition-all shadow-lg border border-slate-700"
+          className="absolute right-4 top-1/2 -translate-y-1/2 bg-[#0e263d]/70 hover:bg-[#0e263d] text-white p-2.5 rounded-full transition-all shadow-lg border border-[#183957]"
         >
           <ChevronRight size={22} />
         </motion.button>
@@ -242,16 +247,15 @@ export default function HeroSection() {
               key={idx}
               type="button"
               onClick={() => setCurrentSlide(idx)}
-              className={`h-2 rounded-full transition-all ${
-                idx === currentSlide ? 'bg-white w-8' : 'bg-white/50 w-2'
-              }`}
+              className={`h-2 rounded-full transition-all ${idx === currentSlide ? 'bg-white w-8' : 'bg-white/50 w-2'
+                }`}
             />
           ))}
         </div>
       </div>
 
       {/* Animated News Ticker Bar */}
-      <div className="bg-slate-950 text-white border-t border-slate-800 py-2.5 px-4 shadow-sm">
+      <div className="bg-[#0e263d] text-white border-t border-[#183957] py-2.5 px-4 shadow-sm">
         <div className="max-w-7xl mx-auto flex items-center gap-4 text-xs">
           <span className="bg-[#ff6800] text-white px-3 py-1 rounded font-black uppercase tracking-wider shrink-0 flex items-center gap-1.5 shadow-sm">
             <span className="w-2 h-2 rounded-full bg-white animate-ping"></span>
@@ -272,7 +276,7 @@ export default function HeroSection() {
             </AnimatePresence>
           </div>
           <div className="flex gap-1 shrink-0">
-            <motion.button 
+            <motion.button
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
               type="button"
@@ -281,7 +285,7 @@ export default function HeroSection() {
             >
               <ChevronLeft size={14} />
             </motion.button>
-            <motion.button 
+            <motion.button
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
               type="button"

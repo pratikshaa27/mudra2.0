@@ -145,34 +145,34 @@ function parseStructuredFAQ(text) {
 
 // Component to render structured FAQ answers cleanly with precision accuracy badge
 function StructuredFAQMessage({ text }) {
-  const { question, answer, category } = parseStructuredFAQ(text);
+  const { answer, category } = parseStructuredFAQ(text);
 
   return (
-    <div className="space-y-2.5">
-      <div className="flex items-center justify-between gap-2">
-        <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-orange-100 text-[#ff6800] border border-orange-200 text-[10px] font-black uppercase tracking-wider">
-          <Sparkles size={11} className="text-[#ff6800]" />
+    <div className="space-y-3">
+      {/* Top Metadata Badges */}
+      <div className="flex items-center justify-between gap-2 pb-1">
+        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-gradient-to-r from-orange-500/10 to-amber-500/10 text-[#ff6800] border border-orange-500/20 text-[10px] font-black uppercase tracking-wider shadow-sm">
+          <Sparkles size={12} className="text-[#ff6800] animate-pulse" />
           <span>{category}</span>
         </div>
-        <span className="text-[9px] font-extrabold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200 flex items-center gap-1">
-          <ShieldCheck size={11} /> 100% RAG Verified
+        <span className="text-[9.5px] font-black text-emerald-700 bg-emerald-500/10 px-2.5 py-1 rounded-full border border-emerald-500/20 flex items-center gap-1.5 shadow-sm">
+          <ShieldCheck size={12} className="text-emerald-600" /> 100% RAG Verified
         </span>
       </div>
 
-      {question ? (
-        <div className="bg-slate-100 p-2.5 rounded-xl border border-slate-200">
-          <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest block mb-0.5 flex items-center gap-1">
-            <HelpCircle size={10} className="text-[#ff6800]" /> QUESTION
+      {/* Official Response Card */}
+      <div className="relative overflow-hidden bg-gradient-to-br from-amber-50/90 via-orange-50/50 to-amber-100/40 p-4 rounded-2xl border border-amber-200/90 shadow-sm transition-all duration-300">
+        <div className="flex items-center gap-1.5 mb-2">
+          <div className="w-5 h-5 rounded-full bg-[#ff6800] text-white flex items-center justify-center shadow-xs">
+            <CheckCircle2 size={12} />
+          </div>
+          <span className="text-[10px] font-black text-[#ff6800] uppercase tracking-wider">
+            OFFICIAL RESPONSE
           </span>
-          <h4 className="text-xs font-black text-slate-900 leading-snug">{question}</h4>
         </div>
-      ) : null}
-
-      <div className="bg-orange-50/70 p-3 rounded-xl border border-orange-200/80 shadow-inner">
-        <span className="text-[9px] font-black text-[#ff6800] uppercase tracking-widest block mb-1 flex items-center gap-1">
-          <CheckCircle2 size={11} className="text-[#ff6800]" /> OFFICIAL RESPONSE
-        </span>
-        <p className="text-xs font-bold text-slate-800 leading-relaxed whitespace-pre-line">{answer}</p>
+        <p className="text-xs font-semibold text-slate-800 leading-relaxed whitespace-pre-line pl-0.5">
+          {answer}
+        </p>
       </div>
     </div>
   );
@@ -306,20 +306,20 @@ Category: MUDRA Official FAQ
             initial={{ scale: 0, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0, opacity: 0 }}
-            whileHover={{ scale: 1.08 }}
+            whileHover={{ scale: 1.06 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => setIsOpen(true)}
-            className="fixed bottom-6 right-6 z-50 px-4 py-3 bg-white text-slate-900 rounded-full shadow-2xl flex items-center gap-3 border-2 border-[#ff6800]/40 hover:border-[#ff6800] shadow-orange-500/20 group transition-all"
+            className="fixed bottom-6 right-6 z-50 px-4 py-3 bg-white text-slate-900 rounded-full shadow-2xl flex items-center gap-3 border border-[#ff6800]/30 hover:border-[#ff6800] shadow-orange-500/20 group transition-all"
           >
             <div className="relative">
-              <div className="w-10 h-10 bg-gradient-to-tr from-[#ff6800] to-amber-400 text-white rounded-full flex items-center justify-center font-black shadow-md">
+              <div className="w-10 h-10 bg-gradient-to-tr from-[#ff6800] via-[#e65c00] to-amber-500 text-white rounded-full flex items-center justify-center font-black shadow-md shadow-orange-500/30">
                 <Sparkles className="w-5 h-5 animate-spin" style={{ animationDuration: '6s' }} />
               </div>
-              <span className="absolute -top-1 -right-1 w-3.5 h-3.5 bg-emerald-500 border-2 border-white rounded-full animate-ping"></span>
+              <span className="absolute -top-1 -right-1 w-3.5 h-3.5 bg-emerald-500 border-2 border-white rounded-full animate-pulse"></span>
             </div>
             <div className="text-left pr-1 hidden sm:block">
-              <p className="text-xs font-black text-slate-900 leading-tight">MUDRA 2.0 Assistant</p>
-              <p className="text-[10px] font-bold text-[#ff6800]">Precision Hybrid RAG Engine</p>
+              <p className="text-xs font-black text-[#0e263d] leading-tight">MUDRA 2.0 Assistant</p>
+              <p className="text-[10px] font-bold text-[#ff6800]">GenAI RAG Engine</p>
             </div>
           </motion.button>
         )}
@@ -329,16 +329,16 @@ Category: MUDRA Official FAQ
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ opacity: 0, y: 80, scale: 0.9 }}
+            initial={{ opacity: 0, y: 80, scale: 0.92 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 80, scale: 0.9 }}
-            transition={{ type: "spring", damping: 25, stiffness: 300 }}
-            className="fixed bottom-6 right-6 z-50 w-full max-w-md"
+            exit={{ opacity: 0, y: 80, scale: 0.92 }}
+            transition={{ type: "spring", damping: 26, stiffness: 320 }}
+            className="fixed bottom-0 right-0 sm:bottom-6 sm:right-6 z-50 w-full sm:w-[420px] max-w-full sm:px-0 px-1"
           >
-            <div className="bg-white text-slate-900 rounded-3xl border-2 border-slate-200 shadow-2xl overflow-hidden flex flex-col" style={{ height: isMinimized ? '64px' : '620px' }}>
-              
+            <div className="bg-white text-slate-900 rounded-t-3xl sm:rounded-3xl border border-slate-200/90 shadow-2xl overflow-hidden flex flex-col" style={{ height: isMinimized ? '64px' : 'min(620px, calc(100vh - 32px))' }}>
+
               {/* Header */}
-              <div className="bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 text-white p-4 border-b border-slate-800 flex items-center justify-between shadow-md">
+              <div className="bg-[#0e263d] text-white p-4 border-b border-[#183957] flex items-center justify-between shadow-md">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-[#ff6800] to-amber-400 text-white flex items-center justify-center font-bold shadow-md shadow-orange-500/30">
                     <Sparkles className="w-5 h-5" />
@@ -352,7 +352,7 @@ Category: MUDRA Official FAQ
                 <div className="flex items-center gap-1.5">
                   <button
                     onClick={() => setRagEnabled(!ragEnabled)}
-                    title={ragEnabled ? "RAG Mode Enabled (vector_store/chunks.pkl Active)" : "Standard Mode"}
+                    title={ragEnabled ? "RAG Mode Enabled" : "Standard Mode"}
                     className={`px-2.5 py-1 rounded-full text-xs flex items-center gap-1 font-bold transition-all ${
                       ragEnabled ? 'bg-[#ff6800] text-white shadow-sm' : 'bg-slate-800 text-slate-400'
                     }`}
@@ -378,7 +378,7 @@ Category: MUDRA Official FAQ
               {!isMinimized && (
                 <>
                   {/* Message Stream */}
-                  <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-slate-50/80 text-xs">
+                  <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-slate-50/70 text-xs">
                     {messages.map((msg, idx) => (
                       <motion.div
                         key={idx}
@@ -386,36 +386,36 @@ Category: MUDRA Official FAQ
                         animate={{ opacity: 1, y: 0 }}
                         className={`flex ${msg.type === 'user' ? 'justify-end' : 'justify-start'}`}
                       >
-                        <div className={`max-w-[85%] rounded-2xl p-3.5 shadow-sm ${
+                        <div className={`max-w-[88%] rounded-2xl p-4 shadow-sm transition-all ${
                           msg.type === 'user'
-                            ? 'bg-[#ff6800] text-white rounded-br-none font-medium'
-                            : 'bg-white border-2 border-slate-200 text-slate-800 rounded-bl-none'
+                            ? 'bg-gradient-to-r from-[#ff6800] via-[#e65c00] to-[#d95300] text-white rounded-tr-xs shadow-orange-500/20 font-bold'
+                            : 'bg-white border border-slate-200/90 text-slate-800 rounded-tl-xs shadow-slate-200/50'
                         }`}>
-                          
+
                           {/* Render Structured FAQ View */}
                           {msg.type === 'bot' ? (
                             <StructuredFAQMessage text={msg.text} />
                           ) : (
-                            <p className="leading-relaxed whitespace-pre-line text-xs font-semibold">{msg.text}</p>
+                            <p className="leading-relaxed whitespace-pre-line text-xs font-bold text-white">{msg.text}</p>
                           )}
 
                           {/* RAG Vector Sources Citation Links */}
                           {msg.sources && msg.sources.length > 0 && (
-                            <div className="mt-3 pt-2.5 border-t border-slate-200 text-[10px] text-slate-600">
-                              <p className="font-black flex items-center gap-1 mb-1.5 text-slate-700 uppercase tracking-wider text-[9px]">
-                                <FileText className="w-3 h-3 text-[#ff6800]" /> Clickable PDF Citations:
+                            <div className="mt-3.5 pt-3 border-t border-slate-200/80 text-[10px] text-slate-600">
+                              <p className="font-black flex items-center gap-1.5 mb-2 text-slate-700 uppercase tracking-wider text-[9px]">
+                                <FileText className="w-3.5 h-3.5 text-[#ff6800]" /> Clickable PDF Citations:
                               </p>
-                              <div className="space-y-1">
+                              <div className="space-y-1.5">
                                 {msg.sources.map((src, sIdx) => (
                                   <a
                                     key={sIdx}
                                     href={`/pdf/${src}`}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="bg-slate-100 hover:bg-orange-50 px-2.5 py-1 rounded-lg border border-slate-200 hover:border-orange-300 font-mono text-[9px] text-slate-700 hover:text-[#ff6800] flex items-center justify-between transition-all group"
+                                    className="bg-slate-100/90 hover:bg-orange-50/80 px-3 py-1.5 rounded-xl border border-slate-200/80 hover:border-orange-300 font-mono text-[9px] text-slate-700 hover:text-[#ff6800] flex items-center justify-between transition-all group shadow-2xs"
                                   >
-                                    <span className="truncate pr-2">📄 {src}</span>
-                                    <span className="text-[#ff6800] font-black text-[9px] shrink-0 flex items-center gap-0.5 group-hover:underline">
+                                    <span className="truncate pr-2 font-semibold">📄 {src}</span>
+                                    <span className="text-[#ff6800] font-black text-[9px] shrink-0 flex items-center gap-1 group-hover:translate-x-0.5 transition-transform">
                                       VIEW <ExternalLink className="w-2.5 h-2.5 inline" />
                                     </span>
                                   </a>
@@ -424,14 +424,14 @@ Category: MUDRA Official FAQ
                             </div>
                           )}
 
-                          <div className={`mt-2 flex items-center justify-between text-[10px] ${
-                            msg.type === 'user' ? 'text-orange-100 font-medium' : 'text-slate-400 font-bold'
+                          <div className={`mt-2.5 flex items-center justify-between text-[10px] ${
+                            msg.type === 'user' ? 'text-orange-100 font-semibold' : 'text-slate-400 font-bold'
                           }`}>
                             <span>{msg.time}</span>
                             {msg.type === 'bot' && (
                               <button
                                 onClick={() => speakText(msg.text, idx)}
-                                className="hover:text-[#ff6800] flex items-center gap-1 transition-colors ml-2 font-bold"
+                                className="hover:text-[#ff6800] flex items-center gap-1.5 transition-colors ml-2 font-bold px-2 py-0.5 rounded-full bg-slate-100 hover:bg-orange-50 border border-slate-200/60 text-slate-600 hover:text-[#ff6800]"
                               >
                                 {speakingIndex === idx ? (
                                   <>
@@ -450,7 +450,7 @@ Category: MUDRA Official FAQ
                     ))}
 
                     {isTyping && (
-                      <div className="flex items-center gap-2 text-slate-600 font-bold text-xs bg-white p-3 rounded-2xl w-fit border-2 border-slate-200 shadow-sm">
+                      <div className="flex items-center gap-2.5 text-slate-600 font-bold text-xs bg-white p-3.5 rounded-2xl w-fit border border-slate-200/90 shadow-sm">
                         <Loader2 className="w-4 h-4 animate-spin text-[#ff6800]" />
                         <span>Performing precision RAG retrieval...</span>
                       </div>
@@ -460,14 +460,14 @@ Category: MUDRA Official FAQ
                   </div>
 
                   {/* Preset Question Chips */}
-                  <div className="p-3 bg-slate-100/90 border-t border-slate-200 space-y-1.5">
-                    <p className="text-[10px] text-slate-500 font-black uppercase tracking-wider">FAQ Quick Prompts:</p>
+                  <div className="p-3 bg-slate-100/80 border-t border-slate-200/90 space-y-1.5">
+                    <p className="text-[9.5px] text-slate-500 font-black uppercase tracking-wider pl-0.5">FAQ Quick Prompts:</p>
                     <div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none">
                       {predefinedQuestions.map((q, idx) => (
                         <button
                           key={idx}
                           onClick={() => handleSendMessage(q)}
-                          className="whitespace-nowrap px-3 py-1 rounded-full text-[10px] font-bold bg-white hover:bg-orange-50 text-slate-700 hover:text-[#ff6800] border border-slate-300 hover:border-[#ff6800] shadow-sm transition-all"
+                          className="whitespace-nowrap px-3.5 py-1.5 rounded-full text-[10px] font-bold bg-white hover:bg-orange-50 text-slate-700 hover:text-[#ff6800] border border-slate-200 hover:border-[#ff6800] shadow-xs hover:shadow-sm transition-all transform hover:-translate-y-0.5"
                         >
                           {q}
                         </button>
@@ -481,21 +481,21 @@ Category: MUDRA Official FAQ
                       e.preventDefault();
                       handleSendMessage(inputValue);
                     }}
-                    className="p-3 bg-white border-t border-slate-200 flex items-center gap-2"
+                    className="p-3 bg-white border-t border-slate-200/90 flex items-center gap-2"
                   >
                     <Input
                       value={inputValue}
                       onChange={(e) => setInputValue(e.target.value)}
                       placeholder="Ask any question in your own words..."
                       disabled={isTyping}
-                      className="bg-slate-50 border-2 border-slate-200 text-slate-900 placeholder:text-slate-400 text-xs font-semibold h-10 rounded-xl focus:border-[#ff6800] focus:ring-0"
+                      className="bg-slate-50 border border-slate-200/90 text-slate-900 placeholder:text-slate-400 text-xs font-semibold h-11 rounded-full px-4 focus:border-[#ff6800] focus:ring-2 focus:ring-[#ff6800]/20 transition-all"
                     />
                     <Button
                       type="submit"
                       disabled={isTyping || !inputValue.trim()}
-                      className="h-10 px-4 bg-[#ff6800] hover:bg-orange-600 text-white font-black rounded-xl shadow-md transition-all shrink-0"
+                      className="h-11 w-11 p-0 bg-gradient-to-r from-[#ff6800] to-[#e65c00] hover:from-orange-600 hover:to-orange-700 text-white font-black rounded-full shadow-md shadow-orange-500/30 transition-all shrink-0 flex items-center justify-center hover:scale-105 active:scale-95 disabled:opacity-50 disabled:hover:scale-100"
                     >
-                      <Send className="w-4 h-4" />
+                      <Send className="w-4 h-4 ml-0.5" />
                     </Button>
                   </form>
                 </>
