@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  X, 
-  ZoomIn, 
-  Sparkles, 
-  ChevronLeft, 
-  ChevronRight, 
-  Search, 
-  Share2, 
-  Download, 
-  Tag, 
+import {
+  X,
+  ZoomIn,
+  Sparkles,
+  ChevronLeft,
+  ChevronRight,
+  Search,
+  Share2,
+  Download,
+  Tag,
   Calendar,
   Building2
 } from 'lucide-react';
@@ -64,8 +64,8 @@ export default function Gallery() {
   const [copied, setCopied] = useState(false);
 
   const images = galleryImages[activeCategory] || [];
-  
-  const filteredImages = images.filter(img => 
+
+  const filteredImages = images.filter(img =>
     !searchQuery || img.caption.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
@@ -96,9 +96,9 @@ export default function Gallery() {
       <Header />
 
       <main className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 py-12 w-full">
-        
+
         {/* Centered Page Header */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           className="text-center max-w-3xl mx-auto mb-12"
@@ -121,7 +121,7 @@ export default function Gallery() {
 
         {/* Search Bar & Category Navigation */}
         <div className="space-y-6 mb-12">
-          
+
           {/* Interactive Search Bar */}
           <div className="max-w-md mx-auto relative">
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 w-4 h-4" />
@@ -155,11 +155,10 @@ export default function Gallery() {
                     setActiveCategory(cat.id);
                     setSelectedIndex(null);
                   }}
-                  className={`relative z-10 px-4 py-2 rounded-full text-xs font-black tracking-wider transition-colors ${
-                    isSelected
+                  className={`relative z-10 px-4 py-2 rounded-full text-xs font-black tracking-wider transition-colors ${isSelected
                       ? 'text-white dark:text-slate-950 font-black'
                       : 'text-slate-700 dark:text-slate-300 hover:text-slate-950 dark:hover:text-white'
-                  }`}
+                    }`}
                 >
                   {isSelected && (
                     <motion.div

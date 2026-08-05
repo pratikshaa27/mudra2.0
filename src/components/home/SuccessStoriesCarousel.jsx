@@ -102,7 +102,7 @@ export default function SuccessStoriesCarousel() {
   const current = stories[currentIndex];
 
   return (
-    <section className="py-20 bg-slate-50 dark:bg-[#070b14] text-slate-900 dark:text-slate-100 transition-colors duration-300 relative overflow-hidden border-t border-slate-200 dark:border-slate-800">
+    <section className="py-20 bg-transparent text-slate-900 dark:text-slate-100 transition-colors duration-300 relative overflow-hidden border-t border-slate-200 dark:border-slate-800">
       
       {/* Glow Orbs */}
       <div className="absolute top-1/2 left-0 w-96 h-96 bg-amber-400/10 rounded-full blur-3xl pointer-events-none -translate-y-1/2"></div>

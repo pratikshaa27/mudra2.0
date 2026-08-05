@@ -98,7 +98,7 @@ export default function ImpactStatistics() {
   const isInView = useInView(sectionRef, { once: true, margin: "-100px" });
 
   return (
-    <section ref={sectionRef} className="py-20 bg-slate-50 dark:bg-[#070b14] text-slate-900 dark:text-slate-100 transition-colors duration-300 relative overflow-hidden border-t border-slate-200 dark:border-slate-800">
+    <section ref={sectionRef} className="py-20 bg-transparent text-slate-900 dark:text-slate-100 transition-colors duration-300 relative overflow-hidden border-t border-slate-200 dark:border-slate-800">
       
       {/* Subtle Background Orbs */}
       <div className="absolute top-0 right-1/4 w-96 h-96 bg-amber-400/10 rounded-full blur-3xl pointer-events-none"></div>

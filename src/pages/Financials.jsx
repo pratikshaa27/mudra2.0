@@ -134,10 +134,18 @@ export default function Financials() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-[#070b14] text-slate-900 dark:text-slate-100 transition-colors duration-300 flex flex-col justify-between">
+    <div className="min-h-screen bg-slate-50 dark:bg-[#070b14] text-slate-900 dark:text-slate-100 transition-colors duration-300 flex flex-col justify-between relative overflow-hidden">
+      
+      {/* Taj Mahal Fixed Background Image Effect */}
+      <div 
+        className="absolute inset-0 pointer-events-none bg-cover bg-center bg-fixed filter brightness-105 contrast-110 opacity-75 dark:opacity-55"
+        style={{ backgroundImage: `url('/photo/tajmahal.png')` }}
+      />
+      <div className="absolute inset-0 pointer-events-none bg-gradient-to-b from-[#fffbeb]/75 via-white/55 to-[#fffbeb]/85 dark:from-[#070b14]/85 dark:via-[#070b14]/75 dark:to-[#070b14]/90" />
+
       <Header />
 
-      <main className="flex-1 max-w-7xl mx-auto px-4 py-12 w-full">
+      <main className="flex-1 max-w-7xl mx-auto px-4 py-12 w-full relative z-10">
         {/* Page Header */}
         <div className="text-center max-w-3xl mx-auto mb-12">
           <span className="inline-flex items-center gap-1.5 bg-[#f97316] text-white px-3.5 py-1 rounded-md text-xs font-black tracking-wider uppercase mb-3 shadow-sm">

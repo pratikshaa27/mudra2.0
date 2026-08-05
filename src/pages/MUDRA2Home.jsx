@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useCMS } from '../components/CMSContext';
 import MockupSwitcher from '../components/home/MockupSwitcher';
+import VisionMission from '../components/home/VisionMission';
 import SocialMediaFeed from '../components/home/SocialMediaFeed';
 import ChatBot from '../components/ChatBot';
 import { Link } from 'react-router-dom';
@@ -278,6 +279,9 @@ export default function MUDRA2Home() {
           </div>
         </div>
       </section>
+
+      {/* 7b. VISION & MISSION SECTION */}
+      <VisionMission />
 
       {/* 8. SCHEMES MATRIX (SIMPLE CLEAN CARDS) */}
       <section id="schemes" className="py-16 px-4 bg-white border-b border-slate-200">

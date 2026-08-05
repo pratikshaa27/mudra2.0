@@ -67,7 +67,17 @@ export default function AboutPMMY() {
   const current = achievements[currentIndex];
 
   return (
-    <section id="about-mudra" className="py-20 bg-slate-50 dark:bg-[#070b14] text-slate-900 dark:text-slate-100 transition-colors duration-300 relative overflow-hidden border-t border-slate-200 dark:border-slate-800">
+    <section id="about-mudra" className="py-20 text-slate-900 dark:text-slate-100 transition-colors duration-300 relative overflow-hidden border-t border-slate-200 dark:border-slate-800">
+      
+      {/* Taj Mahal Fixed Background Image (Image remains fixed on scroll while info glides over) */}
+      <div 
+        className="absolute inset-0 pointer-events-none bg-cover bg-center bg-fixed filter brightness-105 contrast-110 opacity-80 dark:opacity-60"
+        style={{ backgroundImage: `url('/photo/tajmahal.png')` }}
+      />
+
+      {/* Ambient Gradient Overlay for Readability */}
+      <div className="absolute inset-0 pointer-events-none bg-gradient-to-b from-[#fffbeb]/70 via-white/50 to-[#fffbeb]/80 dark:from-[#070b14]/85 dark:via-[#070b14]/70 dark:to-[#070b14]/90" />
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
         
         {/* Header */}

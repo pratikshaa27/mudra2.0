@@ -72,7 +72,7 @@ export default function AnnouncementsNews() {
   const items = announcementsData[activeTab] || [];
 
   return (
-    <section className="py-20 bg-slate-50 dark:bg-[#070b14] text-slate-900 dark:text-slate-100 transition-colors duration-300 relative border-t border-slate-200 dark:border-slate-800">
+    <section className="py-20 bg-transparent text-slate-900 dark:text-slate-100 transition-colors duration-300 relative border-t border-slate-200 dark:border-slate-800">
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
         
         {/* Centered Uniform Header */}

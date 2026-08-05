@@ -2,15 +2,15 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  CheckCircle2, 
-  ArrowRight, 
-  ShieldCheck, 
-  Sparkles, 
-  X, 
-  FileText, 
-  Percent, 
-  Briefcase, 
+import {
+  CheckCircle2,
+  ArrowRight,
+  ShieldCheck,
+  Sparkles,
+  X,
+  FileText,
+  Percent,
+  Briefcase,
   Info,
   Maximize2
 } from 'lucide-react';
@@ -22,7 +22,7 @@ const products = [
     limit: 'Up to ₹50,000',
     range: 'Loans up to ₹50,000/-',
     stage: 'Startups & Micro Beginners',
-    image: '/photo/shishu.jpeg',
+    image: '/photo/shishu.jpg',
     description: 'Designed for early-stage micro entrepreneurs, small artisans, street vendors, and shopkeepers setting up initial business operations.',
     features: ['Zero collateral required', 'Minimal documentation', 'Up to 5 years tenure', 'Zero processing fee'],
     gradient: 'from-blue-600 to-indigo-700',
@@ -90,9 +90,9 @@ export default function LoanProducts() {
   const [selectedScheme, setSelectedScheme] = useState(null);
 
   return (
-    <section id="schemes" className="py-20 bg-slate-50 dark:bg-[#070b14] text-slate-900 dark:text-slate-100 transition-colors duration-300 relative border-t border-slate-200 dark:border-slate-800">
+    <section id="schemes" className="py-20 bg-transparent text-slate-900 dark:text-slate-100 transition-colors duration-300 relative border-t border-slate-200 dark:border-slate-800">
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
-        
+
         {/* Centered Section Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -116,7 +116,7 @@ export default function LoanProducts() {
           </p>
         </motion.div>
 
-        {/* 4 Cards Grid - Clean, No Buttons, No Moving Track */}
+        {/* 4 Cards Grid - Image First (Full Image Displayed Without Cropping) */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-7">
           {products.map((product, idx) => (
             <motion.div
@@ -129,62 +129,73 @@ export default function LoanProducts() {
               onClick={() => setSelectedScheme(product)}
               className="relative group cursor-pointer flex"
             >
-              <div className="relative bg-white dark:bg-slate-900 rounded-3xl overflow-hidden shadow-xl border-2 border-slate-200 dark:border-slate-800 group-hover:border-amber-400 dark:group-hover:border-amber-500/70 transition-all w-full flex flex-col justify-between">
-                
-                <div>
-                  {/* Local Photo Banner */}
-                  <div className="relative h-48 w-full overflow-hidden bg-slate-200 dark:bg-slate-800">
-                    <img 
-                      src={product.image} 
-                      alt={product.name} 
-                      className="w-full h-full object-cover group-hover:scale-108 transition-transform duration-700"
-                      onError={(e) => {
-                        e.target.src = 'https://images.unsplash.com/photo-1590682680695-43b964a3ae17?auto=format&fit=crop&w=800&q=80';
-                      }}
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/30 to-transparent"></div>
-                    
-                    <div className="absolute top-3 left-3 right-3 flex justify-between items-center z-10">
-                      <span className="text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-full bg-slate-900/90 text-amber-300 backdrop-blur-md border border-slate-700 shadow-md">
-                        {product.badge}
-                      </span>
-                      <div className="w-7 h-7 rounded-full bg-emerald-500 text-white flex items-center justify-center shadow-md">
-                        <ShieldCheck size={15} />
-                      </div>
-                    </div>
+              <div className="relative bg-white dark:bg-slate-900 rounded-3xl overflow-hidden shadow-xl border-2 border-slate-200 dark:border-slate-800 group-hover:border-amber-400 dark:group-hover:border-amber-500/80 transition-all w-full h-[22rem] flex flex-col justify-between">
 
-                    <div className="absolute bottom-3 left-4 right-4 z-10">
-                      <h3 className="text-2xl font-black text-white tracking-tight">
-                        {product.name}
-                      </h3>
-                      <p className="text-[11px] font-extrabold text-amber-300">
-                        {product.stage}
-                      </p>
-                    </div>
+                {/* Full Cover Image Container (object-contain shows full image without cropping) */}
+                <div className="relative w-full h-full p-2 bg-slate-100 dark:bg-slate-900 flex items-center justify-center overflow-hidden">
+                  <img
+                    src={product.image}
+                    alt={product.name}
+                    className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500 rounded-2xl"
+                    onError={(e) => {
+                      e.target.src = 'https://images.unsplash.com/photo-1590682680695-43b964a3ae17?auto=format&fit=crop&w=800&q=80';
+                    }}
+                  />
+                </div>
+
+                {/* Top Badge (Always Visible) */}
+                <div className="absolute top-3 left-3 right-3 flex justify-between items-center z-10">
+                  <span className="text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-full bg-slate-900/90 text-amber-300 backdrop-blur-md border border-slate-700 shadow-md">
+                    {product.badge}
+                  </span>
+                  <div className="w-7 h-7 rounded-full bg-emerald-500 text-white flex items-center justify-center shadow-md">
+                    <ShieldCheck size={15} />
                   </div>
+                </div>
 
-                  {/* Compact Body - Limit & Info trigger button */}
-                  <div className="p-5 flex flex-col items-center justify-between gap-4">
-                    <div className="w-full text-center text-red-800 dark:text-amber-400 font-black text-sm px-3.5 py-2.5 bg-red-50 dark:bg-slate-800/90 rounded-2xl border border-red-200 dark:border-slate-700 shadow-inner">
-                      Limit: {product.limit}
-                    </div>
+                {/* Initial Scheme Title at Bottom (Fades out on hover) */}
+                <div className="absolute bottom-3 left-3 right-3 z-10 group-hover:opacity-0 transition-opacity duration-300 bg-slate-950/80 p-3 rounded-2xl backdrop-blur-md border border-white/10 shadow-lg">
+                  <h3 className="text-xl font-black text-white tracking-tight">
+                    {product.name}
+                  </h3>
+                  <p className="text-[11px] font-extrabold text-amber-300">
+                    {product.limit}
+                  </p>
+                </div>
 
-                    <p className="text-[11px] text-slate-500 dark:text-slate-400 font-bold text-center">
-                      Collateral-Free PMMY Credit Facility
+                {/* Info Overlay (Revealed On Cursor Hover) */}
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/90 to-slate-950/60 p-5 flex flex-col justify-end gap-3 text-white opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-6 group-hover:translate-y-0 z-20 backdrop-blur-[3px]">
+                  <div>
+                    <span className="text-[10px] font-black text-amber-400 uppercase tracking-widest">
+                      {product.badge}
+                    </span>
+                    <h3 className="text-2xl font-black text-white tracking-tight mt-0.5">
+                      {product.name}
+                    </h3>
+                    <p className="text-xs font-extrabold text-amber-300">
+                      {product.stage}
                     </p>
-
-                    <button
-                      type="button"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setSelectedScheme(product);
-                      }}
-                      className="w-full py-3 rounded-2xl bg-[#0f2942] group-hover:bg-red-800 text-white font-black text-xs shadow-lg transition-all flex items-center justify-center gap-2"
-                    >
-                      <Maximize2 size={14} className="text-amber-400" />
-                      <span>Click to View Info & Apply</span>
-                    </button>
                   </div>
+
+                  <div className="w-full text-center text-amber-300 font-black text-xs px-3 py-2 bg-white/10 rounded-xl border border-white/20 backdrop-blur-md shadow-inner">
+                    Limit: {product.limit}
+                  </div>
+
+                  <p className="text-[11px] text-slate-300 font-bold text-center">
+                    Collateral-Free PMMY Credit Facility
+                  </p>
+
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setSelectedScheme(product);
+                    }}
+                    className="w-full py-2.5 rounded-xl bg-red-800 hover:bg-red-700 text-white font-black text-xs shadow-lg transition-all flex items-center justify-center gap-2 mt-1"
+                  >
+                    <Maximize2 size={14} className="text-amber-400" />
+                    <span>Click to View Info & Apply</span>
+                  </button>
                 </div>
 
               </div>
@@ -207,10 +218,10 @@ export default function LoanProducts() {
             >
               {/* Modal Header with Local Photo */}
               <div className="relative h-60 w-full overflow-hidden bg-slate-800">
-                <img 
-                  src={selectedScheme.image} 
+                <img
+                  src={selectedScheme.image}
                   alt={selectedScheme.name}
-                  className="w-full h-full object-cover" 
+                  className="w-full h-full object-cover"
                   onError={(e) => {
                     e.target.src = 'https://images.unsplash.com/photo-1590682680695-43b964a3ae17?auto=format&fit=crop&w=800&q=80';
                   }}
@@ -241,7 +252,7 @@ export default function LoanProducts() {
 
               {/* Modal Body */}
               <div className="p-6 md:p-8 space-y-6">
-                
+
                 {/* Description */}
                 <div>
                   <h4 className="text-xs font-black uppercase tracking-wider text-slate-400 dark:text-slate-500 mb-2 flex items-center gap-1.5">

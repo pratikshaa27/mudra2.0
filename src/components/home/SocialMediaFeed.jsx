@@ -80,7 +80,7 @@ export default function SocialMediaFeed() {
   };
 
   return (
-    <section className="py-20 px-4 relative overflow-hidden bg-slate-50 dark:bg-[#070b14] text-slate-900 dark:text-slate-100 transition-colors duration-300 border-t border-slate-200 dark:border-slate-800">
+    <section className="py-20 px-4 relative overflow-hidden bg-transparent text-slate-900 dark:text-slate-100 transition-colors duration-300 border-t border-slate-200 dark:border-slate-800">
       
       {/* Background glowing accents */}
       <div className="absolute top-1/4 -left-20 w-96 h-96 bg-amber-400/10 rounded-full blur-3xl pointer-events-none"></div>
