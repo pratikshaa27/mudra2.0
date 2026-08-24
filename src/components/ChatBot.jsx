@@ -8,6 +8,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { createPageUrl } from '@/utils';
+import faqData from '../../faq_parsed.json';
 
 const quickActions = [
   { label: 'Check Eligibility', icon: ClipboardCheck, href: createPageUrl('Offerings') },
@@ -60,6 +61,51 @@ async function streamRAGBackend(message, onEvent) {
       if (line) onEvent(JSON.parse(line));
     }
   }
+}
+
+// Bundled copy of faq_parsed.json used as a last-resort answer source when
+// the RAG backend itself can't be reached at all (network down, cold-starting
+// free-tier instance, etc.) — matched purely client-side, no server needed.
+// Scored on what fraction of the query's meaningful words show up in each
+// entry's question+answer text, since users paraphrase the FAQ wording
+// (e.g. "how many days for approval" vs. the FAQ's "turn around time").
+const FAQ_MATCH_STOPWORDS = new Set([
+  'a', 'an', 'the', 'is', 'are', 'was', 'were', 'be', 'been', 'being',
+  'of', 'to', 'in', 'on', 'for', 'with', 'and', 'or', 'how', 'what',
+  'which', 'do', 'does', 'did', 'can', 'i', 'you', 'it', 'this', 'that',
+  'has', 'have', 'had'
+]);
+
+function tokenizeForFaqMatch(str) {
+  return str
+    .toLowerCase()
+    .replace(/[^a-z0-9\s]/g, ' ')
+    .split(/\s+/)
+    .filter(Boolean)
+    .map((t) => t.replace(/s$/, '')) // naive singularize (loans -> loan)
+    .filter((t) => t.length > 1 && !FAQ_MATCH_STOPWORDS.has(t));
+}
+
+const INDEXED_FAQ = faqData.map((entry) => ({
+  entry,
+  tokens: new Set(tokenizeForFaqMatch(`${entry.question} ${entry.answer}`))
+}));
+
+function findLocalFaqAnswer(query) {
+  const qTokens = new Set(tokenizeForFaqMatch(query));
+  if (qTokens.size < 2) return null;
+
+  let best = null;
+  let bestScore = 0;
+  for (const { entry, tokens } of INDEXED_FAQ) {
+    const overlap = [...qTokens].filter((t) => tokens.has(t)).length;
+    const score = overlap / qTokens.size;
+    if (score > bestScore) {
+      bestScore = score;
+      best = entry;
+    }
+  }
+  return bestScore >= 0.5 ? best : null;
 }
 
 // Robust text parser for FAQ / Document chunks
@@ -255,13 +301,20 @@ export default function ChatBot() {
       //   }]);
       // }
     } catch (error) {
-      const errorMessage = {
-        type: 'bot',
-        isError: true,
-        text: "I'm having trouble reaching the MUDRA assistant service right now. Please make sure the RAG backend is running and try again.",
-        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-      };
-      setMessages(prev => [...prev, errorMessage]);
+      const localMatch = findLocalFaqAnswer(text);
+      const fallbackMessage = localMatch
+        ? {
+            type: 'bot',
+            text: `Question: ${localMatch.question}\nAnswer: ${localMatch.answer}\nCategory: ${localMatch.category} (Offline)`,
+            time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+          }
+        : {
+            type: 'bot',
+            isError: true,
+            text: "I'm having trouble reaching the MUDRA assistant service right now. Please make sure the RAG backend is running and try again.",
+            time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+          };
+      setMessages(prev => [...prev, fallbackMessage]);
     } finally {
       setIsTyping(false);
     }
