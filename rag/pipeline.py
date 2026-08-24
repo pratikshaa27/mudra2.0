@@ -16,9 +16,13 @@ from rag.llm import (
     LLMUnavailableError,
 )
 
-SERVICE_UNAVAILABLE_MESSAGE = (
-    "I'm having trouble reaching the answer engine right now. Please try again in a moment."
-)
+def _extractive_fallback(chunks) -> str:
+    """Answer straight from the best-matching retrieved chunk when every LLM
+    backend is unreachable (e.g. Enlight blocked from a cloud host and no
+    Groq key configured) — a plain-retrieval answer beats a hard failure,
+    and FAQ.pdf chunks are already one-question-each so the raw text reads
+    fine on its own."""
+    return chunks[0]["text"] if chunks else DECLINE_MESSAGE
 
 
 class RAGPipeline:
@@ -69,10 +73,11 @@ class RAGPipeline:
         except LLMUnavailableError:
             return {
                 "query": user_query,
-                "answer": SERVICE_UNAVAILABLE_MESSAGE,
+                "answer": _extractive_fallback(chunks),
+                "chunks": chunks,
                 "cached": False,
                 "sources": sources,
-                "error": True,
+                "fallback": True,
             }
 
         self.cache.set(user_query, answer)
@@ -117,8 +122,8 @@ class RAGPipeline:
                 full_answer += piece
                 yield {"type": "chunk", "text": piece}
         except LLMUnavailableError:
-            yield {"type": "chunk", "text": SERVICE_UNAVAILABLE_MESSAGE}
-            yield {"type": "done", "sources": sources, "cached": False, "error": True}
+            yield {"type": "chunk", "text": _extractive_fallback(chunks)}
+            yield {"type": "done", "sources": sources, "cached": False, "fallback": True}
             return
 
         full_answer = full_answer.strip() or DECLINE_MESSAGE
