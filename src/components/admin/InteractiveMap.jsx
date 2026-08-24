@@ -53,7 +53,7 @@ export default function InteractiveMap({ onStateClick, filters }) {
       
       {/* Simplified India Map - Using colored regions */}
       <div className="relative bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg p-4 min-h-[320px]">
-        <div className="grid grid-cols-3 gap-3">
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
           {Object.entries(stateData).map(([code, data]) => (
             <motion.button
               key={code}
@@ -108,7 +108,7 @@ export default function InteractiveMap({ onStateClick, filters }) {
               </div>
 
               {/* State Summary */}
-              <div className="grid grid-cols-3 gap-4 mb-6">
+              <div className="grid grid-cols-1 gap-4 mb-6 sm:grid-cols-3">
                 <div className="bg-blue-50 rounded-lg p-4">
                   <div className="text-sm text-gray-600 mb-1">Total Loans</div>
                   <div className="text-xl font-bold text-blue-700">{stateData[selectedState].loans}</div>

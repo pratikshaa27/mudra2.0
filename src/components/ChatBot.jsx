@@ -1,10 +1,24 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Send, Minimize2, Loader2, Sparkles, Database, Volume2, VolumeX, FileText, ExternalLink, HelpCircle, CheckCircle2, ShieldCheck } from 'lucide-react';
+import {
+  X, Send, Minimize2, Loader2, Sparkles, Database, Volume2, VolumeX, CheckCircle2, ShieldCheck,
+  ClipboardCheck, LayoutGrid, LineChart, MessageCircleQuestion, AlertTriangle
+} from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { base44 } from '@/api/base44Client';
-import ragChunks from '@/data/rag_chunks.json';
+import { createPageUrl } from '@/utils';
+
+const quickActions = [
+  { label: 'Check Eligibility', icon: ClipboardCheck, href: createPageUrl('Offerings') },
+  { label: 'Explore Schemes', icon: LayoutGrid, href: `${createPageUrl('Home')}#schemes` },
+  { label: 'Track Application', icon: LineChart, href: createPageUrl('LoanTracking') },
+  { label: 'Ask a Question', icon: MessageCircleQuestion, focusInput: true }
+];
+
+// Local RAG + LLM backend (rag/server.py) — FAISS vector retrieval over the
+// MUDRA FAQ/PDF corpus, grounded generation via a local Ollama model.
+const RAG_API_URL = import.meta.env.VITE_RAG_API_URL || 'http://localhost:8080';
 
 const predefinedQuestions = [
   "1. WHAT IS MUDRA?",
@@ -14,101 +28,39 @@ const predefinedQuestions = [
   "How many days for Shishu loan approval?"
 ];
 
-// Precision Topic Canonical Mapping for 100% Accuracy
-const TOPIC_CANONICAL_MAP = [
-  { keywords: ["taxi", "tempo", "cng", "cab", "rickshaw", "auto", "vehicle"], qNum: 39 },
-  { keywords: ["khadi", "handloom", "weaving", "textile"], qNum: 41 },
-  { keywords: ["handicapped", "disabled", "disability", "pwd"], qNum: 35 },
-  { keywords: ["insurance", "life insurance"], qNum: 30 },
-  { keywords: ["pan", "pan card", "pancard"], qNum: 31 },
-  { keywords: ["gorakhpur", "sbi", "branch"], qNum: 29 },
-  { keywords: ["food", "diploma", "catering"], qNum: 10 },
-  { keywords: ["graduate", "graduated", "passout", "student"], qNum: 9 },
-  { keywords: ["jari", "artisan", "traditional work"], qNum: 11 },
-  { keywords: ["ice cream", "franchise", "parlour"], qNum: 12 },
-  { keywords: ["paper", "paper goods", "stationery"], qNum: 8 },
-  { keywords: ["turnaround", "processing time", "how many days", "how long"], qNum: 37 },
-  { keywords: ["complaint", "demanding security", "insist collateral", "force collateral"], qNum: 34 },
-  { keywords: ["what is mudra", "definition of mudra", "meaning of mudra", "mudra full form", "full form of mudra"], qNum: 1 },
-  { keywords: ["why mudra", "why has mudra", "why setup", "why set up", "purpose of mudra"], qNum: 2 },
-  { keywords: ["role of mudra", "roles of mudra", "responsibility of mudra", "functions of mudra"], qNum: 3 }
-];
-
-// Generate Bi-Grams and Tri-Grams for N-Gram Similarity Matching
-const generateNGrams = (words, n) => {
-  const nGrams = [];
-  for (let i = 0; i <= words.length - n; i++) {
-    nGrams.push(words.slice(i, i + n).join(" "));
-  }
-  return nGrams;
-};
-
-// Ultra-High Accuracy Hybrid Retrieval Engine (Numbers + N-Grams + Topic Routing)
-const queryRAGChunks = (query, topK = 3) => {
-  if (!ragChunks || ragChunks.length === 0) return [];
-  
-  const queryLower = query.toLowerCase().trim();
-  const cleanQuery = queryLower.replace(/[^\w\s]/gi, '');
-  const rawTokens = cleanQuery.split(/\s+/).filter(w => w.length > 0);
-
-  // 1. Check for Question Number Match (e.g. "1.", "q1", "39", "question 39")
-  const numMatch = queryLower.match(/(?:q|question|num|no\.?|^)\s*(\d{1,2})\b/i);
-  let targetQNum = numMatch ? parseInt(numMatch[1], 10) : null;
-
-  // 2. Check for Topic Canonical Routing
-  if (!targetQNum) {
-    for (const route of TOPIC_CANONICAL_MAP) {
-      if (route.keywords.some(k => queryLower.includes(k))) {
-        targetQNum = route.qNum;
-        break;
-      }
-    }
-  }
-
-  // Generate 2-grams and 3-grams from query
-  const biGrams = generateNGrams(rawTokens, 2);
-  const triGrams = generateNGrams(rawTokens, 3);
-
-  const scored = ragChunks.map(chunk => {
-    const textLower = chunk.text.toLowerCase();
-    let score = 0;
-
-    // Check Question Number boost
-    if (targetQNum) {
-      const qNumPrefix = `question: ${targetQNum}.`;
-      const altNumPrefix = `question: ${targetQNum} `;
-      if (textLower.startsWith(qNumPrefix) || textLower.startsWith(altNumPrefix) || textLower.includes(` ${targetQNum}. `)) {
-        score += 200; // Massive boost for exact Q number / topic match
-      }
-    }
-
-    // N-Gram Sequential Matches
-    triGrams.forEach(tg => {
-      if (textLower.includes(tg)) score += 30;
-    });
-
-    biGrams.forEach(bg => {
-      if (textLower.includes(bg)) score += 15;
-    });
-
-    // Single Word Overlap
-    rawTokens.forEach(token => {
-      if (token.length > 2 && textLower.includes(token)) {
-        score += 3;
-      }
-    });
-
-    // Boost FAQ items
-    if (chunk.source === "FAQ.pdf") {
-      score += 5;
-    }
-
-    return { ...chunk, score };
+// Streams the answer as newline-delimited JSON events ({type:'chunk',text} /
+// {type:'done',...}) so the UI can render text as it's generated instead of
+// waiting for the full response. On the local Ollama backend (rag/llm.py)
+// this is typically a few seconds; set GROQ_API_KEY server-side for
+// near-instant cloud inference instead — either way, streaming keeps the
+// UI feeling responsive from the first token rather than a long blank wait.
+async function streamRAGBackend(message, onEvent) {
+  const res = await fetch(`${RAG_API_URL}/api/chat/stream`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ message })
   });
+  if (!res.ok || !res.body) {
+    throw new Error(`RAG server responded with ${res.status}`);
+  }
 
-  scored.sort((a, b) => b.score - a.score);
-  return scored.slice(0, topK).filter(item => item.score > 0);
-};
+  const reader = res.body.getReader();
+  const decoder = new TextDecoder();
+  let buffer = '';
+
+  while (true) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    buffer += decoder.decode(value, { stream: true });
+
+    let newlineIndex;
+    while ((newlineIndex = buffer.indexOf('\n')) >= 0) {
+      const line = buffer.slice(0, newlineIndex).trim();
+      buffer = buffer.slice(newlineIndex + 1);
+      if (line) onEvent(JSON.parse(line));
+    }
+  }
+}
 
 // Robust text parser for FAQ / Document chunks
 function parseStructuredFAQ(text) {
@@ -151,8 +103,8 @@ function StructuredFAQMessage({ text }) {
     <div className="space-y-3">
       {/* Top Metadata Badges */}
       <div className="flex items-center justify-between gap-2 pb-1">
-        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-gradient-to-r from-orange-500/10 to-amber-500/10 text-[#ff6800] border border-orange-500/20 text-[10px] font-black uppercase tracking-wider shadow-sm">
-          <Sparkles size={12} className="text-[#ff6800] animate-pulse" />
+        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-gradient-to-r from-blue-500/10 to-blue-400/10 text-[#004265] border border-blue-500/20 text-[10px] font-black uppercase tracking-wider shadow-sm">
+          <Sparkles size={12} className="text-[#004265] animate-pulse" />
           <span>{category}</span>
         </div>
         <span className="text-[9.5px] font-black text-emerald-700 bg-emerald-500/10 px-2.5 py-1 rounded-full border border-emerald-500/20 flex items-center gap-1.5 shadow-sm">
@@ -161,12 +113,12 @@ function StructuredFAQMessage({ text }) {
       </div>
 
       {/* Official Response Card */}
-      <div className="relative overflow-hidden bg-gradient-to-br from-amber-50/90 via-orange-50/50 to-amber-100/40 p-4 rounded-2xl border border-amber-200/90 shadow-sm transition-all duration-300">
+      <div className="relative overflow-hidden bg-gradient-to-br from-blue-50/90 via-blue-50/50 to-blue-100/40 p-4 rounded-2xl border border-blue-200/90 shadow-sm transition-all duration-300">
         <div className="flex items-center gap-1.5 mb-2">
-          <div className="w-5 h-5 rounded-full bg-[#ff6800] text-white flex items-center justify-center shadow-xs">
+          <div className="w-5 h-5 rounded-full bg-[#00b6f0] text-white flex items-center justify-center shadow-xs">
             <CheckCircle2 size={12} />
           </div>
-          <span className="text-[10px] font-black text-[#ff6800] uppercase tracking-wider">
+          <span className="text-[10px] font-black text-[#004265] uppercase tracking-wider">
             OFFICIAL RESPONSE
           </span>
         </div>
@@ -179,6 +131,7 @@ function StructuredFAQMessage({ text }) {
 }
 
 export default function ChatBot() {
+  const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
   const [isMinimized, setIsMinimized] = useState(false);
   const [ragEnabled, setRagEnabled] = useState(true);
@@ -187,13 +140,22 @@ export default function ChatBot() {
     {
       type: 'bot',
       text: "Question: 1. WHAT IS MUDRA?\nAnswer: Micro Units Development & Refinance Agency Ltd. (MUDRA) is a financial institution set up by the Government of India for the development and refinancing of micro-enterprises. It provides funding to non-corporate small business sectors through banks, NBFCs, and MFIs.\nCategory: MUDRA Official FAQ",
-      time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-      sources: ['FAQ.pdf', 'Annual-Report-2024-25.pdf', 'Grievance Officers Docs.pdf']
+      time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
     }
   ]);
   const [inputValue, setInputValue] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef(null);
+  const inputRef = useRef(null);
+
+  const handleQuickAction = (action) => {
+    if (action.focusInput) {
+      inputRef.current?.focus();
+      return;
+    }
+    setIsOpen(false);
+    navigate(action.href);
+  };
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -233,62 +195,70 @@ export default function ChatBot() {
     setInputValue('');
     setIsTyping(true);
 
-    try {
-      let matchedSources = [];
-      let contextSnippet = "";
-
-      if (ragEnabled) {
-        const topMatches = queryRAGChunks(text, 3);
-        if (topMatches.length > 0) {
-          matchedSources = Array.from(new Set(topMatches.map(m => m.source)));
-          contextSnippet = topMatches.map(m => m.text).join("\n\n");
-        } else {
-          matchedSources = ['FAQ.pdf', 'Annual-Report-2024-25.pdf'];
-        }
-      }
-
-      const prompt = `You are an advanced GenAI & RAG-Powered MUDRA 2.0 Assistant.
-USER QUESTION: "${text}"
-
-RETRIEVED CONTEXT (PDF & FAQ DATASET):
-${contextSnippet}
-
-INSTRUCTIONS:
-1. Identify the exact FAQ item from the retrieved context that answers the user's question.
-2. Format the response as:
-Question: [Matched FAQ Question]
-Answer: [Complete Official Answer]
-Category: MUDRA Official FAQ
-
-3. Ensure 100% factual accuracy according to MUDRA policy guidelines.`;
-
-      let botText = "";
-      try {
-        botText = await base44.integrations.Core.InvokeLLM({
-          prompt: prompt,
-          add_context_from_internet: false
-        });
-      } catch (err) {
-        const top = queryRAGChunks(text, 1);
-        if (top.length > 0) {
-          botText = top[0].text;
-        } else {
-          botText = "Question: What is MUDRA 2.0 credit limit?\nAnswer: Non-farm micro-enterprises can access collateral-free credit from ₹50,000 up to ₹20 Lakhs across Shishu, Kishore, Tarun, and Tarun Plus categories.\nCategory: MUDRA Official FAQ";
-        }
-      }
-
-      const botMessage = {
+    if (!ragEnabled) {
+      setMessages(prev => [...prev, {
         type: 'bot',
-        text: botText,
-        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-        sources: matchedSources
-      };
+        text: "RAG mode is turned off. Turn it back on (top-right toggle) to ask questions grounded in MUDRA's official documents.",
+        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      }]);
+      setIsTyping(false);
+      return;
+    }
 
-      setMessages(prev => [...prev, botMessage]);
+    try {
+      let botIndex = null;
+
+      await streamRAGBackend(text, (event) => {
+        if (event.type === 'done') {
+          // The backend still sends the "trouble reaching the answer engine"
+          // text as a normal chunk (so it displays at all), but flags this
+          // turn as an error via `done.error` — mark the message so it
+          // renders as a plain notice instead of a "100% RAG Verified"
+          // official-answer card, which would otherwise misrepresent a
+          // backend failure as a confident, sourced answer.
+          if (event.error && botIndex !== null) {
+            setMessages(prev => {
+              const updated = [...prev];
+              updated[botIndex] = { ...updated[botIndex], isError: true };
+              return updated;
+            });
+          }
+          return;
+        }
+
+        if (event.type !== 'chunk' || !event.text) return;
+
+        if (botIndex === null) {
+          setIsTyping(false);
+          setMessages(prev => {
+            botIndex = prev.length;
+            return [...prev, {
+              type: 'bot',
+              text: event.text,
+              time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+            }];
+          });
+        } else {
+          setMessages(prev => {
+            const updated = [...prev];
+            updated[botIndex] = { ...updated[botIndex], text: updated[botIndex].text + event.text };
+            return updated;
+          });
+        }
+      });
+
+      // if (botIndex === null) {
+      //   setMessages(prev => [...prev, {
+      //     type: 'bot',
+      //     text: "I didn't get a response. Please try again.",
+      //     time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      //   }]);
+      // }
     } catch (error) {
       const errorMessage = {
         type: 'bot',
-        text: "I apologize, but I'm having trouble querying vector_store right now. Please try again.",
+        isError: true,
+        text: "I'm having trouble reaching the MUDRA assistant service right now. Please make sure the RAG backend is running and try again.",
         time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
       };
       setMessages(prev => [...prev, errorMessage]);
@@ -309,17 +279,17 @@ Category: MUDRA Official FAQ
             whileHover={{ scale: 1.06 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => setIsOpen(true)}
-            className="fixed bottom-6 right-6 z-50 px-4 py-3 bg-white text-slate-900 rounded-full shadow-2xl flex items-center gap-3 border border-[#ff6800]/30 hover:border-[#ff6800] shadow-orange-500/20 group transition-all"
+            className="fixed bottom-6 right-6 z-50 px-4 py-3 bg-white text-slate-900 rounded-full shadow-2xl flex items-center gap-3 border border-[#00b6f0]/30 hover:border-[#00b6f0] shadow-blue-500/20 group transition-all"
           >
             <div className="relative">
-              <div className="w-10 h-10 bg-gradient-to-tr from-[#ff6800] via-[#e65c00] to-amber-500 text-white rounded-full flex items-center justify-center font-black shadow-md shadow-orange-500/30">
+              <div className="w-10 h-10 bg-gradient-to-tr from-[#00b6f0] via-[#0090c2] to-blue-400 text-white rounded-full flex items-center justify-center font-black shadow-md shadow-blue-500/30">
                 <Sparkles className="w-5 h-5 animate-spin" style={{ animationDuration: '6s' }} />
               </div>
               <span className="absolute -top-1 -right-1 w-3.5 h-3.5 bg-emerald-500 border-2 border-white rounded-full animate-pulse"></span>
             </div>
             <div className="text-left pr-1 hidden sm:block">
-              <p className="text-xs font-black text-[#0e263d] leading-tight">MUDRA 2.0 Assistant</p>
-              <p className="text-[10px] font-bold text-[#ff6800]">GenAI RAG Engine</p>
+              <p className="text-xs font-black text-[#0e263d] leading-tight">MUDRA Saathi</p>
+              <p className="text-[10px] font-bold text-[#004265]">Your MUDRA Assistant</p>
             </div>
           </motion.button>
         )}
@@ -340,12 +310,12 @@ Category: MUDRA Official FAQ
               {/* Header */}
               <div className="bg-[#0e263d] text-white p-4 border-b border-[#183957] flex items-center justify-between shadow-md">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-[#ff6800] to-amber-400 text-white flex items-center justify-center font-bold shadow-md shadow-orange-500/30">
+                  <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-[#00b6f0] to-blue-300 text-white flex items-center justify-center font-bold shadow-md shadow-blue-500/30">
                     <Sparkles className="w-5 h-5" />
                   </div>
                   <div>
-                    <h3 className="font-black text-sm text-white tracking-wide">MUDRA 2.0 Assistant</h3>
-                    <p className="text-[11px] text-slate-300 font-medium">GenAI RAG Knowledge Engine</p>
+                    <h3 className="font-black text-sm text-white tracking-wide">MUDRA Saathi</h3>
+                    <p className="text-[11px] text-slate-300 font-medium">Your Guide to MUDRA &amp; PMMY</p>
                   </div>
                 </div>
 
@@ -354,7 +324,7 @@ Category: MUDRA Official FAQ
                     onClick={() => setRagEnabled(!ragEnabled)}
                     title={ragEnabled ? "RAG Mode Enabled" : "Standard Mode"}
                     className={`px-2.5 py-1 rounded-full text-xs flex items-center gap-1 font-bold transition-all ${
-                      ragEnabled ? 'bg-[#ff6800] text-white shadow-sm' : 'bg-slate-800 text-slate-400'
+                      ragEnabled ? 'bg-[#00b6f0] text-white shadow-sm' : 'bg-slate-800 text-slate-400'
                     }`}
                   >
                     <Database className="w-3.5 h-3.5" />
@@ -377,6 +347,24 @@ Category: MUDRA Official FAQ
 
               {!isMinimized && (
                 <>
+                  {/* Quick-action chips */}
+                  <div className="flex items-center gap-1.5 overflow-x-auto p-3 pb-2.5 bg-white border-b border-slate-100 scrollbar-none">
+                    {quickActions.map((action) => {
+                      const Icon = action.icon;
+                      return (
+                        <button
+                          key={action.label}
+                          type="button"
+                          onClick={() => handleQuickAction(action)}
+                          className="whitespace-nowrap flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[10.5px] font-bold bg-slate-50 hover:bg-blue-50 text-slate-700 hover:text-[#004265] border border-slate-200 hover:border-[#00b6f0] transition-all"
+                        >
+                          <Icon size={12} aria-hidden="true" />
+                          {action.label}
+                        </button>
+                      );
+                    })}
+                  </div>
+
                   {/* Message Stream */}
                   <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-slate-50/70 text-xs">
                     {messages.map((msg, idx) => (
@@ -388,50 +376,31 @@ Category: MUDRA Official FAQ
                       >
                         <div className={`max-w-[88%] rounded-2xl p-4 shadow-sm transition-all ${
                           msg.type === 'user'
-                            ? 'bg-gradient-to-r from-[#ff6800] via-[#e65c00] to-[#d95300] text-white rounded-tr-xs shadow-orange-500/20 font-bold'
+                            ? 'bg-gradient-to-r from-[#00b6f0] via-[#0090c2] to-[#004265] text-white rounded-tr-xs shadow-blue-500/20 font-bold'
                             : 'bg-white border border-slate-200/90 text-slate-800 rounded-tl-xs shadow-slate-200/50'
                         }`}>
 
-                          {/* Render Structured FAQ View */}
-                          {msg.type === 'bot' ? (
+                          {/* Render Structured FAQ View — but never dress up
+                              a backend failure as a "verified" answer. */}
+                          {msg.type === 'bot' && msg.isError ? (
+                            <div className="flex items-start gap-2 rounded-xl border border-amber-200 bg-amber-50 p-3 text-slate-700">
+                              <AlertTriangle size={14} className="mt-0.5 shrink-0 text-amber-600" aria-hidden="true" />
+                              <p className="text-xs font-semibold leading-relaxed">{msg.text}</p>
+                            </div>
+                          ) : msg.type === 'bot' ? (
                             <StructuredFAQMessage text={msg.text} />
                           ) : (
                             <p className="leading-relaxed whitespace-pre-line text-xs font-bold text-white">{msg.text}</p>
                           )}
 
-                          {/* RAG Vector Sources Citation Links */}
-                          {msg.sources && msg.sources.length > 0 && (
-                            <div className="mt-3.5 pt-3 border-t border-slate-200/80 text-[10px] text-slate-600">
-                              <p className="font-black flex items-center gap-1.5 mb-2 text-slate-700 uppercase tracking-wider text-[9px]">
-                                <FileText className="w-3.5 h-3.5 text-[#ff6800]" /> Clickable PDF Citations:
-                              </p>
-                              <div className="space-y-1.5">
-                                {msg.sources.map((src, sIdx) => (
-                                  <a
-                                    key={sIdx}
-                                    href={`/pdf/${src}`}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="bg-slate-100/90 hover:bg-orange-50/80 px-3 py-1.5 rounded-xl border border-slate-200/80 hover:border-orange-300 font-mono text-[9px] text-slate-700 hover:text-[#ff6800] flex items-center justify-between transition-all group shadow-2xs"
-                                  >
-                                    <span className="truncate pr-2 font-semibold">📄 {src}</span>
-                                    <span className="text-[#ff6800] font-black text-[9px] shrink-0 flex items-center gap-1 group-hover:translate-x-0.5 transition-transform">
-                                      VIEW <ExternalLink className="w-2.5 h-2.5 inline" />
-                                    </span>
-                                  </a>
-                                ))}
-                              </div>
-                            </div>
-                          )}
-
                           <div className={`mt-2.5 flex items-center justify-between text-[10px] ${
-                            msg.type === 'user' ? 'text-orange-100 font-semibold' : 'text-slate-400 font-bold'
+                            msg.type === 'user' ? 'text-blue-100 font-semibold' : 'text-slate-400 font-bold'
                           }`}>
                             <span>{msg.time}</span>
                             {msg.type === 'bot' && (
                               <button
                                 onClick={() => speakText(msg.text, idx)}
-                                className="hover:text-[#ff6800] flex items-center gap-1.5 transition-colors ml-2 font-bold px-2 py-0.5 rounded-full bg-slate-100 hover:bg-orange-50 border border-slate-200/60 text-slate-600 hover:text-[#ff6800]"
+                                className="hover:text-[#00b6f0] flex items-center gap-1.5 transition-colors ml-2 font-bold px-2 py-0.5 rounded-full bg-slate-100 hover:bg-blue-50 border border-slate-200/60 text-slate-600 hover:text-[#00b6f0]"
                               >
                                 {speakingIndex === idx ? (
                                   <>
@@ -451,7 +420,7 @@ Category: MUDRA Official FAQ
 
                     {isTyping && (
                       <div className="flex items-center gap-2.5 text-slate-600 font-bold text-xs bg-white p-3.5 rounded-2xl w-fit border border-slate-200/90 shadow-sm">
-                        <Loader2 className="w-4 h-4 animate-spin text-[#ff6800]" />
+                        <Loader2 className="w-4 h-4 animate-spin text-[#00b6f0]" />
                         <span>Performing precision RAG retrieval...</span>
                       </div>
                     )}
@@ -467,7 +436,7 @@ Category: MUDRA Official FAQ
                         <button
                           key={idx}
                           onClick={() => handleSendMessage(q)}
-                          className="whitespace-nowrap px-3.5 py-1.5 rounded-full text-[10px] font-bold bg-white hover:bg-orange-50 text-slate-700 hover:text-[#ff6800] border border-slate-200 hover:border-[#ff6800] shadow-xs hover:shadow-sm transition-all transform hover:-translate-y-0.5"
+                          className="whitespace-nowrap px-3.5 py-1.5 rounded-full text-[10px] font-bold bg-white hover:bg-blue-50 text-slate-700 hover:text-[#00b6f0] border border-slate-200 hover:border-[#00b6f0] shadow-xs hover:shadow-sm transition-all transform hover:-translate-y-0.5"
                         >
                           {q}
                         </button>
@@ -484,16 +453,17 @@ Category: MUDRA Official FAQ
                     className="p-3 bg-white border-t border-slate-200/90 flex items-center gap-2"
                   >
                     <Input
+                      ref={inputRef}
                       value={inputValue}
                       onChange={(e) => setInputValue(e.target.value)}
                       placeholder="Ask any question in your own words..."
                       disabled={isTyping}
-                      className="bg-slate-50 border border-slate-200/90 text-slate-900 placeholder:text-slate-400 text-xs font-semibold h-11 rounded-full px-4 focus:border-[#ff6800] focus:ring-2 focus:ring-[#ff6800]/20 transition-all"
+                      className="bg-slate-50 border border-slate-200/90 text-slate-900 placeholder:text-slate-400 text-xs font-semibold h-11 rounded-full px-4 focus:border-[#00b6f0] focus:ring-2 focus:ring-[#00b6f0]/20 transition-all"
                     />
                     <Button
                       type="submit"
                       disabled={isTyping || !inputValue.trim()}
-                      className="h-11 w-11 p-0 bg-gradient-to-r from-[#ff6800] to-[#e65c00] hover:from-orange-600 hover:to-orange-700 text-white font-black rounded-full shadow-md shadow-orange-500/30 transition-all shrink-0 flex items-center justify-center hover:scale-105 active:scale-95 disabled:opacity-50 disabled:hover:scale-100"
+                      className="h-11 w-11 p-0 bg-gradient-to-r from-[#00b6f0] to-[#0090c2] hover:from-blue-600 hover:to-blue-700 text-white font-black rounded-full shadow-md shadow-blue-500/30 transition-all shrink-0 flex items-center justify-center hover:scale-105 active:scale-95 disabled:opacity-50 disabled:hover:scale-100"
                     >
                       <Send className="w-4 h-4 ml-0.5" />
                     </Button>

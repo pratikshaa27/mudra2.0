@@ -14,9 +14,13 @@ from rag.cache import RAGCache
 def build():
     print("=== Building MUDRA RAG Vector Store Index ===")
     
-    # 1. Ingest PDF files from public/pdf
+    # 1. Ingest PDF files from public/pdf.
+    # FAQ.pdf is skipped here: it is already available as clean, one-chunk-per-
+    # question data via get_faq_dataset() below. Also indexing its raw sliding-window
+    # text would create near-duplicate chunks that compete with the clean ones during
+    # retrieval and degrade answer accuracy.
     pdf_ingester = DocumentIngester(pdf_dir="public/pdf")
-    documents = pdf_ingester.ingest_all()
+    documents = [d for d in pdf_ingester.ingest_all() if d["source"] != "FAQ.pdf"]
 
     chunker = TextChunker(chunk_size=300, overlap=40)
     all_chunks = []
@@ -31,7 +35,7 @@ def build():
             all_chunks.append(c.to_dict())
         chunk_id += len(chunks)
 
-    # Add FAQ dataset chunks
+    # Add FAQ dataset chunks (one clean chunk per Q&A pair)
     faqs = get_faq_dataset()
     for faq in faqs:
         faq_text = f"Question: {faq['question']} Answer: {faq['answer']} Category: {faq['category']}"
@@ -45,18 +49,16 @@ def build():
 
     print(f"Total processed chunks: {len(all_chunks)}")
 
-    # 2. Add to VectorStore and Save (.pkl files & .bin)
+    # 2. Embed chunks (sentence-transformers) and build the FAISS index
+    print("Embedding chunks and building FAISS index (this may take a minute)...")
     vstore = VectorStore(store_dir="vector_store")
     vstore.add_chunks(all_chunks)
     vstore.save()
 
-    # 3. Save cache.json
+    # 3. Reset the answer cache; it is repopulated at runtime from real LLM answers
     cache = RAGCache(cache_file="vector_store/cache.json")
-    cache.set("shishu loan limit", "Up to ₹50,000 collateral-free credit for micro startups.")
-    cache.set("tarun plus limit", "₹10 Lakh to ₹20 Lakh credit ceiling under MUDRA 2.0.")
-    cache.set("collateral requirement", "0 collateral required. Guaranteed under CGFMU framework.")
-    cache.save()
-    print("Saved 'vector_store/cache.json'")
+    cache.clear()
+    print("Reset 'vector_store/cache.json'")
 
     # 4. Export JSON bundle for web app consumption
     os.makedirs("src/data", exist_ok=True)

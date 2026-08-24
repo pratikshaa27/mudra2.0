@@ -23,12 +23,12 @@ export const themes = {
   },
   blue: {
     name: 'Ocean Blue',
-    primary: '#2563eb',
+    primary: '#23ace1',
     primaryLight: '#93c5fd',
     primaryDark: '#1e40af',
     secondary: '#3b82f6',
     accent: '#60a5fa',
-    gradient: 'linear-gradient(135deg, #2563eb 0%, #06b6d4 100%)',
+    gradient: 'linear-gradient(135deg, #23ace1 0%, #06b6d4 100%)',
     cardGradient: 'linear-gradient(135deg, #eff6ff 0%, #ecfeff 100%)',
   },
   green: {

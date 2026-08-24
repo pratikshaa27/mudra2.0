@@ -10,6 +10,81 @@ module.exports = {
   			sm: 'calc(var(--radius) - 4px)'
   		},
   		colors: {
+  			/* Overrides Tailwind's default `blue` scale so every existing
+  			   blue-* utility class across the app (bg-blue-600, text-blue-700,
+  			   border-blue-200, ...) resolves to SIDBI's own palette instead —
+  			   sourced from sidbi.in's stylesheet (--darkblue/--bluecolor).
+  			   No component files needed touching to pick this up. */
+  			blue: {
+  				50: '#eaf9fe',
+  				100: '#d2f0fc',
+  				200: '#a8e4fa',
+  				300: '#6cd3f5',
+  				400: '#23ace1',
+  				500: '#00b6f0',
+  				600: '#0090c2',
+  				700: '#004265',
+  				800: '#032840',
+  				900: '#021731',
+  				950: '#011a39'
+  			},
+  			/* Same treatment for green/emerald — sourced from sidbi.in's
+  			   --greencolor (#3fa253 bright / #1c6331 dark). Both scales share
+  			   one ramp so green- and emerald- utilities stay consistent. */
+  			green: {
+  				50: '#eefaf0',
+  				100: '#d6f2db',
+  				200: '#ade6ba',
+  				300: '#7dd598',
+  				400: '#55c07a',
+  				500: '#3fa253',
+  				600: '#2f8a45',
+  				700: '#1c6331',
+  				800: '#164f27',
+  				900: '#123f20',
+  				950: '#0a2412'
+  			},
+		emerald: {
+			'50': '#eefaf0',
+			'100': '#d6f2db',
+			'200': '#ade6ba',
+			'300': '#7dd598',
+			'400': '#55c07a',
+			'500': '#3fa253',
+			'600': '#2f8a45',
+			'700': '#1c6331',
+			'800': '#164f27',
+			'900': '#123f20',
+			'950': '#0a2412'
+		},
+		/* Saffron and gold — sourced from sidbi.in --yellowcolor / brand
+		   saffron. Used for accent text, badges, and highlights across pages. */
+		orange: {
+			'50': '#fff7ed',
+			'100': '#ffedd5',
+			'200': '#fed7aa',
+			'300': '#fdba74',
+			'400': '#fb923c',
+			'500': '#ff6800',
+			'600': '#ea580c',
+			'700': '#c2410c',
+			'800': '#9a3412',
+			'900': '#7c2d12',
+			'950': '#431407'
+		},
+		yellow: {
+			'50': '#fefce8',
+			'100': '#fef9c3',
+			'200': '#fef08a',
+			'300': '#fde047',
+			'400': '#facc15',
+			'500': '#d2df43',
+			'600': '#b8c234',
+			'700': '#98a42b',
+			'800': '#7c8525',
+			'900': '#657021',
+			'950': '#3d4012'
+		},
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
   			card: {

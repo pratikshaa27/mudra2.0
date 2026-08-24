@@ -132,7 +132,7 @@ function EntrepreneurOnboardingContent() {
               />
               
               {!otpSent ? (
-                <Button onClick={() => setOtpSent(true)} className="w-full bg-[#0f2942] hover:bg-[#153a5c]">
+                <Button onClick={() => setOtpSent(true)} className="w-full bg-[#011a39] hover:bg-[#153a5c]">
                   Send OTP
                 </Button>
               ) : (
@@ -146,7 +146,7 @@ function EntrepreneurOnboardingContent() {
                     onChange={(e) => setFormData({...formData, otp: e.target.value})}
                     maxLength={6}
                   />
-                  <Button onClick={() => setStep(2)} className="w-full bg-[#0f2942] hover:bg-[#153a5c]">
+                  <Button onClick={() => setStep(2)} className="w-full bg-[#011a39] hover:bg-[#153a5c]">
                     Verify & Continue
                   </Button>
                 </>

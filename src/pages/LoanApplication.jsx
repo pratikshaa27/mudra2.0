@@ -180,10 +180,11 @@ export default function LoanApplication() {
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            className="flex items-center gap-6"
+            className="flex flex-col items-center gap-4 text-center sm:flex-row sm:items-center sm:gap-6 sm:text-left"
           >
             <div className="p-4 bg-white/20 backdrop-blur-md rounded-2xl border-2 border-white/30 shadow-xl">
-              <FileText size={48} className="text-white" />
+              <FileText size={40} className="text-white sm:hidden" />
+              <FileText size={48} className="hidden text-white sm:block" />
             </div>
             <div>
               <motion.div
@@ -196,8 +197,8 @@ export default function LoanApplication() {
                   {currentStep === 1 ? 'STEP 1 OF 3' : currentStep === 2 ? 'STEP 2 OF 3' : 'FINAL STEP'}
                 </span>
               </motion.div>
-              <h1 className="text-5xl font-black text-white drop-shadow-2xl mb-3">Apply for MUDRA Loan</h1>
-              <p className="text-amber-100 text-lg font-medium">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-white drop-shadow-2xl mb-3">Apply for MUDRA Loan</h1>
+              <p className="text-amber-100 text-base sm:text-lg font-medium">
                 {currentStep === 1 ? '📝 Basic Information & Credit Check' : 
                  currentStep === 2 ? '🧠 Your AI Credit Score Analysis' : 
                  '✅ Complete Your Application'}
@@ -380,7 +381,7 @@ export default function LoanApplication() {
                       transition={{ delay: 0.3, type: "spring", stiffness: 200 }}
                     >
                       <div className="text-sm text-gray-600 font-semibold mb-3 tracking-wider uppercase">Your Calculated Score</div>
-                      <div className={`text-8xl font-black ${getScoreColor(creditScore)} mb-3 drop-shadow-2xl`}>{creditScore}</div>
+                      <div className={`text-6xl sm:text-7xl md:text-8xl font-black ${getScoreColor(creditScore)} mb-3 drop-shadow-2xl`}>{creditScore}</div>
                       <div className="text-gray-500 text-xl font-medium mb-4">out of 900</div>
                       <div className={`inline-block px-8 py-3 rounded-2xl mt-2 font-bold text-lg shadow-xl ${
                         creditScore >= 750 ? 'bg-gradient-to-r from-green-500 to-green-600 text-white' :

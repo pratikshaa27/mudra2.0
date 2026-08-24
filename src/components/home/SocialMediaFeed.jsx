@@ -11,14 +11,14 @@ import {
   ExternalLink, 
   Sparkles, 
   X, 
-  MessageCircle, 
-  Repeat, 
   CheckCircle2,
-  Bookmark,
   Building2
 } from 'lucide-react';
+import SectionHeading from '@/components/ui/section-heading';
+import { useLanguage } from '../LanguageContext';
 
 export default function SocialMediaFeed() {
+  const { t } = useLanguage();
   const { cmsData } = useCMS();
   const posts = cmsData.socialPosts || [];
   const [activeTab, setActiveTab] = useState('all');
@@ -80,40 +80,28 @@ export default function SocialMediaFeed() {
   };
 
   return (
-    <section className="py-20 px-4 relative overflow-hidden bg-transparent text-slate-900 dark:text-slate-100 transition-colors duration-300 border-t border-slate-200 dark:border-slate-800">
+    <section className="section-y relative overflow-hidden border-t border-slate-200 text-slate-900 dark:border-slate-800 dark:text-slate-100">
       
       {/* Background glowing accents */}
-      <div className="absolute top-1/4 -left-20 w-96 h-96 bg-amber-400/10 rounded-full blur-3xl pointer-events-none"></div>
-      <div className="absolute bottom-1/4 -right-20 w-96 h-96 bg-red-600/10 rounded-full blur-3xl pointer-events-none"></div>
+      <div className="pointer-events-none absolute -left-20 top-1/4 h-96 w-96 rounded-full bg-blue-400/8 blur-3xl" aria-hidden="true"></div>
+      <div className="pointer-events-none absolute -right-20 bottom-1/4 h-96 w-96 rounded-full bg-blue-700/8 blur-3xl" aria-hidden="true"></div>
 
-      <div className="max-w-7xl mx-auto relative z-10">
+      <div className="shell relative">
         
-        {/* Centered Uniform Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="text-center mb-12"
+        <SectionHeading
+          eyebrow={t('socialEyebrow')}
+          icon={Sparkles}
+          title={t('socialTitle')}
+          description={t('socialDescription')}
         >
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-red-100 dark:bg-red-950/60 border border-red-300 dark:border-red-800 text-red-900 dark:text-amber-300 text-xs font-black tracking-wider uppercase mb-3">
-            <Sparkles className="w-3.5 h-3.5 text-red-700 dark:text-amber-400" />
-            <span>REAL-TIME SOCIAL CONNECT</span>
-          </div>
-
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-slate-900 dark:text-white mb-4 tracking-tight">
-            MUDRA Live Social Media Hub
-          </h2>
-
-          <div className="w-32 h-1.5 bg-gradient-to-r from-red-700 via-amber-500 to-red-700 mx-auto rounded-full mb-6"></div>
-
-          <p className="text-slate-600 dark:text-slate-300 max-w-3xl mx-auto text-sm md:text-base font-semibold leading-relaxed mb-8">
-            Stay updated with official announcements, videos, success stories & policy updates directly from MUDRA India verified social channels.
-          </p>
-
           {/* Centered Social Platform Tabs */}
-          <div className="inline-flex items-center gap-1.5 p-1.5 rounded-full border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 shadow-md flex-wrap justify-center">
+          <div
+            role="tablist"
+            aria-label="Social platforms"
+            className="no-scrollbar fade-scroll-x inline-flex max-w-full items-center gap-1 overflow-x-auto rounded-full border border-slate-200 bg-white p-1.5 shadow-sm dark:border-slate-700 dark:bg-slate-900"
+          >
             {[
-              { id: 'all', label: 'All Feeds' },
+              { id: 'all', label: t('socialTabAll') },
               { id: 'twitter', label: 'X (Twitter)', icon: Twitter },
               { id: 'youtube', label: 'YouTube', icon: Youtube },
               { id: 'linkedin', label: 'LinkedIn', icon: Linkedin }
@@ -124,42 +112,45 @@ export default function SocialMediaFeed() {
                 <button
                   key={tab.id}
                   type="button"
+                  role="tab"
+                  aria-selected={isSelected}
                   onClick={() => setActiveTab(tab.id)}
-                  className={`relative z-10 px-4 py-2 rounded-full text-xs font-extrabold transition-colors flex items-center gap-1.5 ${
+                  className={`relative flex items-center gap-1.5 whitespace-nowrap rounded-full px-4 py-2 text-xs font-bold transition-colors duration-200 ${
                     isSelected
-                      ? 'text-white dark:text-slate-950 font-black'
-                      : 'text-slate-700 dark:text-slate-300 hover:text-slate-950 dark:hover:text-white'
+                      ? 'text-white dark:text-slate-950'
+                      : 'text-slate-600 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white'
                   }`}
                 >
                   {isSelected && (
-                    <motion.div
+                    <motion.span
                       layoutId="socialActivePill"
-                      transition={{ type: 'spring', stiffness: 450, damping: 32 }}
-                      className="absolute inset-0 bg-red-800 dark:bg-amber-400 rounded-full shadow-md z-[-1]"
+                      transition={{ type: 'spring', stiffness: 420, damping: 34 }}
+                      className="absolute inset-0 -z-10 rounded-full bg-blue-700 shadow-sm dark:bg-blue-400"
                     />
                   )}
-                  {TabIcon && <TabIcon className="w-3.5 h-3.5" />}
+                  {TabIcon && <TabIcon className="h-3.5 w-3.5" aria-hidden="true" />}
                   <span>{tab.label}</span>
                 </button>
               );
             })}
           </div>
-        </motion.div>
+        </SectionHeading>
 
         {/* Popular Hashtags Filter */}
-        <div className="flex items-center justify-center flex-wrap gap-2 mb-10 text-xs">
-          <span className="font-extrabold text-slate-500 dark:text-slate-400 mr-1">Trending Topics:</span>
+        <div className="mb-10 flex flex-wrap items-center justify-center gap-2 text-xs">
+          <span className="mr-1 font-bold text-slate-500 dark:text-slate-400">{t('socialTrendingTopics')}</span>
           {['#MUDRA2', '#AtmanirbharBharat', '#WomenEntrepreneurs', '#SkillIndia', '#MSMEIndia'].map((tag) => {
             const isTagSelected = activeHashtag === tag;
             return (
               <button
                 key={tag}
                 type="button"
+                aria-pressed={isTagSelected}
                 onClick={() => setActiveHashtag(isTagSelected ? '' : tag)}
-                className={`px-3.5 py-1.5 rounded-full border text-xs font-extrabold transition-all ${
+                className={`rounded-full border px-3.5 py-1.5 text-xs font-bold transition-all duration-200 hover:-translate-y-0.5 ${
                   isTagSelected
-                    ? 'bg-red-800 text-white border-red-700 shadow-md scale-105'
-                    : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:border-amber-400 dark:hover:border-amber-500 shadow-sm'
+                    ? 'border-blue-700 bg-blue-700 text-white shadow-sm'
+                    : 'border-slate-200 bg-white text-slate-600 hover:border-blue-400 hover:text-blue-700 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300 dark:hover:border-blue-600'
                 }`}
               >
                 {tag}
@@ -170,29 +161,38 @@ export default function SocialMediaFeed() {
             <button
               type="button"
               onClick={() => setActiveHashtag('')}
-              className="text-xs font-black text-red-700 dark:text-amber-400 hover:underline ml-2"
+              className="link-underline ml-2 text-xs font-bold text-blue-700 dark:text-blue-400"
             >
-              Clear Filter
+              {t('socialClearFilter')}
             </button>
           )}
         </div>
 
+        {/* Empty state when the active filters match no posts */}
+        {filteredPosts.length === 0 && (
+          <div className="mx-auto max-w-md rounded-2xl border border-dashed border-slate-300 bg-white/70 px-6 py-12 text-center dark:border-slate-700 dark:bg-slate-900/70">
+            <Sparkles className="mx-auto mb-3 h-7 w-7 text-slate-400" aria-hidden="true" />
+            <p className="text-sm font-semibold text-slate-600 dark:text-slate-300">
+              {t('socialNoPosts')}
+            </p>
+          </div>
+        )}
+
         {/* Grid of Feed Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7">
-          {filteredPosts.map((post) => {
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
+          {filteredPosts.map((post, idx) => {
             const currentLikes = likesMap[post.id] || post.likes;
             const meta = platformBadge(post.platform);
             const IconComponent = meta.icon;
 
             return (
-              <motion.div
+              <motion.article
                 key={post.id}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                whileHover={{ y: -6 }}
-                transition={{ duration: 0.3 }}
-                className="bg-white dark:bg-slate-900 rounded-3xl p-6 border-2 border-slate-200 dark:border-slate-800 shadow-xl hover:border-amber-400 dark:hover:border-amber-500/60 transition-all flex flex-col justify-between"
+                viewport={{ once: true, margin: '-40px' }}
+                transition={{ duration: 0.4, delay: (idx % 3) * 0.08, ease: [0.22, 1, 0.36, 1] }}
+                className="card-lift flex flex-col justify-between rounded-2xl border border-slate-200 bg-white p-6 shadow-sm hover:border-blue-300 dark:border-slate-800 dark:bg-slate-900 dark:hover:border-blue-600/50"
               >
                 <div>
                   {/* Card Header: Author Profile & Platform Icon */}
@@ -202,7 +202,7 @@ export default function SocialMediaFeed() {
                         <img
                           src={post.avatar}
                           alt={post.author}
-                          className="w-11 h-11 rounded-2xl bg-amber-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 p-0.5 object-cover shadow-sm"
+                          className="w-11 h-11 rounded-2xl bg-blue-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 p-0.5 object-cover shadow-sm"
                         />
                         <div className="absolute -bottom-1 -right-1 bg-blue-600 text-white rounded-full p-0.5 shadow-sm">
                           <CheckCircle2 size={10} />
@@ -230,52 +230,56 @@ export default function SocialMediaFeed() {
 
                   {/* Media / Video Attachment */}
                   {post.platform === 'youtube' ? (
-                    <div
+                    <button
+                      type="button"
                       onClick={() => setSelectedVideo(post)}
-                      className="relative rounded-2xl overflow-hidden cursor-pointer group mb-4 border border-slate-200 dark:border-slate-700 shadow-md"
+                      aria-label={`Play video: ${post.videoTitle || 'YouTube Video'}`}
+                      className="media-frame group relative mb-4 block w-full border border-slate-200 shadow-sm dark:border-slate-700"
                     >
                       <img
                         src={post.thumbnail || post.media}
                         alt={post.videoTitle || 'YouTube Video'}
-                        className="w-full h-48 object-cover group-hover:scale-108 transition-transform duration-500"
+                        loading="lazy"
+                        className="h-48 w-full object-cover"
                       />
-                      <div className="absolute inset-0 bg-slate-950/40 group-hover:bg-slate-950/30 transition-colors flex items-center justify-center">
-                        <div className="w-13 h-13 w-12 h-12 rounded-2xl bg-red-600 text-white flex items-center justify-center shadow-xl group-hover:scale-110 transition-transform">
-                          <Play className="w-6 h-6 fill-current ml-1" />
-                        </div>
-                      </div>
-                      <div className="absolute bottom-3 right-3 px-2.5 py-1 rounded-lg bg-slate-950/80 backdrop-blur-md text-amber-300 text-[10px] font-black tracking-wider">
+                      <span className="absolute inset-0 flex items-center justify-center bg-slate-950/40 transition-colors duration-300 group-hover:bg-slate-950/25">
+                        <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-red-600 text-white shadow-lg transition-transform duration-300 group-hover:scale-110">
+                          <Play className="ml-0.5 h-6 w-6 fill-current" aria-hidden="true" />
+                        </span>
+                      </span>
+                      <span className="absolute bottom-3 right-3 rounded-md bg-slate-950/80 px-2.5 py-1 text-[10px] font-bold tracking-wide text-blue-300 backdrop-blur-sm">
                         {post.videoDuration || 'VIDEO'}
-                      </div>
-                    </div>
+                      </span>
+                    </button>
                   ) : post.media ? (
-                    <div className="rounded-2xl overflow-hidden mb-4 border border-slate-200 dark:border-slate-800 shadow-md">
+                    <div className="media-frame mb-4 border border-slate-200 shadow-sm dark:border-slate-800">
                       <img
                         src={post.media}
                         alt="Post media"
-                        className="w-full h-48 object-cover hover:scale-105 transition-transform duration-500"
+                        loading="lazy"
+                        className="h-48 w-full object-cover"
                       />
                     </div>
                   ) : null}
                 </div>
 
                 {/* Footer Engagement Metrics Bar */}
-                <div className="pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs text-slate-600 dark:text-slate-400 font-bold">
+                <div className="flex items-center justify-between border-t border-slate-100 pt-4 text-xs font-semibold text-slate-600 dark:border-slate-800 dark:text-slate-400">
                   <button
                     type="button"
                     onClick={() => handleLike(post.id, post.likes)}
-                    className="flex items-center gap-1.5 hover:text-red-600 dark:hover:text-amber-400 transition-colors group px-2 py-1 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800"
+                    className="group flex items-center gap-1.5 rounded-lg px-2 py-1 transition-colors duration-200 hover:bg-slate-100 hover:text-blue-700 dark:hover:bg-slate-800 dark:hover:text-blue-400"
                   >
-                    <Heart size={15} className="group-hover:fill-red-600 dark:group-hover:fill-amber-400 transition-colors text-slate-500 dark:text-slate-400" />
+                    <Heart size={15} className="text-slate-500 transition-colors duration-200 group-hover:fill-red-600 dark:text-slate-400 dark:group-hover:fill-blue-400" aria-hidden="true" />
                     <span>{currentLikes.toLocaleString()}</span>
                   </button>
 
                   <button
                     type="button"
                     onClick={() => handleShare(post.id)}
-                    className="flex items-center gap-1.5 hover:text-red-700 dark:hover:text-amber-400 transition-colors px-2 py-1 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800"
+                    className="flex items-center gap-1.5 rounded-lg px-2 py-1 transition-colors duration-200 hover:bg-slate-100 hover:text-blue-700 dark:hover:bg-slate-800 dark:hover:text-blue-400"
                   >
-                    <Share2 size={15} />
+                    <Share2 size={15} aria-hidden="true" />
                     <span>{copiedId === post.id ? 'Copied!' : post.retweets || 'Share'}</span>
                   </button>
 
@@ -283,13 +287,13 @@ export default function SocialMediaFeed() {
                     href="https://www.mudra.org.in"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-1 text-red-800 dark:text-amber-400 hover:underline font-extrabold px-2 py-1"
+                    className="link-underline flex items-center gap-1 px-2 py-1 font-bold text-blue-700 dark:text-blue-400"
                   >
-                    <span>View Post</span>
-                    <ExternalLink size={13} />
+                    <span>{t('socialViewPost')}</span>
+                    <ExternalLink size={13} aria-hidden="true" />
                   </a>
                 </div>
-              </motion.div>
+              </motion.article>
             );
           })}
         </div>

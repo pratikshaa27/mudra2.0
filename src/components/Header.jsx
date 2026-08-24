@@ -30,7 +30,7 @@ export default function Header({ currentPageName }) {
   return (
     <header className="w-full z-50 shadow-md">
       {/* 1. TOP GOI STATUTORY BAR */}
-      <div className="bg-[#0f2942] text-white text-[11px] py-1.5 px-4 border-b border-slate-700/80">
+      <div className="bg-[#011a39] text-white text-[11px] py-1.5 px-4 border-b border-slate-700/80">
         <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2">
           {/* Emblem & Ministry */}
           <div className="flex items-center gap-3">
@@ -96,12 +96,12 @@ export default function Header({ currentPageName }) {
         <div className="max-w-7xl mx-auto px-4 py-3.5 flex items-center justify-between gap-4">
           {/* Logo & Emblem Branding */}
           <Link to="/" className="flex items-center gap-3 group">
-            <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-[#0f2942] to-[#153a5c] text-white flex items-center justify-center font-black text-xl border-2 border-amber-500/80 shadow-md group-hover:scale-105 transition-transform">
+            <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-[#011a39] to-[#153a5c] text-white flex items-center justify-center font-black text-xl border-2 border-amber-500/80 shadow-md group-hover:scale-105 transition-transform">
               M2
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <span className="font-extrabold text-xl text-[#0f2942] dark:text-white tracking-tight group-hover:text-amber-600 transition-colors">
+                <span className="font-extrabold text-xl text-[#011a39] dark:text-white tracking-tight group-hover:text-amber-600 transition-colors">
                   MUDRA 2.0
                 </span>
                 <span className="text-[10px] font-extrabold bg-amber-100 dark:bg-amber-950 text-amber-900 dark:text-amber-300 px-2 py-0.5 rounded border border-amber-300 dark:border-amber-700 uppercase tracking-wider">
@@ -120,7 +120,7 @@ export default function Header({ currentPageName }) {
               to={createPageUrl('EntrepreneurOnboarding')}
               className={`px-3 py-1.5 rounded-lg transition-all ${
                 location.pathname.includes('Entrepreneur') || location.pathname.includes('LoanApplication')
-                  ? 'bg-[#0f2942] text-white shadow-sm'
+                  ? 'bg-[#011a39] text-white shadow-sm'
                   : 'text-slate-700 dark:text-slate-300 hover:bg-slate-200/70 dark:hover:bg-slate-700'
               }`}
             >
@@ -130,7 +130,7 @@ export default function Header({ currentPageName }) {
               to={createPageUrl('BankOfficerConsole')}
               className={`px-3 py-1.5 rounded-lg transition-all ${
                 location.pathname.includes('BankOfficer')
-                  ? 'bg-[#0f2942] text-white shadow-sm'
+                  ? 'bg-[#011a39] text-white shadow-sm'
                   : 'text-slate-700 dark:text-slate-300 hover:bg-slate-200/70 dark:hover:bg-slate-700'
               }`}
             >
@@ -140,7 +140,7 @@ export default function Header({ currentPageName }) {
               to={createPageUrl('AdminDashboard')}
               className={`px-3 py-1.5 rounded-lg transition-all ${
                 location.pathname.includes('Admin')
-                  ? 'bg-[#0f2942] text-white shadow-sm'
+                  ? 'bg-[#011a39] text-white shadow-sm'
                   : 'text-slate-700 dark:text-slate-300 hover:bg-slate-200/70 dark:hover:bg-slate-700'
               }`}
             >
@@ -152,7 +152,7 @@ export default function Header({ currentPageName }) {
           <div className="flex items-center gap-3">
             <Link
               to={createPageUrl('EntrepreneurOnboarding')}
-              className="px-4 py-2.5 rounded-xl text-xs font-extrabold bg-[#0f2942] hover:bg-[#153a5c] text-white shadow-md hover:shadow-lg transition-all flex items-center gap-2 group border border-amber-500/40"
+              className="px-4 py-2.5 rounded-xl text-xs font-extrabold bg-[#011a39] hover:bg-[#153a5c] text-white shadow-md hover:shadow-lg transition-all flex items-center gap-2 group border border-amber-500/40"
             >
               <span>Apply for MUDRA Loan</span>
               <ArrowRight className="w-3.5 h-3.5 text-amber-400 group-hover:translate-x-1 transition-transform" />
@@ -171,7 +171,7 @@ export default function Header({ currentPageName }) {
       </div>
 
       {/* 3. NAVIGATION BAR */}
-      <nav className="bg-[#0f2942] text-white border-b border-slate-800 shadow-inner hidden lg:block">
+      <nav className="bg-[#011a39] text-white border-b border-slate-800 shadow-inner hidden lg:block">
         <div className="max-w-7xl mx-auto px-4 flex items-center justify-between">
           <div className="flex items-center space-x-1 py-1">
             {navLinks.map((link) => {

@@ -1,18 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import {
-  X,
-  ZoomIn,
-  Sparkles,
-  ChevronLeft,
-  ChevronRight,
-  Search,
-  Share2,
-  Download,
-  Tag,
-  Calendar,
-  Building2
-} from 'lucide-react';
+import { X, ZoomIn, Image as ImageIcon } from 'lucide-react';
 import Header from '../components/home/Header';
 import Footer from '../components/home/Footer';
 import ChatBot from '../components/ChatBot';
@@ -25,316 +13,248 @@ const categories = [
   { id: 'foundation', label: '10TH FOUNDATION DAY' },
 ];
 
+// Magazine Grid sizing is derived from position, not a hardcoded id, so the
+// editorial rhythm (one big cover cell, one tall cell, a wide cell, and
+// normal squares) holds up for every category regardless of how many photos
+// it has — from 2 (awards) to 6 (inauguration).
+const MAGAZINE_PATTERN = [
+  { type: 'cover', span: 'col-span-2 row-span-2' },
+  { type: 'tall', span: 'col-span-1 row-span-2' },
+  { type: 'normal', span: 'col-span-1 row-span-1' },
+  { type: 'wide', span: 'col-span-2 row-span-1' },
+  { type: 'normal', span: 'col-span-1 row-span-1' },
+  { type: 'normal', span: 'col-span-1 row-span-1' }
+];
+
+function getMagazineCell(idx) {
+  return MAGAZINE_PATTERN[idx % MAGAZINE_PATTERN.length];
+}
+
 const galleryImages = {
   inauguration: [
-    { url: 'https://media.base44.com/images/public/6978c66565209a38e92b1aa2/94ec599e3_image.png', caption: 'PM Modi at MUDRA Launch Ceremony', date: 'April 2015', location: 'New Delhi' },
-    { url: 'https://media.base44.com/images/public/6978c66565209a38e92b1aa2/fb7f3e133_image.png', caption: 'MUDRA Inauguration - Union Finance Minister & Dignitaries', date: 'April 2015', location: 'Vigyan Bhawan' },
-    { url: 'https://media.base44.com/images/public/6978c66565209a38e92b1aa2/d2f6d13eb_image.png', caption: 'PM Modi Addressing Micro Entrepreneurs at PMMY Launch', date: 'April 2015', location: 'New Delhi' },
-    { url: 'https://media.base44.com/images/public/6978c66565209a38e92b1aa2/1c94928a7_image.png', caption: 'PM Modi Distributing First Batch of MUDRA Loan Cards', date: 'April 2015', location: 'New Delhi' },
-    { url: 'https://media.base44.com/images/public/6978c66565209a38e92b1aa2/986054bf8_image.png', caption: 'MUDRA Mega Loan Disbursement Ceremony', date: 'May 2015', location: 'Mumbai' },
-    { url: 'https://media.base44.com/images/public/6978c66565209a38e92b1aa2/8f5dc791a_image.png', caption: 'PM Modi Handing Over MUDRA Loan Passbook to Women Artisans', date: 'April 2015', location: 'Vigyan Bhawan' },
+    { url: 'https://media.base44.com/images/public/6978c66565209a38e92b1aa2/94ec599e3_image.png', caption: 'PM Modi at MUDRA Launch' },
+    { url: 'https://media.base44.com/images/public/6978c66565209a38e92b1aa2/fb7f3e133_image.png', caption: 'MUDRA Inauguration - Dignitaries' },
+    { url: 'https://media.base44.com/images/public/6978c66565209a38e92b1aa2/d2f6d13eb_image.png', caption: 'PM Modi at PMMY Launch' },
+    { url: 'https://media.base44.com/images/public/6978c66565209a38e92b1aa2/1c94928a7_image.png', caption: 'PM Modi Distributing Loan Cards' },
+    { url: 'https://media.base44.com/images/public/6978c66565209a38e92b1aa2/986054bf8_image.png', caption: 'MUDRA Loan Disbursement Ceremony' },
+    { url: 'https://media.base44.com/images/public/6978c66565209a38e92b1aa2/8f5dc791a_image.png', caption: 'PM Modi Handing Over Loan Passbook' },
   ],
   awards: [
-    { url: 'https://media.base44.com/images/public/6978c66565209a38e92b1aa2/2cb0ecb45_image.png', caption: 'PM Modi Handing Over National MSME Award', date: 'Oct 2018', location: 'Ludhiana' },
-    { url: 'https://media.base44.com/images/public/6978c66565209a38e92b1aa2/7748456b5_image.png', caption: 'SKOCH Gold Award - Pradhan Mantri MUDRA Yojana', date: 'Dec 2019', location: 'New Delhi' },
+    { url: 'https://media.base44.com/images/public/6978c66565209a38e92b1aa2/2cb0ecb45_image.png', caption: 'PM Modi Handing Over Award' },
+    { url: 'https://media.base44.com/images/public/6978c66565209a38e92b1aa2/7748456b5_image.png', caption: 'SKOCH Award - Pradhan Mantri MUDRA Yojana' },
   ],
   conferences: [
-    { url: 'https://media.base44.com/images/public/6978c66565209a38e92b1aa2/5b38c7001_image.png', caption: 'Bankers Borrowers Business Meet - Empowering MSME Credit', date: 'Feb 2017', location: 'Ahmedabad' },
-    { url: 'https://media.base44.com/images/public/6978c66565209a38e92b1aa2/5ea3c1e1c_image.png', caption: 'ASSOCHAM Financial Inclusion Appreciation Ceremony', date: 'Nov 2016', location: 'New Delhi' },
-    { url: 'https://media.base44.com/images/public/6978c66565209a38e92b1aa2/c7a7fd8c6_image.png', caption: 'Madhya Pradesh Inclusive Finance State Conference', date: 'Jul 2018', location: 'Bhopal' },
-    { url: 'https://media.base44.com/images/public/6978c66565209a38e92b1aa2/b2bf9d19d_image.png', caption: 'NBFC & MFI Refinance Conference - Mumbai 2016', date: 'Sep 2016', location: 'Mumbai' },
+    { url: 'https://media.base44.com/images/public/6978c66565209a38e92b1aa2/5b38c7001_image.png', caption: 'Bankers Borrowers Business Meet - Empowering MSME' },
+    { url: 'https://media.base44.com/images/public/6978c66565209a38e92b1aa2/5ea3c1e1c_image.png', caption: 'ASSOCHAM Appreciation Ceremony' },
+    { url: 'https://media.base44.com/images/public/6978c66565209a38e92b1aa2/c7a7fd8c6_image.png', caption: 'Madhya Pradesh Inclusive Finance Conference' },
+    { url: 'https://media.base44.com/images/public/6978c66565209a38e92b1aa2/b2bf9d19d_image.png', caption: 'Finance Companies Conference - Mumbai 2016' },
   ],
   programmes: [
-    { url: 'https://media.base44.com/images/public/6978c66565209a38e92b1aa2/8470fe5e1_image.png', caption: 'MUDRA Commercial Vehicle Key Handover Ceremony', date: 'Jan 2017', location: 'Lucknow' },
-    { url: 'https://media.base44.com/images/public/6978c66565209a38e92b1aa2/e36016ce5_image.png', caption: 'Launch of 101 E-Rickshaw & 251 Cycle Rickshaw - Lucknow 2015', date: 'Aug 2015', location: 'Lucknow' },
-    { url: 'https://media.base44.com/images/public/6978c66565209a38e92b1aa2/306cb91f3_image.png', caption: 'MUDRA Official Coffee Table Publication Launch', date: 'Nov 2017', location: 'New Delhi' },
+    { url: 'https://media.base44.com/images/public/6978c66565209a38e92b1aa2/8470fe5e1_image.png', caption: 'MUDRA Key Handover Ceremony' },
+    { url: 'https://media.base44.com/images/public/6978c66565209a38e92b1aa2/e36016ce5_image.png', caption: 'Launch of 101 E-Rickshaw & 251 Cycle Rickshaw - Lucknow 2015' },
+    { url: 'https://media.base44.com/images/public/6978c66565209a38e92b1aa2/306cb91f3_image.png', caption: 'MUDRA Publication Launch' },
   ],
   foundation: [
-    { url: 'https://media.base44.com/images/public/6978c66565209a38e92b1aa2/7020d1e25_image.png', caption: 'MUDRA 10th Foundation Day - Outstanding MLI Felicitation', date: 'April 2025', location: 'New Delhi' },
-    { url: 'https://media.base44.com/images/public/6978c66565209a38e92b1aa2/2c1769430_image.png', caption: 'MUDRA 10th Foundation Day - Executive Team Commemoration', date: 'April 2025', location: 'New Delhi' },
-    { url: 'https://media.base44.com/images/public/6978c66565209a38e92b1aa2/19029d398_image.png', caption: 'MUDRA Glorious 10 Years - Group Photo of Awardees', date: 'April 2025', location: 'New Delhi' },
-    { url: 'https://media.base44.com/images/public/6978c66565209a38e92b1aa2/80ae4e9cf_image.png', caption: 'MUDRA 10th Foundation Day - Decennial Celebration', date: 'April 2025', location: 'New Delhi' },
+    { url: 'https://media.base44.com/images/public/6978c66565209a38e92b1aa2/7020d1e25_image.png', caption: 'MUDRA 10th Foundation Day - Felicitation' },
+    { url: 'https://media.base44.com/images/public/6978c66565209a38e92b1aa2/2c1769430_image.png', caption: 'MUDRA 10th Foundation Day - Team Photo' },
+    { url: 'https://media.base44.com/images/public/6978c66565209a38e92b1aa2/19029d398_image.png', caption: 'MUDRA Glorious 10 Years - Group Photo' },
+    { url: 'https://media.base44.com/images/public/6978c66565209a38e92b1aa2/80ae4e9cf_image.png', caption: 'MUDRA 10th Foundation Day - Cake Cutting' },
   ],
 };
 
 export default function Gallery() {
   const [activeCategory, setActiveCategory] = useState('inauguration');
-  const [selectedIndex, setSelectedIndex] = useState(null);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [copied, setCopied] = useState(false);
-
-  const images = galleryImages[activeCategory] || [];
-
-  const filteredImages = images.filter(img =>
-    !searchQuery || img.caption.toLowerCase().includes(searchQuery.toLowerCase())
-  );
-
-  const handleNextImage = (e) => {
-    e.stopPropagation();
-    if (selectedIndex !== null) {
-      setSelectedIndex((prev) => (prev + 1) % filteredImages.length);
-    }
-  };
-
-  const handlePrevImage = (e) => {
-    e.stopPropagation();
-    if (selectedIndex !== null) {
-      setSelectedIndex((prev) => (prev - 1 + filteredImages.length) % filteredImages.length);
-    }
-  };
-
-  const currentModalImage = selectedIndex !== null ? filteredImages[selectedIndex] : null;
-
-  const handleShare = () => {
-    setCopied(true);
-    navigator.clipboard.writeText(window.location.href);
-    setTimeout(() => setCopied(false), 2000);
-  };
+  const [selectedImage, setSelectedImage] = useState(null);
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-[#070b14] text-slate-900 dark:text-slate-100 transition-colors duration-300 flex flex-col justify-between">
-      <Header />
+    <div className="relative min-h-screen overflow-x-hidden bg-slate-50 transition-colors duration-300 dark:bg-[#021731]">
+      <div
+        className="pointer-events-none fixed inset-0 z-0 bg-cover bg-center opacity-[0.05] dark:opacity-[0.04]"
+        style={{ backgroundImage: `url('/photo/tajmahal.png')` }}
+        aria-hidden="true"
+      />
 
-      <main className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 py-12 w-full">
+      <div className="relative z-10">
+        <Header />
 
-        {/* Centered Page Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="text-center max-w-3xl mx-auto mb-12"
-        >
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-red-100 dark:bg-red-950/60 border border-red-300 dark:border-red-800 text-red-900 dark:text-amber-300 text-xs font-black tracking-wider uppercase mb-3 shadow-sm">
-            <Sparkles size={14} className="text-red-700 dark:text-amber-400" />
-            <span>OFFICIAL MEDIA ARCHIVE</span>
-          </div>
-
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-slate-900 dark:text-white tracking-tight mb-4">
-            MUDRA Photo Gallery
-          </h1>
-
-          <div className="w-32 h-1.5 bg-gradient-to-r from-red-700 via-amber-500 to-red-700 mx-auto rounded-full mb-6"></div>
-
-          <p className="text-slate-600 dark:text-slate-300 text-sm md:text-base font-semibold leading-relaxed">
-            Explore official photographs of Pradhan Mantri MUDRA Yojana inauguration, national MSME awards ceremonies, state level conclaves, and foundation day events.
-          </p>
-        </motion.div>
-
-        {/* Search Bar & Category Navigation */}
-        <div className="space-y-6 mb-12">
-
-          {/* Interactive Search Bar */}
-          <div className="max-w-md mx-auto relative">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 w-4 h-4" />
-            <input
-              type="text"
-              placeholder="Search photo captions, events, or keywords..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-11 pr-4 py-2.5 rounded-2xl bg-white dark:bg-slate-900 border-2 border-slate-200 dark:border-slate-800 text-slate-900 dark:text-white text-xs font-bold shadow-md focus:outline-none focus:border-red-800 dark:focus:border-amber-400 transition-colors"
+        <div className="py-14 relative overflow-hidden bg-gradient-to-br from-[#075985] via-[#075985] to-[#021731]">
+          <div className="absolute inset-0 pointer-events-none">
+            <motion.div
+              animate={{
+                scale: [1, 1.2, 1],
+                opacity: [0.12, 0.22, 0.12],
+                x: [0, 20, 0]
+              }}
+              transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
+              className="absolute -top-20 -left-20 w-80 h-80 rounded-full bg-white/20 blur-3xl"
             />
-            {searchQuery && (
-              <button
-                type="button"
-                onClick={() => setSearchQuery('')}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-bold text-red-500 hover:underline"
+            <motion.div
+              animate={{
+                scale: [1.2, 1, 1.2],
+                opacity: [0.12, 0.2, 0.12],
+                x: [0, -20, 0]
+              }}
+              transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut', delay: 1 }}
+              className="absolute -bottom-20 -right-20 w-96 h-96 rounded-full bg-white/10 blur-3xl"
+            />
+          </div>
+
+          <div className="max-w-7xl mx-auto px-4 text-center relative z-10">
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+            >
+              <motion.span
+                whileHover={{ scale: 1.05 }}
+                className="inline-flex items-center gap-1.5 bg-[#f97316] text-white px-3 py-1 rounded-full text-[10px] font-black tracking-wider uppercase mb-2 shadow-sm"
               >
-                Clear
-              </button>
-            )}
+                <ImageIcon size={12} className="text-white" />
+                <span>PHOTO GALLERY</span>
+              </motion.span>
+              <h1 className="text-2xl sm:text-3xl md:text-4xl font-black text-white tracking-tight mb-2 [text-shadow:0_4px_18px_rgba(2,23,49,0.55)]">
+                Photo Gallery
+              </h1>
+              <p className="pb-5 text-blue-50 max-w-3xl mx-auto text-sm sm:text-base font-semibold leading-snug [text-shadow:0_2px_10px_rgba(2,23,49,0.5)]">
+                A visual journey through MUDRA's milestones, events, and celebrations.
+              </p>
+            </motion.div>
           </div>
 
-          {/* Animated Category Tabs with Spring Pill */}
-          <div className="flex items-center justify-center gap-1.5 bg-white dark:bg-slate-900 p-1.5 rounded-full border-2 border-slate-200 dark:border-slate-800 shadow-md flex-wrap justify-center max-w-4xl mx-auto">
-            {categories.map((cat) => {
-              const isSelected = activeCategory === cat.id;
-              return (
-                <button
-                  key={cat.id}
-                  type="button"
-                  onClick={() => {
-                    setActiveCategory(cat.id);
-                    setSelectedIndex(null);
-                  }}
-                  className={`relative z-10 px-4 py-2 rounded-full text-xs font-black tracking-wider transition-colors ${isSelected
-                      ? 'text-white dark:text-slate-950 font-black'
-                      : 'text-slate-700 dark:text-slate-300 hover:text-slate-950 dark:hover:text-white'
-                    }`}
-                >
-                  {isSelected && (
-                    <motion.div
-                      layoutId="galleryCatPill"
-                      transition={{ type: 'spring', stiffness: 450, damping: 32 }}
-                      className="absolute inset-0 bg-red-800 dark:bg-amber-400 rounded-full shadow-md z-[-1]"
-                    />
-                  )}
-                  <span>{cat.label}</span>
-                </button>
-              );
-            })}
+          <div className="pointer-events-none absolute inset-x-0 bottom-[-1px] z-10" aria-hidden="true">
+            <svg viewBox="0 0 1440 140" preserveAspectRatio="none" className="block h-14 w-full sm:h-24">
+              <defs>
+                <linearGradient id="galleryHeroCurveBorder" x1="0" y1="0" x2="1" y2="0">
+                  <stop offset="0%" stopColor="#7dd3fc" />
+                  <stop offset="55%" stopColor="#00b6f0" />
+                  <stop offset="100%" stopColor="#021731" />
+                </linearGradient>
+              </defs>
+              <path d="M0,70 C360,0 720,140 1080,70 C1260,35 1350,20 1440,45 L1440,140 L0,140 Z" className="fill-slate-50 dark:fill-[#021731]" />
+              <path d="M0,70 C360,0 720,140 1080,70 C1260,35 1350,20 1440,45" fill="none" stroke="url(#galleryHeroCurveBorder)" strokeWidth="7" strokeLinecap="round" />
+            </svg>
           </div>
-
         </div>
 
-        {/* Gallery Grid */}
-        {filteredImages.length === 0 ? (
-          <div className="text-center py-16 bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 max-w-md mx-auto">
-            <Search className="w-10 h-10 text-slate-400 mx-auto mb-3" />
-            <p className="text-sm font-bold text-slate-700 dark:text-slate-300">No photos found matching "{searchQuery}"</p>
-            <button
-              type="button"
-              onClick={() => setSearchQuery('')}
-              className="mt-3 text-xs font-black text-red-800 dark:text-amber-400 hover:underline"
-            >
-              Reset Search Filter
-            </button>
+        <main className="max-w-7xl mx-auto px-4 py-12 w-full relative z-10">
+          <div className="flex items-center gap-3 mb-8">
+            <div className="w-1 h-8 bg-blue-700 dark:bg-blue-400"></div>
+            <h2 className="text-2xl font-black text-[#011a39] dark:text-white">Photo Gallery</h2>
           </div>
-        ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-7">
+
+          <div className="flex items-center justify-center gap-2 flex-wrap mb-10">
+            {categories.map((cat) => (
+              <motion.button
+                whileHover={{ scale: 1.04 }}
+                whileTap={{ scale: 0.96 }}
+                key={cat.id}
+                type="button"
+                onClick={() => setActiveCategory(cat.id)}
+                className={`px-5 py-3 rounded-2xl text-xs sm:text-sm font-black tracking-wide transition-all ${
+                  activeCategory === cat.id
+                    ? 'bg-blue-800 dark:bg-blue-600 text-white shadow-lg'
+                    : 'bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-800 hover:bg-blue-50 dark:hover:bg-slate-800'
+                }`}
+              >
+                {cat.label}
+              </motion.button>
+            ))}
+          </div>
+
+          <motion.div
+            layout
+            className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 auto-rows-[170px] sm:auto-rows-[190px] md:auto-rows-[200px] [grid-auto-flow:dense] gap-3 md:gap-4"
+          >
             <AnimatePresence mode="wait">
-              {filteredImages.map((img, idx) => (
-                <motion.div
-                  key={`${activeCategory}-${idx}`}
-                  initial={{ opacity: 0, scale: 0.95, y: 20 }}
-                  animate={{ opacity: 1, scale: 1, y: 0 }}
-                  exit={{ opacity: 0, scale: 0.95, y: 20 }}
-                  transition={{ duration: 0.3, delay: idx * 0.05 }}
-                  whileHover={{ y: -8, scale: 1.02 }}
-                  onClick={() => setSelectedIndex(idx)}
-                  className="group relative bg-white dark:bg-slate-900 rounded-3xl overflow-hidden shadow-xl border-2 border-slate-200 dark:border-slate-800 hover:border-amber-400 dark:hover:border-amber-500/70 transition-all cursor-pointer flex flex-col justify-between"
-                >
-                  <div className="relative h-64 overflow-hidden bg-slate-200 dark:bg-slate-800">
+              {galleryImages[activeCategory]?.map((image, idx) => {
+                const cell = getMagazineCell(idx);
+                const isCover = cell.type === 'cover';
+                const isFeature = isCover || cell.type === 'tall' || cell.type === 'wide';
+                return (
+                  <motion.div
+                    key={`${activeCategory}-${idx}`}
+                    layout
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.9 }}
+                    transition={{ delay: idx * 0.05 }}
+                    className={`${cell.span} relative group cursor-pointer overflow-hidden rounded-3xl shadow-md hover:shadow-xl border border-slate-200 dark:border-slate-800 bg-slate-900 transition-all`}
+                    onClick={() => setSelectedImage(image)}
+                  >
                     <img
-                      src={img.url}
-                      alt={img.caption}
-                      className="w-full h-full object-cover group-hover:scale-108 transition-transform duration-700"
+                      src={image.url}
+                      alt={image.caption}
+                      className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                     />
-                    <div className="absolute inset-0 bg-slate-950/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                      <div className="w-13 h-13 w-12 h-12 rounded-2xl bg-amber-400 text-slate-950 flex items-center justify-center font-bold shadow-xl group-hover:scale-110 transition-transform">
-                        <ZoomIn size={22} />
-                      </div>
-                    </div>
 
-                    <div className="absolute top-3 right-3 bg-slate-950/80 backdrop-blur-md text-amber-300 px-2.5 py-1 rounded-full text-[10px] font-black border border-slate-700">
-                      {img.date}
-                    </div>
-                  </div>
+                    {/* Persistent editorial caption bar, not hover-only — the
+                        "always-on kicker + headline" is what reads as
+                        magazine layout rather than a plain hover-gallery. */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/10 to-transparent" />
 
-                  <div className="p-5 bg-white dark:bg-slate-900 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
-                    <div>
-                      <h4 className="text-xs font-black text-slate-900 dark:text-white line-clamp-1">
-                        {img.caption}
-                      </h4>
-                      <p className="text-[10px] font-bold text-slate-500 dark:text-slate-400 mt-0.5">
-                        📍 {img.location}
+                    {isCover && (
+                      <span className="absolute top-4 left-4 text-5xl md:text-6xl font-black text-white/20 leading-none select-none">
+                        01
+                      </span>
+                    )}
+
+                    <div className={`absolute bottom-0 left-0 right-0 ${isFeature ? 'p-4 md:p-5' : 'p-3'}`}>
+                      <span className={`block font-black uppercase tracking-wider text-amber-400 mb-1 ${isCover ? 'text-[11px]' : 'text-[9px]'}`}>
+                        {categories.find((c) => c.id === activeCategory)?.label}
+                      </span>
+                      <p className={`text-white font-black leading-snug ${isCover ? 'text-xl md:text-2xl line-clamp-3' : isFeature ? 'text-sm md:text-base line-clamp-2' : 'text-xs line-clamp-2'}`}>
+                        {image.caption}
                       </p>
                     </div>
-                    <div className="w-8 h-8 rounded-xl bg-amber-50 dark:bg-slate-800 text-red-800 dark:text-amber-400 flex items-center justify-center shrink-0 group-hover:bg-red-800 group-hover:text-white transition-colors">
-                      <ZoomIn size={15} />
-                    </div>
-                  </div>
-                </motion.div>
-              ))}
-            </AnimatePresence>
-          </div>
-        )}
 
-        {/* Lightbox Slideshow Modal */}
+                    <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity">
+                      <div className="w-9 h-9 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
+                        <ZoomIn className="text-white" size={18} />
+                      </div>
+                    </div>
+                  </motion.div>
+                );
+              })}
+            </AnimatePresence>
+          </motion.div>
+        </main>
+
         <AnimatePresence>
-          {currentModalImage && (
-            <div
-              className="fixed inset-0 z-[9999] bg-slate-950/90 backdrop-blur-md p-4 flex items-center justify-center"
-              onClick={() => setSelectedIndex(null)}
+          {selectedImage && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4"
+              onClick={() => setSelectedImage(null)}
             >
+              <button
+                className="absolute top-6 right-6 text-white hover:text-amber-400 transition-colors"
+                onClick={() => setSelectedImage(null)}
+              >
+                <X size={32} />
+              </button>
               <motion.div
-                initial={{ scale: 0.9, opacity: 0 }}
+                initial={{ scale: 0.8, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
-                exit={{ scale: 0.9, opacity: 0 }}
-                className="relative max-w-4xl w-full bg-slate-900 rounded-3xl overflow-hidden border-2 border-slate-800 shadow-2xl"
+                exit={{ scale: 0.8, opacity: 0 }}
+                className="max-w-4xl max-h-[80vh] bg-white dark:bg-slate-900 rounded-3xl shadow-2xl overflow-hidden"
                 onClick={(e) => e.stopPropagation()}
               >
-                {/* Modal Header */}
-                <div className="p-4 bg-slate-950 border-b border-slate-800 flex items-center justify-between text-white">
-                  <div className="flex items-center gap-2">
-                    <span className="text-xs font-black text-amber-400 uppercase tracking-wider">
-                      PHOTO {selectedIndex + 1} OF {filteredImages.length}
-                    </span>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => setSelectedIndex(null)}
-                    className="w-9 h-9 rounded-full bg-slate-800 text-white hover:bg-red-700 transition-colors flex items-center justify-center border border-slate-700"
-                  >
-                    <X size={18} />
-                  </button>
-                </div>
-
-                {/* Main Image Container */}
-                <div className="relative h-[60vh] max-h-[500px] w-full bg-black flex items-center justify-center overflow-hidden">
-                  <img
-                    src={currentModalImage.url}
-                    alt={currentModalImage.caption}
-                    className="w-full h-full object-contain"
-                  />
-
-                  {/* Left / Right Slideshow Navigation */}
-                  <button
-                    type="button"
-                    onClick={handlePrevImage}
-                    className="absolute left-4 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-slate-900/80 text-white hover:bg-amber-500 hover:text-slate-950 flex items-center justify-center shadow-xl border border-slate-700 transition-all"
-                  >
-                    <ChevronLeft size={22} />
-                  </button>
-                  <button
-                    type="button"
-                    onClick={handleNextImage}
-                    className="absolute right-4 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-slate-900/80 text-white hover:bg-amber-500 hover:text-slate-950 flex items-center justify-center shadow-xl border border-slate-700 transition-all"
-                  >
-                    <ChevronRight size={22} />
-                  </button>
-                </div>
-
-                {/* Modal Footer Caption & Controls */}
-                <div className="p-5 bg-slate-900 border-t border-slate-800 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-                  <div>
-                    <h3 className="text-base font-black text-white mb-1">
-                      {currentModalImage.caption}
-                    </h3>
-                    <p className="text-xs text-slate-400 font-bold flex items-center gap-3">
-                      <span>🗓️ {currentModalImage.date}</span>
-                      <span>📍 {currentModalImage.location}</span>
-                    </p>
-                  </div>
-
-                  <div className="flex items-center gap-2 shrink-0">
-                    <button
-                      type="button"
-                      onClick={handleShare}
-                      className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-amber-400 font-black text-xs border border-slate-700 transition-all flex items-center gap-1.5"
-                    >
-                      <Share2 size={14} />
-                      <span>{copied ? 'Copied Link!' : 'Share'}</span>
-                    </button>
-                    <a
-                      href={currentModalImage.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="px-4 py-2 rounded-xl bg-amber-400 hover:bg-amber-500 text-slate-950 font-black text-xs shadow-md transition-all flex items-center gap-1.5"
-                    >
-                      <Download size={14} />
-                      <span>High-Res</span>
-                    </a>
-                  </div>
-                </div>
-
+                <img
+                  src={selectedImage.url}
+                  alt={selectedImage.caption}
+                  className="max-w-full max-h-[70vh] object-contain"
+                />
+                <p className="text-white dark:text-slate-900 text-center mt-4 text-lg font-bold px-4 pb-4">{selectedImage.caption}</p>
               </motion.div>
-            </div>
+            </motion.div>
           )}
         </AnimatePresence>
 
-      </main>
-
-      <Footer />
-      <ChatBot />
+        <Footer />
+        <ChatBot />
+      </div>
     </div>
   );
 }

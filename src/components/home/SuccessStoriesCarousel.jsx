@@ -1,8 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
-import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronLeft, ChevronRight, Award, MapPin, IndianRupee, UserCheck, Sparkles, ArrowRight, Quote } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { ArrowRight, Award, MapPin, Quote, Sparkles } from 'lucide-react';
+import SectionHeading from '@/components/ui/section-heading';
+import { useLanguage } from '../LanguageContext';
 
 const stories = [
   {
@@ -13,7 +15,7 @@ const stories = [
     business: 'Ananya Handloom & Textiles',
     location: 'Guwahati, Assam',
     loanCategory: 'Tarun (₹8.5 Lakh)',
-    image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=800&q=80',
+    image: '/photo/success/handloom-weaver.jpg',
     description: 'Started as a small home weaving setup with 2 looms. With a MUDRA Tarun loan, expanded to 14 automatic looms employing 22 local women weavers and exporting traditional Eri silk products.',
     impact: '22 Local Women Employed • 5x Revenue Growth'
   },
@@ -25,7 +27,7 @@ const stories = [
     business: 'Zenith Precision Engineering Works',
     location: 'Pune, Maharashtra',
     loanCategory: 'TarunPlus (₹15 Lakh)',
-    image: 'https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=800&q=80',
+    image: '/photo/success/cnc-engineering.jpg',
     description: 'A young diploma engineer who established a CNC lathe component manufacturing unit supplying auto ancillaries. Scaled up under TarunPlus scheme with zero third-party collateral.',
     impact: 'Supplies 12 Auto OEM Manufacturers • ISO Certified'
   },
@@ -37,7 +39,7 @@ const stories = [
     business: 'Sri Lakshmi Organic Spice Processing',
     location: 'Madurai, Tamil Nadu',
     loanCategory: 'Kishore (₹4.2 Lakh)',
-    image: 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=800&q=80',
+    image: '/photo/success/spice-processing.jpg',
     description: 'Procures organic spices from local smallholders, processes and vacuum packs them for retail chains across South India. Increased monthly revenue 5x post-MUDRA financial support.',
     impact: '45 Organic Farmers Onboarded • Pan-South Reach'
   },
@@ -49,7 +51,7 @@ const stories = [
     business: 'Kisan Chilling & Dairy Processing',
     location: 'Anand, Gujarat',
     loanCategory: 'Kishore (₹3.8 Lakh)',
-    image: 'https://images.unsplash.com/photo-1625246333195-78d9c38ad449?auto=format&fit=crop&w=800&q=80',
+    image: '/photo/success/dairy-farmer.jpg',
     description: 'Set up a bulk milk cooling unit in his village, collecting 1,200 liters daily from 45 dairy farmers and delivering directly to cooperative dairies.',
     impact: '1,200 Ltrs Daily Capacity • Village Dairy Cooperative'
   },
@@ -61,7 +63,7 @@ const stories = [
     business: 'GreenWatt Solar Installation Solutions',
     location: 'Jaipur, Rajasthan',
     loanCategory: 'Tarun (₹10 Lakh)',
-    image: 'https://images.unsplash.com/photo-1556761175-5973dc0f32e7?auto=format&fit=crop&w=800&q=80',
+    image: '/photo/success/solar-installer.jpg',
     description: 'Provided rooftop solar installation services for commercial shops in Tier-2 cities. Utilized MUDRA credit to purchase testing equipment and inventory.',
     impact: '180+ Solar Roofs Installed • Green Clean Energy'
   },
@@ -73,209 +75,106 @@ const stories = [
     business: 'EcoPottery Artisans Collective',
     location: 'Varanasi, Uttar Pradesh',
     loanCategory: 'Shishu (₹50,000)',
-    image: 'https://images.unsplash.com/photo-1590682680695-43b964a3ae17?auto=format&fit=crop&w=800&q=80',
+    image: '/photo/success/pottery-artisan.jpg',
     description: 'Upgraded traditional manual pottery wheel to an electric pug mill and kiln. Reduced manufacturing cycle time by 60% and expanded to online handicraft platforms.',
     impact: '60% Production Time Saved • E-Commerce Seller'
   }
 ];
 
+const MotionLink = motion(Link);
+
 export default function SuccessStoriesCarousel() {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [isAutoplay, setIsAutoplay] = useState(true);
-
-  useEffect(() => {
-    if (!isAutoplay) return;
-    const interval = setInterval(() => {
-      setCurrentIndex((prev) => (prev + 1) % stories.length);
-    }, 5000);
-    return () => clearInterval(interval);
-  }, [isAutoplay]);
-
-  const handleNext = () => {
-    setCurrentIndex((prev) => (prev + 1) % stories.length);
-  };
-
-  const handlePrev = () => {
-    setCurrentIndex((prev) => (prev - 1 + stories.length) % stories.length);
-  };
-
-  const current = stories[currentIndex];
+  const { t } = useLanguage();
 
   return (
-    <section className="py-20 bg-transparent text-slate-900 dark:text-slate-100 transition-colors duration-300 relative overflow-hidden border-t border-slate-200 dark:border-slate-800">
-      
-      {/* Glow Orbs */}
-      <div className="absolute top-1/2 left-0 w-96 h-96 bg-amber-400/10 rounded-full blur-3xl pointer-events-none -translate-y-1/2"></div>
-      <div className="absolute top-1/2 right-0 w-96 h-96 bg-red-600/10 rounded-full blur-3xl pointer-events-none -translate-y-1/2"></div>
+    <section className="section-y relative overflow-hidden border-t border-slate-200 text-slate-900 dark:border-slate-800 dark:text-slate-100">
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
-        
-        {/* Centered Uniform Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="text-center mb-14"
+      {/* Ambient glow (static, not perpetually animated) */}
+      <div className="pointer-events-none absolute left-0 top-1/2 h-96 w-96 -translate-y-1/2 rounded-full bg-blue-400/10 blur-3xl" aria-hidden="true" />
+      <div className="pointer-events-none absolute right-0 top-1/2 h-96 w-96 -translate-y-1/2 rounded-full bg-blue-600/10 blur-3xl" aria-hidden="true" />
+
+      <div className="shell relative">
+        <SectionHeading
+          eyebrow={t('successCarouselEyebrow')}
+          icon={Sparkles}
+          title={t('successCarouselTitle')}
+          description={t('successCarouselDescription')}
         >
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-red-100 dark:bg-red-950/60 border border-red-300 dark:border-red-800 text-red-900 dark:text-amber-300 text-xs font-black tracking-wider uppercase mb-3">
-            <Sparkles size={14} className="text-red-700 dark:text-amber-400" />
-            <span>GRASSROOTS INSPIRATION</span>
-          </div>
+          <Link
+            to={createPageUrl('SuccessStories')}
+            className="link-underline inline-flex items-center gap-1.5 text-xs font-extrabold uppercase tracking-wider text-blue-700 dark:text-blue-400"
+          >
+            <span>{t('successCarouselExploreAll')}</span>
+            <ArrowRight size={14} aria-hidden="true" />
+          </Link>
+        </SectionHeading>
 
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-slate-900 dark:text-white mb-4 tracking-tight">
-            PMMY Success Stories Carousel
-          </h2>
-
-          <div className="w-32 h-1.5 bg-gradient-to-r from-red-700 via-amber-500 to-red-700 mx-auto rounded-full mb-6"></div>
-
-          <p className="text-slate-600 dark:text-slate-300 max-w-3xl mx-auto text-sm md:text-base font-semibold leading-relaxed">
-            Real stories of grassroots entrepreneurs, women leaders, and rural innovators empowered by collateral-free MUDRA loans.
-          </p>
-
-          <div className="flex items-center justify-center gap-4 mt-6">
-            <Link
-              to={createPageUrl('SuccessStories')}
-              className="text-xs font-extrabold text-red-800 dark:text-amber-400 hover:underline flex items-center gap-1.5 uppercase tracking-wider"
+        {/* Hover-reveal story row — each card shows its photo by default;
+            hovering swaps it for a gradient spotlight panel with the quote,
+            impact stat and a CTA, one card at a time. */}
+        <div className="flex snap-x snap-mandatory gap-2 overflow-x-auto pb-3 lg:snap-none lg:overflow-visible lg:pb-0">
+          {stories.map((story, idx) => (
+            <MotionLink
+              key={story.id}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '-60px' }}
+              transition={{ duration: 0.4, delay: idx * 0.06, ease: [0.22, 1, 0.36, 1] }}
+              to={`${createPageUrl('SuccessStories')}?cat=${story.category}`}
+              className="group relative h-[420px] w-[240px] shrink-0 snap-start overflow-hidden rounded-2xl bg-gradient-to-br from-slate-700 to-slate-900 shadow-lg ring-1 ring-black/5 transition-transform duration-500 hover:z-10 hover:-translate-y-1 lg:h-[460px] lg:w-auto lg:flex-1"
             >
-              <span>Explore All Stories</span>
-              <ArrowRight size={14} />
-            </Link>
-
-            {/* Navigation Buttons */}
-            <div className="flex gap-2">
-              <button
-                type="button"
-                onClick={handlePrev}
-                className="w-9 h-9 rounded-xl bg-white dark:bg-slate-800 hover:bg-amber-500 text-slate-800 dark:text-white hover:text-slate-950 flex items-center justify-center transition-all shadow-md border border-slate-200 dark:border-slate-700"
-                aria-label="Previous story"
-              >
-                <ChevronLeft size={18} />
-              </button>
-              <button
-                type="button"
-                onClick={handleNext}
-                className="w-9 h-9 rounded-xl bg-white dark:bg-slate-800 hover:bg-amber-500 text-slate-800 dark:text-white hover:text-slate-950 flex items-center justify-center transition-all shadow-md border border-slate-200 dark:border-slate-700"
-                aria-label="Next story"
-              >
-                <ChevronRight size={18} />
-              </button>
-            </div>
-          </div>
-        </motion.div>
-
-        {/* Featured Story Carousel Card */}
-        <div
-          className="relative max-w-5xl mx-auto"
-          onMouseEnter={() => setIsAutoplay(false)}
-          onMouseLeave={() => setIsAutoplay(true)}
-        >
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={current.id}
-              initial={{ opacity: 0, x: 60, scale: 0.97 }}
-              animate={{ opacity: 1, x: 0, scale: 1 }}
-              exit={{ opacity: 0, x: -60, scale: 0.97 }}
-              transition={{ duration: 0.45, ease: 'easeOut' }}
-              className="bg-white dark:bg-slate-900 rounded-3xl overflow-hidden shadow-2xl border-2 border-amber-200 dark:border-slate-800 grid grid-cols-1 md:grid-cols-12"
-            >
-              {/* Left Image Side */}
-              <div className="md:col-span-5 relative min-h-[300px] md:min-h-[420px] bg-slate-800">
-                <img
-                  src={current.image}
-                  alt={current.name}
-                  className="w-full h-full object-cover"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent"></div>
-
-                <motion.div
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.2, duration: 0.3 }}
-                  className="absolute top-4 left-4 bg-amber-500 text-slate-950 px-3 py-1 rounded-full text-xs font-black shadow-md flex items-center gap-1"
-                >
-                  <Award size={13} />
-                  <span>{current.categoryLabel}</span>
-                </motion.div>
-
-                <div className="absolute bottom-4 left-4 right-4 text-white">
-                  <div className="flex items-center gap-1.5 text-amber-300 text-xs font-bold mb-1">
-                    <MapPin size={14} />
-                    <span>{current.location}</span>
-                  </div>
-                  <h4 className="text-xl font-black">{current.name}</h4>
-                  <p className="text-xs text-slate-300 font-semibold">{current.business}</p>
-                </div>
+              {/* Default state — photo + name caption */}
+              <img
+                src={story.image}
+                alt={`${story.name} — ${story.business}, ${story.location}`}
+                loading="lazy"
+                className="absolute inset-0 h-full w-full object-cover transition-opacity duration-500 group-hover:opacity-0"
+                onError={(e) => {
+                  // Keep the card readable (gradient + caption) if the photo ever fails to load.
+                  e.currentTarget.style.display = 'none';
+                }}
+              />
+              <div
+                className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/20 to-transparent transition-opacity duration-500 group-hover:opacity-0"
+                aria-hidden="true"
+              />
+              <div className="absolute inset-x-0 bottom-0 p-4 text-white transition-opacity duration-500 group-hover:opacity-0">
+                <p className="mb-1 flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider text-blue-300">
+                  <Award size={11} aria-hidden="true" />
+                  <span>{story.categoryLabel}</span>
+                </p>
+                <h4 className="text-sm font-black leading-snug">{story.name}</h4>
+                <p className="mt-0.5 flex items-center gap-1 text-[11px] text-slate-300">
+                  <MapPin size={11} aria-hidden="true" />
+                  <span>{story.location}</span>
+                </p>
               </div>
 
-              {/* Right Details Side */}
-              <div className="md:col-span-7 p-7 md:p-10 flex flex-col justify-between">
+              {/* Hover reveal — gradient spotlight panel replaces the photo */}
+              <div className="absolute inset-0 flex translate-y-2 flex-col justify-between bg-gradient-to-br from-[#012a4a] via-[#0369a1] to-[#00b6f0] p-5 text-white opacity-0 transition-all duration-500 group-hover:translate-y-0 group-hover:opacity-100">
                 <div>
-                  <div className="flex items-center justify-between gap-2 mb-4">
-                    <div className="flex items-center gap-1.5 px-3 py-1 rounded-lg bg-red-50 dark:bg-slate-800 text-red-800 dark:text-amber-400 font-black text-xs border border-red-200 dark:border-slate-700">
-                      <IndianRupee size={13} />
-                      <span>{current.loanCategory}</span>
-                    </div>
-
-                    <span className="text-[11px] font-bold text-emerald-600 dark:text-emerald-400 flex items-center gap-1">
-                      <Award size={13} /> Collateral-Free Sanction
-                    </span>
-                  </div>
-
-                  <motion.div
-                    initial={{ opacity: 0, rotate: -10 }}
-                    animate={{ opacity: 1, rotate: 0 }}
-                    transition={{ delay: 0.3, duration: 0.4 }}
-                  >
-                    <Quote size={36} className="text-amber-400/40 mb-2" />
-                  </motion.div>
-
-                  <p className="text-slate-700 dark:text-slate-200 text-sm md:text-base leading-relaxed font-semibold mb-6 italic">
-                    "{current.description}"
+                  <p className="text-[10px] font-bold uppercase tracking-wider text-blue-200">{story.categoryLabel}</p>
+                  <h4 className="mt-1 text-base font-black leading-snug">{story.name}</h4>
+                  <Quote size={22} className="mt-3 text-blue-200/60" aria-hidden="true" />
+                  <p className="mt-2 line-clamp-5 text-xs font-medium italic leading-relaxed text-blue-50">
+                    "{story.description}"
                   </p>
-
-                  <motion.div
-                    initial={{ opacity: 0, y: 15 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.4, duration: 0.35 }}
-                    className="bg-amber-50 dark:bg-slate-800/80 p-4 rounded-2xl border border-amber-200 dark:border-slate-700 mb-6"
-                  >
-                    <span className="text-[11px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-wider block mb-1">Measurable Business Impact</span>
-                    <p className="text-xs sm:text-sm font-extrabold text-red-800 dark:text-amber-400">
-                      {current.impact}
-                    </p>
-                  </motion.div>
                 </div>
 
-                {/* Footer Bar of Card */}
-                <div className="flex items-center justify-between pt-4 border-t border-slate-100 dark:border-slate-800">
-                  <div className="flex gap-1.5">
-                    {stories.map((_, idx) => (
-                      <button
-                        key={idx}
-                        type="button"
-                        onClick={() => setCurrentIndex(idx)}
-                        className={`h-2 rounded-full transition-all ${
-                          idx === currentIndex ? 'w-8 bg-red-800 dark:bg-amber-400' : 'w-2 bg-slate-300 dark:bg-slate-700'
-                        }`}
-                        aria-label={`Go to slide ${idx + 1}`}
-                      />
-                    ))}
+                <div>
+                  <div className="mb-3 rounded-xl border border-white/20 bg-white/10 p-2.5 backdrop-blur-sm">
+                    <span className="block text-[9px] font-bold uppercase tracking-wide text-blue-200">{t('successCarouselImpact')}</span>
+                    <span className="text-[11px] font-extrabold text-white">{story.impact}</span>
                   </div>
-
-                  <Link
-                    to={`${createPageUrl('SuccessStories')}?cat=${current.category}`}
-                    className="text-xs font-black text-[#0f2942] dark:text-white hover:text-red-800 dark:hover:text-amber-400 flex items-center gap-1"
-                  >
-                    <span>Read Full Story</span>
-                    <ArrowRight size={14} />
-                  </Link>
+                  <span className="inline-flex items-center gap-1 text-xs font-black text-white">
+                    <span>{t('successCarouselReadFull')}</span>
+                    <ArrowRight size={13} aria-hidden="true" />
+                  </span>
                 </div>
-
               </div>
-            </motion.div>
-          </AnimatePresence>
+            </MotionLink>
+          ))}
         </div>
-
       </div>
     </section>
   );

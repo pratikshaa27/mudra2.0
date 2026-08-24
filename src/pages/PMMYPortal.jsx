@@ -68,22 +68,22 @@ export default function PMMYPortal() {
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
       <div className="bg-white border-b-2 border-gray-200 shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 py-4 flex items-start justify-between">
-          <div className="flex items-center gap-4">
-            <img 
+        <div className="max-w-7xl mx-auto px-4 py-4 flex flex-col items-center gap-4 text-center sm:flex-row sm:items-start sm:justify-between sm:text-left">
+          <div className="flex flex-col items-center gap-3 sm:flex-row sm:items-center sm:gap-4">
+            <img
               src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/6978c66565209a38e92b1aa2/282d5f6a9_image.png"
               alt="MUDRA Logo"
-              className="h-16 w-auto"
+              className="h-10 w-auto sm:h-16"
             />
             <div>
-              <h1 className="text-red-700 text-2xl font-bold">Micro Units Development & Refinance Agency Ltd.</h1>
+              <h1 className="text-red-700 text-lg font-bold leading-snug sm:text-2xl">Micro Units Development & Refinance Agency Ltd.</h1>
             </div>
           </div>
-          <div className="flex flex-col items-center gap-3">
-            <img 
+          <div className="flex flex-row items-center gap-3 sm:flex-col">
+            <img
               src="https://upload.wikimedia.org/wikipedia/commons/5/55/Emblem_of_India.svg"
               alt="Government of India"
-              className="h-16 w-auto"
+              className="h-10 w-auto sm:h-16"
             />
             <div className="bg-red-700 text-white px-2.5 py-0.5 rounded shadow-sm font-semibold text-center whitespace-nowrap">
               <div className="text-[10px] leading-none">Welcome</div>

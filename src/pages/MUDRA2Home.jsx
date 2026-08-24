@@ -94,7 +94,7 @@ export default function MUDRA2Home() {
                   {currentBanner.badge}
                 </span>
 
-                <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-[#0f2942] tracking-tight leading-tight">
+                <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-[#011a39] tracking-tight leading-tight">
                   {currentBanner.title}
                 </h1>
 
@@ -118,7 +118,7 @@ export default function MUDRA2Home() {
                 <div className="mt-8 flex flex-wrap items-center gap-4">
                   <Link
                     to={createPageUrl('EntrepreneurOnboarding')}
-                    className="px-6 py-3 rounded-lg font-bold text-xs bg-[#0f2942] hover:bg-[#153a5c] text-white shadow-md transition-all flex items-center gap-2 uppercase tracking-wider"
+                    className="px-6 py-3 rounded-lg font-bold text-xs bg-[#011a39] hover:bg-[#153a5c] text-white shadow-md transition-all flex items-center gap-2 uppercase tracking-wider"
                   >
                     <span>{currentBanner.ctaText}</span>
                     <ArrowRight className="w-4 h-4 text-amber-400" />
@@ -143,7 +143,7 @@ export default function MUDRA2Home() {
                   />
                   <div className="p-4 bg-slate-50 border-t border-slate-200 text-slate-800 text-xs flex items-center justify-between">
                     <div>
-                      <p className="font-bold text-[#0f2942]">Shishu • Kishore • Tarun • TarunPlus</p>
+                      <p className="font-bold text-[#011a39]">Shishu • Kishore • Tarun • TarunPlus</p>
                       <p className="text-[11px] text-slate-600">Sanctioned through Banks, MFIs & NBFCs</p>
                     </div>
                     <span className="px-2.5 py-1 rounded bg-emerald-600 text-white font-bold text-[10px]">
@@ -159,7 +159,7 @@ export default function MUDRA2Home() {
                       key={idx}
                       onClick={() => setActiveBannerIdx(idx)}
                       className={`h-2 rounded-full transition-all ${
-                        activeBannerIdx === idx ? 'w-6 bg-[#0f2942]' : 'w-2 bg-slate-300'
+                        activeBannerIdx === idx ? 'w-6 bg-[#011a39]' : 'w-2 bg-slate-300'
                       }`}
                     ></button>
                   ))}
@@ -175,7 +175,7 @@ export default function MUDRA2Home() {
         <div className="max-w-7xl mx-auto px-4">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
             <div className="p-4 rounded-xl bg-slate-50 border border-slate-200">
-              <p className="text-2xl sm:text-3xl font-black text-[#0f2942]">
+              <p className="text-2xl sm:text-3xl font-black text-[#011a39]">
                 {cmsData.impactStats?.totalDisbursed || '₹33.5 Lakh Cr'}
               </p>
               <p className="text-xs font-semibold text-slate-600 mt-1">
@@ -184,7 +184,7 @@ export default function MUDRA2Home() {
             </div>
 
             <div className="p-4 rounded-xl bg-slate-50 border border-slate-200">
-              <p className="text-2xl sm:text-3xl font-black text-[#0f2942]">
+              <p className="text-2xl sm:text-3xl font-black text-[#011a39]">
                 {cmsData.impactStats?.totalAccounts || '46.2 Crore+'}
               </p>
               <p className="text-xs font-semibold text-slate-600 mt-1">
@@ -221,7 +221,7 @@ export default function MUDRA2Home() {
               <span className="px-3 py-1 rounded text-xs font-bold uppercase tracking-wider bg-amber-100 text-amber-900 border border-amber-300">
                 Statutory Framework
               </span>
-              <h2 className="text-2xl sm:text-3xl font-extrabold text-[#0f2942] mt-3">
+              <h2 className="text-2xl sm:text-3xl font-extrabold text-[#011a39] mt-3">
                 About MUDRA 2.0 (Pradhan Mantri MUDRA Yojana)
               </h2>
               <p className="text-slate-700 text-sm mt-3 leading-relaxed">
@@ -233,11 +233,11 @@ export default function MUDRA2Home() {
 
               <div className="grid grid-cols-2 gap-4 mt-6">
                 <div className="p-4 rounded-xl bg-white border border-slate-200 shadow-sm">
-                  <h4 className="font-bold text-[#0f2942] text-sm">🎯 Mission Statement</h4>
+                  <h4 className="font-bold text-[#011a39] text-sm">🎯 Mission Statement</h4>
                   <p className="text-xs text-slate-600 mt-1">Financial inclusion and economic empowerment of micro-entrepreneurs.</p>
                 </div>
                 <div className="p-4 rounded-xl bg-white border border-slate-200 shadow-sm">
-                  <h4 className="font-bold text-[#0f2942] text-sm">👁️ Vision 2030</h4>
+                  <h4 className="font-bold text-[#011a39] text-sm">👁️ Vision 2030</h4>
                   <p className="text-xs text-slate-600 mt-1">Build a robust MSME ecosystem driving GDP growth and job creation.</p>
                 </div>
               </div>
@@ -245,7 +245,7 @@ export default function MUDRA2Home() {
 
             <div className="lg:col-span-5 grid grid-cols-2 gap-4">
               <div className="p-5 rounded-xl bg-white border border-slate-200 shadow-sm">
-                <div className="w-10 h-10 rounded bg-[#0f2942] text-amber-400 flex items-center justify-center font-black text-sm mb-2">
+                <div className="w-10 h-10 rounded bg-[#011a39] text-amber-400 flex items-center justify-center font-black text-sm mb-2">
                   0%
                 </div>
                 <h4 className="font-bold text-slate-900 text-xs">Zero Collateral</h4>
@@ -253,7 +253,7 @@ export default function MUDRA2Home() {
               </div>
 
               <div className="p-5 rounded-xl bg-white border border-slate-200 shadow-sm">
-                <div className="w-10 h-10 rounded bg-[#0f2942] text-emerald-400 flex items-center justify-center font-black text-sm mb-2">
+                <div className="w-10 h-10 rounded bg-[#011a39] text-emerald-400 flex items-center justify-center font-black text-sm mb-2">
                   AI
                 </div>
                 <h4 className="font-bold text-slate-900 text-xs">AI Credit Scoring</h4>
@@ -261,7 +261,7 @@ export default function MUDRA2Home() {
               </div>
 
               <div className="p-5 rounded-xl bg-white border border-slate-200 shadow-sm">
-                <div className="w-10 h-10 rounded bg-[#0f2942] text-purple-400 flex items-center justify-center font-black text-sm mb-2">
+                <div className="w-10 h-10 rounded bg-[#011a39] text-purple-400 flex items-center justify-center font-black text-sm mb-2">
                   🎓
                 </div>
                 <h4 className="font-bold text-slate-900 text-xs">Skill Subvention</h4>
@@ -269,7 +269,7 @@ export default function MUDRA2Home() {
               </div>
 
               <div className="p-5 rounded-xl bg-white border border-slate-200 shadow-sm">
-                <div className="w-10 h-10 rounded bg-[#0f2942] text-cyan-400 flex items-center justify-center font-black text-sm mb-2">
+                <div className="w-10 h-10 rounded bg-[#011a39] text-cyan-400 flex items-center justify-center font-black text-sm mb-2">
                   ₹20L
                 </div>
                 <h4 className="font-bold text-slate-900 text-xs">Tarun Plus</h4>
@@ -290,7 +290,7 @@ export default function MUDRA2Home() {
             <span className="px-3 py-1 rounded text-xs font-bold uppercase tracking-wider bg-slate-100 text-slate-800 border border-slate-300">
               Loan Categories
             </span>
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-[#0f2942] mt-3">
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-[#011a39] mt-3">
               MUDRA Loan Products Overview
             </h2>
             <p className="mt-2 text-xs sm:text-sm text-slate-600">
@@ -310,13 +310,13 @@ export default function MUDRA2Home() {
               >
                 <div>
                   <div className="flex items-center justify-between mb-3">
-                    <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-[#0f2942] text-amber-400">
+                    <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-[#011a39] text-amber-400">
                       {scheme.name}
                     </span>
                     <span className="text-[10px] font-mono text-slate-500">{scheme.tenure}</span>
                   </div>
 
-                  <h3 className="text-lg font-bold text-[#0f2942]">
+                  <h3 className="text-lg font-bold text-[#011a39]">
                     {scheme.amount}
                   </h3>
                   <p className="text-xs text-slate-500 mt-1">
@@ -343,7 +343,7 @@ export default function MUDRA2Home() {
                   className={`w-full py-2.5 rounded-lg text-xs font-bold text-center transition-all ${
                     scheme.popular
                       ? 'bg-amber-500 hover:bg-amber-400 text-slate-950 shadow-sm'
-                      : 'bg-[#0f2942] hover:bg-[#153a5c] text-white'
+                      : 'bg-[#011a39] hover:bg-[#153a5c] text-white'
                   }`}
                 >
                   Apply Under {scheme.name}
@@ -362,7 +362,7 @@ export default function MUDRA2Home() {
               <span className="px-3 py-1 rounded text-xs font-bold uppercase tracking-wider bg-slate-200 text-slate-800">
                 Calculator
               </span>
-              <h2 className="text-2xl sm:text-3xl font-extrabold text-[#0f2942] mt-3">
+              <h2 className="text-2xl sm:text-3xl font-extrabold text-[#011a39] mt-3">
                 MUDRA EMI & Eligibility Calculator
               </h2>
               <p className="text-xs sm:text-sm text-slate-600 mt-2 mb-8">
@@ -373,7 +373,7 @@ export default function MUDRA2Home() {
                 <div>
                   <div className="flex items-center justify-between text-xs font-bold mb-2">
                     <span className="text-slate-700">Required Loan Amount:</span>
-                    <span className="text-lg font-black text-[#0f2942]">₹{loanAmount.toLocaleString('en-IN')}</span>
+                    <span className="text-lg font-black text-[#011a39]">₹{loanAmount.toLocaleString('en-IN')}</span>
                   </div>
                   <input
                     type="range"
@@ -382,7 +382,7 @@ export default function MUDRA2Home() {
                     step="10000"
                     value={loanAmount}
                     onChange={(e) => setLoanAmount(Number(e.target.value))}
-                    className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-[#0f2942]"
+                    className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-[#011a39]"
                   />
                   <div className="flex justify-between text-[10px] text-slate-500 mt-1 font-mono">
                     <span>₹10,000</span>
@@ -414,7 +414,7 @@ export default function MUDRA2Home() {
               <div className="p-7 rounded-2xl bg-white text-slate-900 shadow-md border-2 border-slate-200">
                 <div className="text-center">
                   <p className="text-xs font-bold text-slate-600 uppercase tracking-wider">Estimated Monthly EMI</p>
-                  <p className="text-4xl font-black text-[#0f2942] my-3">
+                  <p className="text-4xl font-black text-[#011a39] my-3">
                     ₹{calculateEMI().toLocaleString('en-IN')}<span className="text-xs text-slate-500 font-normal">/mo</span>
                   </p>
                   <p className="text-[11px] text-slate-600">Indicative rate ~9.5% p.a. • 0% processing fee</p>
@@ -424,7 +424,7 @@ export default function MUDRA2Home() {
                   <div className="mt-6 pt-6 border-t border-slate-200 space-y-2.5 text-xs">
                     <div className="flex items-center justify-between">
                       <span className="text-slate-600">Recommended Category:</span>
-                      <span className="font-bold text-[#0f2942] bg-amber-100 border border-amber-300 px-2.5 py-0.5 rounded">
+                      <span className="font-bold text-[#011a39] bg-amber-100 border border-amber-300 px-2.5 py-0.5 rounded">
                         {recommendedScheme.name}
                       </span>
                     </div>
@@ -443,7 +443,7 @@ export default function MUDRA2Home() {
 
                 <Link
                   to={createPageUrl('EntrepreneurOnboarding')}
-                  className="mt-6 w-full py-3 rounded-lg font-bold text-xs text-center bg-[#0f2942] hover:bg-[#153a5c] text-white flex items-center justify-center gap-2 uppercase tracking-wider transition-colors shadow-sm"
+                  className="mt-6 w-full py-3 rounded-lg font-bold text-xs text-center bg-[#011a39] hover:bg-[#153a5c] text-white flex items-center justify-center gap-2 uppercase tracking-wider transition-colors shadow-sm"
                 >
                   <span>Apply with Pre-approved Rate</span>
                   <ArrowRight className="w-4 h-4 text-amber-400" />
@@ -462,7 +462,7 @@ export default function MUDRA2Home() {
               <span className="px-3 py-1 rounded text-xs font-bold uppercase tracking-wider bg-slate-100 text-slate-800 border border-slate-300">
                 Beneficiary Impact
               </span>
-              <h2 className="text-2xl sm:text-3xl font-extrabold text-[#0f2942] mt-2">
+              <h2 className="text-2xl sm:text-3xl font-extrabold text-[#011a39] mt-2">
                 MUDRA Entrepreneur Success Stories
               </h2>
             </div>
@@ -474,7 +474,7 @@ export default function MUDRA2Home() {
                   onClick={() => setActiveStoryIdx(idx)}
                   className={`px-3 py-1.5 rounded text-xs font-bold transition-all ${
                     activeStoryIdx === idx
-                      ? 'bg-[#0f2942] text-white'
+                      ? 'bg-[#011a39] text-white'
                       : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
                   }`}
                 >
@@ -492,13 +492,13 @@ export default function MUDRA2Home() {
                   alt={stories[activeStoryIdx].name}
                   className="w-full h-72 object-cover rounded-xl border border-slate-300 shadow-sm"
                 />
-                <span className="absolute top-3 left-3 px-3 py-1 rounded bg-[#0f2942] text-amber-400 text-xs font-bold">
+                <span className="absolute top-3 left-3 px-3 py-1 rounded bg-[#011a39] text-amber-400 text-xs font-bold">
                   {stories[activeStoryIdx].loanCategory}
                 </span>
               </div>
 
               <div className="lg:col-span-7">
-                <h3 className="text-xl font-bold text-[#0f2942]">
+                <h3 className="text-xl font-bold text-[#011a39]">
                   {stories[activeStoryIdx].name} • {stories[activeStoryIdx].venture}
                 </h3>
                 <p className="text-xs text-slate-500 mb-3">📍 {stories[activeStoryIdx].location}</p>
@@ -529,7 +529,7 @@ export default function MUDRA2Home() {
         <div className="max-w-7xl mx-auto">
           <div className="text-center max-w-2xl mx-auto mb-10">
             <span className="text-xs font-bold text-slate-600 uppercase tracking-wider">Statutory Guarantee Partners</span>
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-[#0f2942] mt-1">
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-[#011a39] mt-1">
               Supported by Official Financial Bodies
             </h2>
             <p className="text-xs text-slate-600 mt-1">Direct reference links to key credit guarantee & refinancing institutions</p>
@@ -540,15 +540,15 @@ export default function MUDRA2Home() {
               href="https://www.sidbi.in/en/"
               target="_blank"
               rel="noopener noreferrer"
-              className="p-6 rounded-xl border border-slate-200 bg-white hover:border-[#0f2942] hover:shadow-md transition-all group"
+              className="p-6 rounded-xl border border-slate-200 bg-white hover:border-[#011a39] hover:shadow-md transition-all group"
             >
               <div className="flex items-center justify-between mb-3">
-                <div className="w-10 h-10 rounded bg-[#0f2942] text-white flex items-center justify-center font-bold text-xs">
+                <div className="w-10 h-10 rounded bg-[#011a39] text-white flex items-center justify-center font-bold text-xs">
                   SIDBI
                 </div>
-                <ExternalLink className="w-4 h-4 text-slate-400 group-hover:text-[#0f2942]" />
+                <ExternalLink className="w-4 h-4 text-slate-400 group-hover:text-[#011a39]" />
               </div>
-              <h3 className="font-bold text-base text-[#0f2942]">SIDBI Official Portal</h3>
+              <h3 className="font-bold text-base text-[#011a39]">SIDBI Official Portal</h3>
               <p className="text-xs text-slate-600 mt-1 leading-relaxed">
                 Small Industries Development Bank of India - Principal Financial Institution for promotion & financing of MSMEs.
               </p>
@@ -559,15 +559,15 @@ export default function MUDRA2Home() {
               href="https://www.cgtmse.in/"
               target="_blank"
               rel="noopener noreferrer"
-              className="p-6 rounded-xl border border-slate-200 bg-white hover:border-[#0f2942] hover:shadow-md transition-all group"
+              className="p-6 rounded-xl border border-slate-200 bg-white hover:border-[#011a39] hover:shadow-md transition-all group"
             >
               <div className="flex items-center justify-between mb-3">
-                <div className="w-10 h-10 rounded bg-[#0f2942] text-amber-400 flex items-center justify-center font-bold text-xs">
+                <div className="w-10 h-10 rounded bg-[#011a39] text-amber-400 flex items-center justify-center font-bold text-xs">
                   CGTMSE
                 </div>
-                <ExternalLink className="w-4 h-4 text-slate-400 group-hover:text-[#0f2942]" />
+                <ExternalLink className="w-4 h-4 text-slate-400 group-hover:text-[#011a39]" />
               </div>
-              <h3 className="font-bold text-base text-[#0f2942]">CGTMSE Coverage</h3>
+              <h3 className="font-bold text-base text-[#011a39]">CGTMSE Coverage</h3>
               <p className="text-xs text-slate-600 mt-1 leading-relaxed">
                 Credit Guarantee Fund Trust for Micro and Small Enterprises - Providing sovereign credit guarantee cover.
               </p>
@@ -578,15 +578,15 @@ export default function MUDRA2Home() {
               href="https://www.ncgtc.in/"
               target="_blank"
               rel="noopener noreferrer"
-              className="p-6 rounded-xl border border-slate-200 bg-white hover:border-[#0f2942] hover:shadow-md transition-all group"
+              className="p-6 rounded-xl border border-slate-200 bg-white hover:border-[#011a39] hover:shadow-md transition-all group"
             >
               <div className="flex items-center justify-between mb-3">
-                <div className="w-10 h-10 rounded bg-[#0f2942] text-cyan-400 flex items-center justify-center font-bold text-xs">
+                <div className="w-10 h-10 rounded bg-[#011a39] text-cyan-400 flex items-center justify-center font-bold text-xs">
                   NCGTC
                 </div>
-                <ExternalLink className="w-4 h-4 text-slate-400 group-hover:text-[#0f2942]" />
+                <ExternalLink className="w-4 h-4 text-slate-400 group-hover:text-[#011a39]" />
               </div>
-              <h3 className="font-bold text-base text-[#0f2942]">NCGTC Framework</h3>
+              <h3 className="font-bold text-base text-[#011a39]">NCGTC Framework</h3>
               <p className="text-xs text-slate-600 mt-1 leading-relaxed">
                 National Credit Guarantee Trustee Company Ltd. - Trustee entity managing credit guarantee funds.
               </p>

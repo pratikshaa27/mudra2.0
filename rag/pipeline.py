@@ -6,38 +6,130 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")
 
 from rag.retriever import RAGRetriever
 from rag.cache import RAGCache
+from rag.llm import (
+    generate_answer,
+    generate_answer_stream,
+    is_smalltalk,
+    looks_like_path,
+    DECLINE_MESSAGE,
+    SMALLTALK_RESPONSE,
+    LLMUnavailableError,
+)
+
+SERVICE_UNAVAILABLE_MESSAGE = (
+    "I'm having trouble reaching the answer engine right now. Please try again in a moment."
+)
+
 
 class RAGPipeline:
     def __init__(self):
         self.retriever = RAGRetriever()
         self.cache = RAGCache()
 
-    def query(self, user_query: str, top_k: int = 3) -> Dict[str, Any]:
-        cached_resp = self.cache.get(user_query)
-        if cached_resp:
+    def query(self, user_query: str) -> Dict[str, Any]:
+        if looks_like_path(user_query):
             return {
                 "query": user_query,
-                "answer": cached_resp,
-                "cached": True,
-                "sources": ["Cache-Hit"]
+                "answer": DECLINE_MESSAGE,
+                "chunks": [],
+                "sources": [],
+                "cached": False,
             }
 
-        chunks = self.retriever.retrieve(user_query, top_k=top_k)
-        sources = list(set([c["source"] for c in chunks]))
+        cached_answer = self.cache.get(user_query)
+        if cached_answer:
+            return {
+                "query": user_query,
+                "answer": cached_answer,
+                "cached": True,
+                "sources": [],
+            }
 
-        context_str = "\n---\n".join([f"[{c['source']}] {c['text']}" for c in chunks])
+        chunks = self.retriever.retrieve_relevant(user_query)
+        sources = list(dict.fromkeys(c["source"] for c in chunks))
+
+        # No retrieved context at all: decide locally instead of trusting the
+        # LLM to follow the CONTEXT-is-N/A decline rule every time — direct
+        # testing showed it doesn't always (e.g. "what is 2+2?" got answered
+        # "4" instead of declined). Small talk still gets a friendly reply;
+        # everything else with zero context is out of scope by definition.
+        if not chunks:
+            answer = SMALLTALK_RESPONSE if is_smalltalk(user_query) else DECLINE_MESSAGE
+            self.cache.set(user_query, answer)
+            return {
+                "query": user_query,
+                "answer": answer,
+                "chunks": chunks,
+                "sources": sources,
+                "cached": False,
+            }
+
+        try:
+            answer = generate_answer(user_query, chunks)
+        except LLMUnavailableError:
+            return {
+                "query": user_query,
+                "answer": SERVICE_UNAVAILABLE_MESSAGE,
+                "cached": False,
+                "sources": sources,
+                "error": True,
+            }
+
+        self.cache.set(user_query, answer)
 
         return {
             "query": user_query,
-            "context": context_str,
+            "answer": answer,
             "chunks": chunks,
             "sources": sources,
-            "cached": False
+            "cached": False,
         }
+
+    def query_stream(self, user_query: str):
+        """Generator yielding {"type": ...} events as the answer is produced,
+        so the caller can render the answer incrementally instead of waiting
+        for the full generation to finish."""
+        if looks_like_path(user_query):
+            yield {"type": "chunk", "text": DECLINE_MESSAGE}
+            yield {"type": "done", "sources": [], "cached": False}
+            return
+
+        cached_answer = self.cache.get(user_query)
+        if cached_answer:
+            yield {"type": "chunk", "text": cached_answer}
+            yield {"type": "done", "sources": [], "cached": True}
+            return
+
+        chunks = self.retriever.retrieve_relevant(user_query)
+        sources = list(dict.fromkeys(c["source"] for c in chunks))
+
+        if not chunks:
+            answer = SMALLTALK_RESPONSE if is_smalltalk(user_query) else DECLINE_MESSAGE
+            self.cache.set(user_query, answer)
+            yield {"type": "chunk", "text": answer}
+            yield {"type": "done", "sources": sources, "cached": False}
+            return
+
+        full_answer = ""
+
+        try:
+            for piece in generate_answer_stream(user_query, chunks):
+                full_answer += piece
+                yield {"type": "chunk", "text": piece}
+        except LLMUnavailableError:
+            yield {"type": "chunk", "text": SERVICE_UNAVAILABLE_MESSAGE}
+            yield {"type": "done", "sources": sources, "cached": False, "error": True}
+            return
+
+        full_answer = full_answer.strip() or DECLINE_MESSAGE
+        self.cache.set(user_query, full_answer)
+
+        yield {"type": "done", "sources": sources, "cached": False}
+
 
 if __name__ == "__main__":
     pipeline = RAGPipeline()
-    res = pipeline.query("What is Shishu loan limit?", top_k=2)
+    res = pipeline.query("What is Shishu loan limit?")
     print(f"Query: {res['query']}")
     print(f"Sources: {res['sources']}")
-    print(f"Context snippet: {res.get('context', res.get('answer'))[:200]}")
+    print(f"Answer: {res['answer']}")

@@ -93,7 +93,7 @@ function BankOfficerConsoleContent() {
         </div>
 
         {/* Summary Cards */}
-        <div className="grid grid-cols-4 gap-4 mb-6">
+        <div className="grid grid-cols-2 gap-4 mb-6 lg:grid-cols-4">
           <div className="bg-white rounded-lg shadow-md p-4">
             <div className="text-2xl font-bold text-blue-600">{applications.length}</div>
             <div className="text-sm text-gray-600">Pending Review</div>

@@ -21,7 +21,7 @@ export default function MockupSwitcher() {
             onClick={() => updateMockupTheme('mockup2')}
             className={`flex items-center gap-1.5 px-3 py-1 rounded-md text-xs font-semibold transition-all ${
               currentTheme === 'mockup2'
-                ? 'bg-[#0f2942] text-white border border-amber-500/50 shadow-md'
+                ? 'bg-[#011a39] text-white border border-amber-500/50 shadow-md'
                 : 'text-slate-300 hover:text-white hover:bg-slate-700/60'
             }`}
           >

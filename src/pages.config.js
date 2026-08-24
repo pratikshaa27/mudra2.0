@@ -27,6 +27,7 @@ import PMMYPortal from './pages/PMMYPortal';
 import POCScope from './pages/POCScope';
 import SkillTraining from './pages/SkillTraining';
 import SuccessStories from './pages/SuccessStories';
+import Sitemap from './pages/Sitemap';
 import __Layout from './Layout.jsx';
 
 export const PAGES = {
@@ -56,6 +57,7 @@ export const PAGES = {
     "POCScope": POCScope,
     "SkillTraining": SkillTraining,
     "SuccessStories": SuccessStories,
+    "Sitemap": Sitemap,
 }
 
 export const pagesConfig = {

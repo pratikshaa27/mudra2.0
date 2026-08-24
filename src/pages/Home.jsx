@@ -1,61 +1,83 @@
 import React from 'react';
 import Header from '../components/home/Header';
-import HeroSection from '../components/home/HeroSection';
+import HeroVideoBanner from '../components/home/HeroVideoBanner';
+import HeroSlideshow from '../components/home/HeroSlideshow';
+import SuccessStoriesCarousel from '../components/home/SuccessStoriesCarousel';
+import LatestUpdatesTicker from '../components/home/LatestUpdatesTicker';
+import ImpactDashboard from '../components/home/ImpactDashboard';
+import QuickLinks from '../components/home/QuickLinks';
 import AboutPMMY from '../components/home/AboutPMMY';
 import VisionMission from '../components/home/VisionMission';
 import LoanProducts from '../components/home/LoanProducts';
-import SuccessStoriesCarousel from '../components/home/SuccessStoriesCarousel';
-import ImpactStatistics from '../components/home/ImpactStatistics';
+import LoanJourney from '../components/home/LoanJourney';
+import FraudSafetyCenter from '../components/home/FraudSafetyCenter';
 import AnnouncementsNews from '../components/home/AnnouncementsNews';
 import SocialMediaFeed from '../components/home/SocialMediaFeed';
-import QuickLinks from '../components/home/QuickLinks';
 import Footer from '../components/home/Footer';
 import ChatBot from '../components/ChatBot';
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-[#070b14] transition-colors duration-300 relative overflow-hidden">
-      
-      {/* Global Taj Mahal Fixed Background Image Effect for Home Page */}
-      <div 
-        className="absolute inset-0 pointer-events-none bg-cover bg-center bg-fixed filter brightness-105 contrast-110 opacity-75 dark:opacity-55 z-0"
+    <div className="relative min-h-screen overflow-x-hidden bg-slate-50 transition-colors duration-300 dark:bg-[#021731]">
+
+      {/* Global heritage backdrop: a faint watermark, not a competing photo —
+          kept subtle so every section reads as a clean, high-contrast surface
+          like the reference institutional sites (SIDBI/CGTMSE/NCGTC). */}
+      <div
+        className="pointer-events-none fixed inset-0 z-0 bg-cover bg-center opacity-[0.05] dark:opacity-[0.04]"
         style={{ backgroundImage: `url('/photo/tajmahal.png')` }}
+        aria-hidden="true"
       />
-      <div className="absolute inset-0 pointer-events-none bg-gradient-to-b from-[#fffbeb]/70 via-white/50 to-[#fffbeb]/80 dark:from-[#070b14]/85 dark:via-[#070b14]/75 dark:to-[#070b14]/90 z-0" />
 
       <div className="relative z-10">
         {/* Navigation Header */}
         <Header />
 
-        {/* 1. Hero banner with CTA buttons */}
-        <HeroSection />
+         <main id="main-content">
+           {/* 1. Hero video banner with CTA buttons */}
+           <HeroVideoBanner />
 
-        {/* 2. About MUDRA */}
-        <AboutPMMY />
+           {/* 2. PMMY Success Stories */}
+           <SuccessStoriesCarousel />
 
-        {/* 2b. MUDRA Vision & Mission */}
-        <VisionMission />
+           {/* 2b. Latest updates ticker */}
+           <LatestUpdatesTicker />
 
-        {/* 3. Schemes overview */}
-        <LoanProducts />
+           {/* 2c. Impact slideshow + trust-stats strip */}
+           <HeroSlideshow />
 
-        {/* 4. Success stories carousel */}
-        <SuccessStoriesCarousel />
+           {/* 3. MUDRA Impact Dashboard — consolidated metric cards, trend chart,
+                  demographic reach and PAN-India footprint */}
+           <ImpactDashboard />
 
-        {/* 5. Impact statistics */}
-        <ImpactStatistics />
+           {/* 4. Quick links / resource hub cards */}
+           <QuickLinks />
 
-        {/* 6. Announcements and news */}
-        <AnnouncementsNews />
+           {/* 5. About MUDRA — pillars, process steps and achievements */}
+           <AboutPMMY />
 
-        {/* 7. Social media feed */}
-        <SocialMediaFeed />
+           {/* 6. MUDRA Vision & Mission */}
+           <VisionMission />
+
+           {/* 7. Schemes overview */}
+           <LoanProducts />
+
+           {/* 7b. Guided loan journey — eligibility, scheme, apply, track */}
+           <LoanJourney />
+
+           {/* 8. Fraud & Safety Center */}
+           <FraudSafetyCenter />
+
+           {/* 9. Announcements and news */}
+           <AnnouncementsNews />
+
+           {/* 10. Social media feed */}
+           <SocialMediaFeed />
+         </main>
 
         {/* 8. Chatbot widget */}
         <ChatBot />
 
-        {/* 9. Footer with quick links */}
-        <QuickLinks />
         <Footer />
       </div>
     </div>

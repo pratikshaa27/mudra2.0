@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { HelpCircle, ChevronDown, Search, Phone, Sparkles } from 'lucide-react';
+import { ChevronDown, Search, Phone, Sparkles } from 'lucide-react';
 import Header from '../components/home/Header';
 import Footer from '../components/home/Footer';
 import ChatBot from '../components/ChatBot';
@@ -109,16 +109,95 @@ export default function FAQ() {
   })).filter(cat => activeCategory === 'all' || cat.id === activeCategory);
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-[#070b14] text-slate-900 dark:text-slate-100 transition-colors duration-300 flex flex-col justify-between relative overflow-hidden">
-      
-      {/* Taj Mahal Fixed Background Image Effect */}
-      <div 
-        className="absolute inset-0 pointer-events-none bg-cover bg-center bg-fixed filter brightness-105 contrast-110 opacity-75 dark:opacity-55"
+    <div className="min-h-screen bg-slate-50 dark:bg-[#021731] text-slate-900 dark:text-slate-100 transition-colors duration-300 flex flex-col justify-between relative overflow-hidden">
+
+      {/* Global heritage backdrop: a faint watermark, not a competing photo —
+          kept subtle so every section reads as a clean, high-contrast surface
+          like the reference institutional sites (SIDBI/CGTMSE/NCGTC). */}
+      <div
+        className="pointer-events-none fixed inset-0 z-0 bg-cover bg-center opacity-[0.05] dark:opacity-[0.04]"
         style={{ backgroundImage: `url('/photo/tajmahal.png')` }}
+        aria-hidden="true"
       />
-      <div className="absolute inset-0 pointer-events-none bg-gradient-to-b from-[#fffbeb]/75 via-white/55 to-[#fffbeb]/85 dark:from-[#070b14]/85 dark:via-[#070b14]/75 dark:to-[#070b14]/90" />
 
       <Header />
+
+      {/* Hero Page Header with Ambient Animations — filled with the same
+          light-blue → accent → navy ramp traced by the S-curve below, so the
+          band and its border read as one continuous piece. Text switches to
+          white/gold here since it now sits on a saturated blue, not a pale
+          tint. */}
+      <div className="py-14 relative overflow-hidden bg-gradient-to-br from-[#075985] via-[#075985] to-[#021731]">
+
+        {/* Animated Background Blobs — white-toned so they read as a soft
+            highlight against the blue fill instead of blending into it. */}
+        <div className="absolute inset-0 pointer-events-none">
+          <motion.div
+            animate={{ scale: [1, 1.2, 1], opacity: [0.12, 0.22, 0.12], x: [0, 20, 0] }}
+            transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
+            className="absolute -top-20 -left-20 w-80 h-80 rounded-full bg-white/20 blur-3xl"
+          />
+          <motion.div
+            animate={{ scale: [1.2, 1, 1.2], opacity: [0.12, 0.2, 0.12], x: [0, -20, 0] }}
+            transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut', delay: 1 }}
+            className="absolute -bottom-20 -right-20 w-96 h-96 rounded-full bg-white/10 blur-3xl"
+          />
+        </div>
+
+        <div className="max-w-7xl mx-auto px-4 text-center relative z-10">
+          <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
+            <motion.span whileHover={{ scale: 1.05 }} className="inline-flex items-center gap-1.5 bg-[#f97316] text-white px-3 py-1 rounded-full text-[10px] font-black tracking-wider uppercase mb-2 shadow-sm">
+              <Sparkles size={12} className="text-white animate-pulse" />
+              <span>KNOWLEDGE BASE & SUPPORT</span>
+            </motion.span>
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-black text-white tracking-tight mb-2 [text-shadow:0_4px_18px_rgba(2,23,49,0.55)]">
+              Frequently Asked <span className="bg-gradient-to-r from-amber-200 via-amber-300 to-amber-400 bg-clip-text text-transparent">Questions</span>
+            </h1>
+            <p className="text-blue-50 max-w-3xl mx-auto text-sm sm:text-base font-semibold leading-snug mb-6 [text-shadow:0_2px_10px_rgba(2,23,49,0.5)]">
+              Clear answers regarding PMMY loan categories, zero-collateral guidelines, online application portals, and interest rate structures.
+            </p>
+
+            {/* Search Box */}
+            <div className="relative max-w-xl mx-auto pb-6">
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search questions (e.g. collateral, Shishu, documents, JanSamarth)..."
+                className="w-full pl-11 pr-4 py-3.5 rounded-2xl bg-white dark:bg-slate-900 border-2 border-white/40 dark:border-slate-800 text-slate-900 dark:text-white text-xs sm:text-sm font-semibold shadow-lg focus:border-blue-700 dark:focus:border-blue-400 outline-none transition-all"
+              />
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+            </div>
+          </motion.div>
+        </div>
+
+        {/* Dramatic filled S-curve — same treatment as the Home hero video's
+            bottom border: the fill masks the banner's straight edge with an
+            actual curved boundary into the page background, traced with the
+            light-blue → accent → navy gradient line. */}
+        <div className="pointer-events-none absolute inset-x-0 bottom-[-1px] z-10" aria-hidden="true">
+          <svg viewBox="0 0 1440 140" preserveAspectRatio="none" className="block h-14 w-full sm:h-24">
+            <defs>
+              <linearGradient id="faqHeroCurveBorder" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0%" stopColor="#7dd3fc" />
+                <stop offset="55%" stopColor="#00b6f0" />
+                <stop offset="100%" stopColor="#021731" />
+              </linearGradient>
+            </defs>
+            <path
+              d="M0,70 C360,0 720,140 1080,70 C1260,35 1350,20 1440,45 L1440,140 L0,140 Z"
+              className="fill-slate-50 dark:fill-[#021731]"
+            />
+            <path
+              d="M0,70 C360,0 720,140 1080,70 C1260,35 1350,20 1440,45"
+              fill="none"
+              stroke="url(#faqHeroCurveBorder)"
+              strokeWidth="7"
+              strokeLinecap="round"
+            />
+          </svg>
+        </div>
+      </div>
 
       {/* Ambient Animated Background Blobs */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
@@ -143,40 +222,6 @@ export default function FAQ() {
       </div>
 
       <main className="flex-1 max-w-7xl mx-auto px-4 py-12 w-full relative z-10">
-        
-        {/* Hero Page Header */}
-        <motion.div 
-          initial={{ opacity: 0, y: -25 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="text-center max-w-3xl mx-auto mb-12"
-        >
-          <motion.span 
-            whileHover={{ scale: 1.05 }}
-            className="inline-flex items-center gap-1.5 bg-[#f97316] text-white px-4 py-1 rounded-full text-xs font-black tracking-wider uppercase mb-3 shadow-sm"
-          >
-            <Sparkles size={14} className="text-white animate-pulse" />
-            <span>KNOWLEDGE BASE & SUPPORT</span>
-          </motion.span>
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-[#0f2942] dark:text-white tracking-tight mb-3">
-            Frequently Asked <span className="bg-gradient-to-r from-red-700 via-amber-600 to-amber-500 bg-clip-text text-transparent">Questions</span>
-          </h1>
-          <p className="text-slate-600 dark:text-slate-300 text-sm md:text-base font-semibold">
-            Clear answers regarding PMMY loan categories, zero-collateral guidelines, online application portals, and interest rate structures.
-          </p>
-
-          {/* Search Box */}
-          <div className="mt-8 relative max-w-xl mx-auto">
-            <input 
-              type="text"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search questions (e.g. collateral, Shishu, documents, JanSamarth)..."
-              className="w-full pl-11 pr-4 py-3.5 rounded-2xl bg-white dark:bg-slate-900 border-2 border-slate-200 dark:border-slate-800 text-slate-900 dark:text-white text-xs sm:text-sm font-semibold shadow-lg focus:border-red-700 dark:focus:border-amber-400 outline-none transition-all"
-            />
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
-          </div>
-        </motion.div>
 
         {/* Category Pills with Smooth Animated Active Pill */}
         <div className="flex items-center justify-center gap-2 flex-wrap mb-10">
@@ -193,7 +238,7 @@ export default function FAQ() {
               <motion.div
                 layoutId="activeFaqCategory"
                 transition={{ type: 'spring', stiffness: 450, damping: 35 }}
-                className="absolute inset-0 bg-red-800 dark:bg-amber-400 rounded-xl shadow-md z-[-1]"
+                className="absolute inset-0 bg-blue-800 dark:bg-blue-400 rounded-xl shadow-md z-[-1]"
               />
             )}
             All Questions
@@ -215,7 +260,7 @@ export default function FAQ() {
                   <motion.div
                     layoutId="activeFaqCategory"
                     transition={{ type: 'spring', stiffness: 450, damping: 35 }}
-                    className="absolute inset-0 bg-red-800 dark:bg-amber-400 rounded-xl shadow-md z-[-1]"
+                    className="absolute inset-0 bg-blue-800 dark:bg-blue-400 rounded-xl shadow-md z-[-1]"
                   />
                 )}
                 {cat.title}
@@ -238,7 +283,7 @@ export default function FAQ() {
               {filteredCategories.map((category, catIdx) => (
                 category.faqs.length > 0 && (
                   <div key={catIdx} className="space-y-4">
-                    <h3 className="text-xl font-black text-[#0f2942] dark:text-amber-400 border-b border-slate-200 dark:border-slate-800 pb-2">
+                    <h3 className="text-xl font-black text-[#011a39] dark:text-amber-400 border-b border-slate-200 dark:border-slate-800 pb-2">
                       {category.title}
                     </h3>
 
@@ -259,14 +304,14 @@ export default function FAQ() {
                             <button
                               type="button"
                               onClick={() => toggleFaq(globalIdx)}
-                              className="w-full text-left p-5 flex items-center justify-between gap-4 font-bold text-slate-900 dark:text-white text-xs sm:text-sm hover:text-red-700 dark:hover:text-amber-400 transition-colors"
+                              className="w-full text-left p-5 flex items-center justify-between gap-4 font-bold text-slate-900 dark:text-white text-xs sm:text-sm hover:text-blue-700 dark:hover:text-blue-400 transition-colors"
                             >
                               <span className="flex items-center gap-2">
                                 {faq.q}
                               </span>
                               <ChevronDown 
                                 size={18} 
-                                className={`shrink-0 text-slate-400 transition-transform duration-300 ${isOpen ? 'rotate-180 text-red-700 dark:text-amber-400' : ''}`}
+                                className={`shrink-0 text-slate-400 transition-transform duration-300 ${isOpen ? 'rotate-180 text-blue-700 dark:text-blue-400' : ''}`}
                               />
                             </button>
 
@@ -302,19 +347,19 @@ export default function FAQ() {
           className="max-w-4xl mx-auto mt-14 bg-amber-500/10 dark:bg-slate-900 p-6 rounded-3xl border-2 border-amber-300 dark:border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-lg"
         >
           <div className="flex items-center gap-3 text-xs sm:text-sm font-bold text-slate-900 dark:text-white">
-            <Phone className="text-red-700 dark:text-amber-400 shrink-0 animate-pulse" size={24} />
+            <Phone className="text-blue-700 dark:text-blue-400 shrink-0 animate-pulse" size={24} />
             <div>
               <p className="text-base font-black">Still have queries?</p>
-              <p className="text-slate-600 dark:text-slate-400">Call our official National Toll-Free Helpline: <strong className="text-red-800 dark:text-amber-400 font-black">1800-180-1111</strong></p>
+              <p className="text-slate-600 dark:text-slate-400">Call our official National Toll-Free Helpline: <strong className="text-blue-800 dark:text-blue-400 font-black">1800-180-1111</strong></p>
             </div>
           </div>
-          <motion.a 
+          <motion.a
             whileHover={{ scale: 1.05, y: -2 }}
             whileTap={{ scale: 0.95 }}
             href="https://www.jansamarth.in/login"
             target="_blank"
             rel="noopener noreferrer"
-            className="px-5 py-2.5 bg-red-800 hover:bg-red-900 text-white text-xs font-black rounded-xl shadow-md transition-all shrink-0"
+            className="px-5 py-2.5 bg-blue-800 hover:bg-blue-900 text-white text-xs font-black rounded-xl shadow-md transition-all shrink-0"
           >
             Apply Online via JanSamarth
           </motion.a>

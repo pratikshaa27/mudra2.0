@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Download, ChevronRight, FileText, ShieldAlert, Search, CheckCircle2 } from 'lucide-react';
+import { Download, FileText, ShieldAlert, CheckCircle2 } from 'lucide-react';
 import Header from '../components/home/Header';
 import Footer from '../components/home/Footer';
 import ChatBot from '../components/ChatBot';
@@ -183,19 +183,94 @@ export default function Careers() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-[#070b14] text-slate-900 dark:text-slate-100 transition-colors duration-300 flex flex-col justify-between relative overflow-hidden">
-      
-      {/* Taj Mahal Fixed Background Image Effect */}
-      <div 
-        className="absolute inset-0 pointer-events-none bg-cover bg-center bg-fixed filter brightness-105 contrast-110 opacity-75 dark:opacity-55"
+    <div className="min-h-screen bg-slate-50 dark:bg-[#021731] text-slate-900 dark:text-slate-100 transition-colors duration-300 flex flex-col justify-between relative overflow-hidden">
+
+      {/* Global heritage backdrop: a faint watermark, not a competing photo —
+          kept subtle so every section reads as a clean, high-contrast surface. */}
+      <div
+        className="pointer-events-none fixed inset-0 z-0 bg-cover bg-center opacity-[0.05] dark:opacity-[0.04]"
         style={{ backgroundImage: `url('/photo/tajmahal.png')` }}
+        aria-hidden="true"
       />
-      <div className="absolute inset-0 pointer-events-none bg-gradient-to-b from-[#fffbeb]/75 via-white/55 to-[#fffbeb]/85 dark:from-[#070b14]/85 dark:via-[#070b14]/75 dark:to-[#070b14]/90" />
 
       <Header />
 
       {/* Main Content */}
-      <main className="flex-1 max-w-6xl mx-auto px-4 py-10 w-full space-y-8 relative z-10">
+      <main className="flex-1 w-full relative z-10">
+
+        {/* Hero Page Header with Ambient Animations — filled with the same
+            light-blue → accent → navy ramp traced by the S-curve below, so the
+            band and its border read as one continuous piece. Text switches to
+            white/gold here since it now sits on a saturated blue, not a pale
+            tint. Sits directly in the unconstrained <main>, so it bleeds the
+            full viewport width instead of being capped by the content column. */}
+        <div className="py-14 relative overflow-hidden bg-gradient-to-br from-[#075985] via-[#075985] to-[#021731]">
+
+          {/* Animated Background Blobs — white-toned so they read as a soft
+              highlight against the blue fill instead of blending into it. */}
+          <div className="absolute inset-0 pointer-events-none">
+            <motion.div
+              animate={{
+                scale: [1, 1.2, 1],
+                opacity: [0.12, 0.22, 0.12],
+                x: [0, 20, 0]
+              }}
+              transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
+              className="absolute -top-20 -left-20 w-80 h-80 rounded-full bg-white/20 blur-3xl"
+            />
+            <motion.div
+              animate={{
+                scale: [1.2, 1, 1.2],
+                opacity: [0.12, 0.2, 0.12],
+                x: [0, -20, 0]
+              }}
+              transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut', delay: 1 }}
+              className="absolute -bottom-20 -right-20 w-96 h-96 rounded-full bg-white/10 blur-3xl"
+            />
+          </div>
+
+          <div className="max-w-7xl mx-auto px-4 text-center relative z-10">
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+            >
+              <motion.span
+                whileHover={{ scale: 1.05 }}
+                className="inline-flex items-center gap-1.5 bg-[#f97316] text-white px-3 py-1 rounded-full text-[10px] font-black tracking-wider uppercase mb-2 shadow-sm"
+              >
+                <FileText size={12} className="text-white animate-pulse" />
+                <span>Careers at MUDRA</span>
+              </motion.span>
+              <h1 className="text-2xl sm:text-3xl md:text-4xl font-black text-white tracking-tight mb-2 [text-shadow:0_4px_18px_rgba(2,23,49,0.55)]">
+                Recruitment & Careers
+              </h1>
+              <p className="pb-5 text-blue-50 max-w-3xl mx-auto text-sm sm:text-base font-semibold leading-snug [text-shadow:0_2px_10px_rgba(2,23,49,0.5)]">
+                Explore current and past recruitment notices, detailed advertisements, and application forms for professional positions at MUDRA.
+              </p>
+            </motion.div>
+          </div>
+
+          {/* Dramatic filled S-curve — same treatment as the Home hero video's
+              bottom border: the fill masks the banner's straight edge with an
+              actual curved boundary into the page background, traced with the
+              light-blue → accent → navy gradient line. */}
+          <div className="pointer-events-none absolute inset-x-0 bottom-[-1px] z-10" aria-hidden="true">
+            <svg viewBox="0 0 1440 140" preserveAspectRatio="none" className="block h-14 w-full sm:h-24">
+              <defs>
+                <linearGradient id="careersHeroCurveBorder" x1="0" y1="0" x2="1" y2="0">
+                  <stop offset="0%" stopColor="#7dd3fc" />
+                  <stop offset="55%" stopColor="#00b6f0" />
+                  <stop offset="100%" stopColor="#021731" />
+                </linearGradient>
+              </defs>
+              <path d="M0,70 C360,0 720,140 1080,70 C1260,35 1350,20 1440,45 L1440,140 L0,140 Z" className="fill-slate-50 dark:fill-[#021731]" />
+              <path d="M0,70 C360,0 720,140 1080,70 C1260,35 1350,20 1440,45" fill="none" stroke="url(#careersHeroCurveBorder)" strokeWidth="7" strokeLinecap="round" />
+            </svg>
+          </div>
+        </div>
+
+        <div className="max-w-6xl mx-auto px-4 py-10 w-full space-y-8">
 
         {/* Recruitment Groups */}
         <div className="space-y-6">
@@ -207,8 +282,8 @@ export default function Careers() {
               transition={{ duration: 0.3, delay: groupIdx * 0.04 }}
               className="bg-white dark:bg-slate-900 rounded-3xl overflow-hidden shadow-lg border border-slate-200 dark:border-slate-800"
             >
-              {/* Deep Red Official Header */}
-              <div className="bg-gradient-to-r from-red-800 to-red-900 px-6 py-4 flex items-center justify-between text-white">
+              {/* Deep Blue Official Header */}
+              <div className="bg-gradient-to-r from-blue-800 to-blue-900 px-6 py-4 flex items-center justify-between text-white">
                 <h2 className="text-sm sm:text-base font-black tracking-wide flex items-center gap-2">
                   <FileText size={18} className="text-amber-400" />
                   <span>{group.title}</span>
@@ -230,7 +305,7 @@ export default function Careers() {
                         {item.name}
                       </p>
                       <div className="flex items-center gap-3 text-[11px] text-slate-500 dark:text-slate-400 font-bold">
-                        <span className="px-2 py-0.5 rounded bg-red-100 dark:bg-red-950/80 text-red-800 dark:text-amber-400 font-black text-[10px] uppercase">
+                        <span className="px-2 py-0.5 rounded bg-blue-100 dark:bg-blue-950/80 text-blue-800 dark:text-blue-400 font-black text-[10px] uppercase">
                           {item.type || 'PDF'}
                         </span>
                         <span>Date: {item.date}</span>
@@ -275,13 +350,15 @@ export default function Careers() {
           </div>
 
           <a
-            href="https://www.jansamarth.in/login"
+            href=""
             target="_blank"
             rel="noopener noreferrer"
             className="px-6 py-3 rounded-2xl bg-amber-400 hover:bg-amber-300 text-slate-950 text-xs font-black shadow-lg transition-all shrink-0 text-center uppercase tracking-wide border border-amber-300"
           >
             ENROLL TRAINED PARTNER
           </a>
+        </div>
+
         </div>
 
         {/* Download Modal Indicator */}
@@ -291,12 +368,12 @@ export default function Careers() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 20 }}
-              className="fixed bottom-6 right-6 z-50 bg-slate-900 text-white px-5 py-3.5 rounded-2xl border border-emerald-500 shadow-2xl flex items-center gap-3"
+              className="fixed inset-x-4 bottom-6 z-50 flex items-center gap-3 rounded-2xl border border-emerald-500 bg-slate-900 px-5 py-3.5 text-white shadow-2xl sm:inset-x-auto sm:left-auto sm:right-6 sm:max-w-sm"
             >
-              <CheckCircle2 size={20} className="text-emerald-400 animate-bounce" />
-              <div className="text-xs font-bold">
+              <CheckCircle2 size={20} className="shrink-0 text-emerald-400 animate-bounce" />
+              <div className="min-w-0 text-xs font-bold">
                 <p className="text-emerald-400 font-black">Downloading Document...</p>
-                <p className="text-slate-300 truncate max-w-xs">{downloadModalItem.name}</p>
+                <p className="truncate text-slate-300">{downloadModalItem.name}</p>
               </div>
             </motion.div>
           )}

@@ -97,13 +97,15 @@ function MobilePreviewContent() {
         </div>
 
         <div className="flex justify-center">
-          {/* Mobile Frame */}
-          <div className="relative">
+          {/* Mobile Frame — width-capped at a real phone's size but shrinks to
+              fit narrower viewports via aspect-ratio, so the preview itself
+              never causes horizontal overflow on small screens. */}
+          <div className="relative mx-auto aspect-[375/700] w-full max-w-[375px]">
             {/* Phone Frame */}
-            <div className="w-[375px] h-[700px] bg-gray-900 rounded-[3rem] p-4 shadow-2xl">
+            <div className="h-full w-full bg-gray-900 rounded-[3rem] p-4 shadow-2xl">
               {/* Notch */}
               <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-40 h-7 bg-gray-900 rounded-b-3xl z-10"></div>
-              
+
               {/* Screen */}
               <div className="bg-white h-full rounded-[2.5rem] overflow-hidden">
                 {/* Status Bar */}

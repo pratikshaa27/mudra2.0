@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Bell, FileText, ShieldAlert, Calendar, Download, ExternalLink, Sparkles, ChevronRight, Megaphone } from 'lucide-react';
+import { Bell, FileText, ShieldAlert, Calendar, Download, Megaphone, ChevronRight } from 'lucide-react';
+import { Reveal } from '@/components/ui/reveal';
+import SectionHeading from '@/components/ui/section-heading';
+import { useLanguage } from '../LanguageContext';
 
 const announcementsData = {
   news: [
@@ -68,128 +71,133 @@ const announcementsData = {
 };
 
 export default function AnnouncementsNews() {
+  const { t } = useLanguage();
+  const tabs = [
+    { id: 'news', label: t('newsTabPress'), icon: Bell },
+    { id: 'circulars', label: t('newsTabCirculars'), icon: FileText },
+    { id: 'advisories', label: t('newsTabAdvisories'), icon: ShieldAlert }
+  ];
   const [activeTab, setActiveTab] = useState('news');
   const items = announcementsData[activeTab] || [];
 
   return (
-    <section className="py-20 bg-transparent text-slate-900 dark:text-slate-100 transition-colors duration-300 relative border-t border-slate-200 dark:border-slate-800">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6">
-        
-        {/* Centered Uniform Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="text-center mb-12"
-        >
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-red-100 dark:bg-red-950/60 border border-red-300 dark:border-red-800 text-red-900 dark:text-amber-300 text-xs font-black tracking-wider uppercase mb-3">
-            <Megaphone size={14} className="text-red-700 dark:text-amber-400" />
-            <span>OFFICIAL BULLETIN & NOTIFICATIONS</span>
+    <section className="section-y relative border-t border-slate-200 text-slate-900 dark:border-slate-800 dark:text-slate-100">
+      <div className="shell">
+        {/* CGTMSE-style statutory advisory ribbon — surfaces the fraud warning
+            that already exists in the 'advisories' tab up front, so it is
+            immediately visible like the reference site's caution banner. */}
+        <Reveal variant="up">
+          <div className="mb-8 rounded-xl border border-amber-200 bg-amber-50/80 px-4 py-3.5 text-xs font-semibold text-amber-900 dark:border-amber-900/40 dark:bg-amber-950/30 dark:text-amber-200 md:py-4 md:text-sm">
+            <ShieldAlert className="inline-block h-4 w-4 shrink-0 text-amber-700 dark:text-amber-400" aria-hidden="true" />
+            <span className="ml-2 font-bold">{t('newsAdvisoryLabel')}</span>
+            <span className="ml-1">
+              {t('newsAdvisoryText')}
+              (<a
+                href="https://www.jansamarth.in/login"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="underline decoration-amber-700/50 dark:decoration-amber-400/50"
+              >
+                www.jansamarth.in
+              </a>
+              ). Report fraud to <strong className="font-extrabold">1800-180-1111</strong>.
+            </span>
           </div>
+        </Reveal>
 
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-slate-900 dark:text-white mb-4 tracking-tight">
-            Announcements & Latest News
-          </h2>
-
-          <div className="w-32 h-1.5 bg-gradient-to-r from-red-700 via-amber-500 to-red-700 mx-auto rounded-full mb-6"></div>
-
-          <p className="text-slate-600 dark:text-slate-300 max-w-3xl mx-auto text-sm md:text-base font-semibold leading-relaxed mb-8">
-            Stay informed with official press releases, government circulars, statutory vigilance alerts, and policy guidelines directly from MUDRA.
-          </p>
-
-          {/* Centered Tab Switcher with Sliding Pill Animation */}
-          <div className="inline-flex items-center gap-1 bg-slate-100 dark:bg-slate-800 p-1.5 rounded-full border border-slate-200 dark:border-slate-700 text-xs font-black shadow-inner">
-            {[
-              { id: 'news', label: 'Press News', icon: Bell },
-              { id: 'circulars', label: 'Official Circulars', icon: FileText },
-              { id: 'advisories', label: 'Statutory Advisories', icon: ShieldAlert }
-            ].map((tab) => {
+        <SectionHeading
+          eyebrow={t('newsEyebrow')}
+          icon={Megaphone}
+          title={t('newsTitle')}
+          description={t('newsDescription')}
+        >
+          <div
+            role="tablist"
+            aria-label="Announcement categories"
+            className="no-scrollbar fade-scroll-x inline-flex max-w-full items-center gap-1 overflow-x-auto rounded-full border border-slate-200 bg-slate-100 p-1.5 text-xs font-bold dark:border-slate-700 dark:bg-slate-800"
+          >
+            {tabs.map((tab) => {
               const isSelected = activeTab === tab.id;
               const TabIcon = tab.icon;
               return (
                 <button
                   key={tab.id}
                   type="button"
+                  role="tab"
+                  aria-selected={isSelected}
                   onClick={() => setActiveTab(tab.id)}
-                  className={`relative z-10 px-4 py-2 rounded-full transition-colors flex items-center gap-1.5 ${
+                  className={`relative flex items-center gap-1.5 whitespace-nowrap rounded-full px-4 py-2 transition-colors duration-200 ${
                     isSelected
-                      ? 'text-white dark:text-slate-950 font-black'
-                      : 'text-slate-700 dark:text-slate-300 hover:text-slate-950 dark:hover:text-white'
+                      ? 'text-white dark:text-slate-950'
+                      : 'text-slate-600 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white'
                   }`}
                 >
                   {isSelected && (
-                    <motion.div
+                    <motion.span
                       layoutId="newsActivePill"
-                      transition={{ type: 'spring', stiffness: 450, damping: 32 }}
-                      className="absolute inset-0 bg-red-800 dark:bg-amber-400 rounded-full shadow-md z-[-1]"
+                      transition={{ type: 'spring', stiffness: 420, damping: 34 }}
+                      className="absolute inset-0 -z-10 rounded-full bg-blue-700 shadow-sm dark:bg-blue-400"
                     />
                   )}
-                  <TabIcon size={14} />
+                  <TabIcon size={13} aria-hidden="true" />
                   <span>{tab.label}</span>
                 </button>
               );
             })}
           </div>
-        </motion.div>
+        </SectionHeading>
 
-        {/* Content List */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
           <AnimatePresence mode="wait">
-            {items.map((item) => (
-              <motion.div
+            {items.map((item, idx) => (
+              <motion.article
                 key={item.id}
-                initial={{ opacity: 0, y: 30, scale: 0.95 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, y: -20, scale: 0.95 }}
-                transition={{ duration: 0.35 }}
-                whileHover={{ y: -6, scale: 1.02, boxShadow: "0 20px 40px -10px rgba(0,0,0,0.12)" }}
-                className="bg-amber-50/50 dark:bg-slate-900/90 rounded-3xl p-6 border-2 border-amber-200/80 dark:border-slate-800 hover:border-amber-400 dark:hover:border-amber-500 transition-all flex flex-col justify-between relative overflow-hidden group"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -12 }}
+                transition={{ duration: 0.3, delay: idx * 0.07, ease: [0.22, 1, 0.36, 1] }}
+                className="card-lift card-accent-top relative flex flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white p-6 shadow-sm hover:border-blue-300 dark:border-slate-800 dark:bg-slate-900 dark:hover:border-blue-600/50"
               >
-                {/* Top accent glow line on hover */}
-                <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-red-700 via-amber-500 to-red-700 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-
-                <div>
-                  <div className="flex items-center justify-between gap-2 mb-3">
-                    <span className="text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-full bg-red-100 dark:bg-red-950/60 text-red-800 dark:text-amber-300 border border-red-200 dark:border-red-800">
-                      {item.tag}
-                    </span>
-                    <div className="flex items-center gap-1 text-[11px] font-bold text-slate-500 dark:text-slate-400">
-                      <Calendar size={12} />
-                      <span>{item.date}</span>
-                    </div>
-                  </div>
-
-                  <h3 className="text-base font-black text-slate-900 dark:text-white mb-2 leading-snug">
-                    {item.title}
-                  </h3>
-
-                  <p className="text-xs text-slate-600 dark:text-slate-300 font-semibold leading-relaxed mb-4">
-                    {item.desc}
-                  </p>
+                <div className="mb-3.5 flex flex-wrap items-center justify-between gap-2">
+                  <span className="rounded-full border border-blue-200 bg-blue-50 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide text-blue-700 dark:border-blue-900 dark:bg-blue-950/50 dark:text-blue-300">
+                    {item.tag}
+                  </span>
+                  <span className="flex items-center gap-1 text-[11px] font-semibold text-slate-500 dark:text-slate-400">
+                    <Calendar size={12} aria-hidden="true" />
+                    <span>{item.date}</span>
+                  </span>
                 </div>
 
-                <div className="pt-3 border-t border-slate-200/60 dark:border-slate-800 flex items-center justify-between text-xs font-black">
+                <h3 className="mb-2.5 text-base font-extrabold leading-snug text-slate-900 dark:text-white">
+                  {item.title}
+                </h3>
+
+                <p className="mb-5 text-xs font-medium leading-relaxed text-slate-600 dark:text-slate-300">
+                  {item.desc}
+                </p>
+
+                <div className="mt-auto flex items-center justify-between border-t border-slate-100 pt-4 dark:border-slate-800">
                   <a
                     href="#"
-                    className="text-red-800 dark:text-amber-400 hover:underline flex items-center gap-1"
+                    className="link-underline group flex items-center gap-1 text-xs font-bold text-blue-700 dark:text-blue-400"
                   >
-                    <span>Read Circular</span>
-                    <ChevronRight size={14} />
+                    <span>{t('newsReadCircular')}</span>
+                    <ChevronRight size={14} className="transition-transform duration-200 group-hover:translate-x-0.5" aria-hidden="true" />
                   </a>
 
                   <button
                     type="button"
-                    className="p-2 rounded-lg bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-amber-500 hover:text-slate-950 transition-colors shadow-sm"
+                    className="flex h-10 w-10 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-600 transition-all duration-200 hover:-translate-y-0.5 hover:border-blue-400 hover:text-blue-700 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300"
                     title="Download Official Notice"
+                    aria-label="Download Official Notice"
                   >
-                    <Download size={14} />
+                    <Download size={14} aria-hidden="true" />
                   </button>
                 </div>
-              </motion.div>
+              </motion.article>
             ))}
           </AnimatePresence>
         </div>
-
       </div>
     </section>
   );

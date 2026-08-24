@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   ArrowRight, 
@@ -7,19 +7,21 @@ import {
   FolderCheck, 
   Sparkles, 
   Image as GalleryIcon, 
-  CheckCircle2, 
   X
 } from 'lucide-react';
+import { Reveal, RevealGroup } from '@/components/ui/reveal';
+import SectionHeading from '@/components/ui/section-heading';
+import { useLanguage } from '../LanguageContext';
 
-const linkCategories = [
+const buildLinkCategories = (t) => [
   {
     id: 'portals',
-    title: 'QUICK LINKS',
-    subtitle: 'Institutional Portals',
+    title: t('quickLinksCatPortalsTitle'),
+    subtitle: t('quickLinksCatPortalsSubtitle'),
     icon: ExternalLink,
-    color: 'from-[#0f2942] to-[#1e40af]',
+    color: 'from-[#011a39] to-blue-600',
     badgeBg: 'bg-blue-500/10 text-blue-700 dark:text-blue-300 border-blue-200 dark:border-blue-800',
-    description: 'Direct access to government refinancing portals, lending gateways, and rural credit networks.',
+    description: t('quickLinksCatPortalsDesc'),
     items: [
       { label: 'SIDBI Refinance Portal', href: 'https://www.sidbi.in/', desc: 'Apex financial institution for MSME refinancing', type: 'PORTAL' },
       { label: 'Stand Up India Portal', href: 'https://www.standupmitra.in/', desc: 'Greenfield enterprise loans for SC/ST & Women', type: 'PORTAL' },
@@ -31,12 +33,12 @@ const linkCategories = [
   },
   {
     id: 'reports',
-    title: 'PMMY REPORTS',
-    subtitle: 'Financial Performance',
+    title: t('quickLinksCatReportsTitle'),
+    subtitle: t('quickLinksCatReportsSubtitle'),
     icon: FileText,
     color: 'from-emerald-800 to-teal-900',
     badgeBg: 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800',
-    description: 'Audited financial progress statistics, state-wise loan disbursements, and MLI performance metrics.',
+    description: t('quickLinksCatReportsDesc'),
     items: [
       { label: 'PMMY Annual Performance 2023-24', href: 'https://www.mudra.org.in', desc: 'Comprehensive financial year statistical bulletin', type: 'PDF • 4.8 MB' },
       { label: 'Cumulative Progress Report', href: 'https://www.mudra.org.in', desc: 'Decade performance summary since 2015 inception', type: 'PDF • 6.2 MB' },
@@ -48,12 +50,12 @@ const linkCategories = [
   },
   {
     id: 'documents',
-    title: 'DOCUMENTS',
-    subtitle: 'Official Publications',
+    title: t('quickLinksCatDocumentsTitle'),
+    subtitle: t('quickLinksCatDocumentsSubtitle'),
     icon: FolderCheck,
     color: 'from-amber-700 to-amber-900',
     badgeBg: 'bg-amber-500/10 text-amber-800 dark:text-amber-300 border-amber-200 dark:border-amber-800',
-    description: 'Official circulars, coffee table books, MSME policy frameworks, and success story compendiums.',
+    description: t('quickLinksCatDocumentsDesc'),
     items: [
       { label: 'Coffee Table Book - MUDRA Udyamis', href: 'https://www.mudra.org.in', desc: 'High-res commemorative volume of Indian entrepreneurs', type: 'PDF • 12.4 MB' },
       { label: 'Grassroots Success Stories Vol I', href: 'https://www.mudra.org.in', desc: 'First-hand stories of micro enterprise founders', type: 'PDF • 8.1 MB' },
@@ -64,12 +66,12 @@ const linkCategories = [
   },
   {
     id: 'events',
-    title: 'EVENTS & MEDIA',
-    subtitle: 'Visual Highlights',
+    title: t('quickLinksCatEventsTitle'),
+    subtitle: t('quickLinksCatEventsSubtitle'),
     icon: GalleryIcon,
     color: 'from-red-800 to-rose-950',
     badgeBg: 'bg-red-500/10 text-red-700 dark:text-red-300 border-red-200 dark:border-red-800',
-    description: 'Press bulletins, photo archives from national loan melas, and MSME award ceremonies.',
+    description: t('quickLinksCatEventsDesc'),
     items: [
       { label: 'National MUDRA Loan Melas 2026', href: 'https://www.mudra.org.in', desc: '500+ district credit disbursement camps', type: 'EVENT' },
       { label: 'National MSME Awards Ceremony', href: 'https://www.mudra.org.in', desc: 'Recognizing top grassroots micro enterprises', type: 'GALLERY' },
@@ -81,174 +83,158 @@ const linkCategories = [
 ];
 
 export default function QuickLinks() {
+  const { t } = useLanguage();
+  const linkCategories = buildLinkCategories(t);
   const [selectedDoc, setSelectedDoc] = useState(null);
+  const closeButtonRef = useRef(null);
+
+  useEffect(() => {
+    if (!selectedDoc) return undefined;
+
+    const onKeyDown = (e) => {
+      if (e.key === 'Escape') setSelectedDoc(null);
+    };
+
+    document.addEventListener('keydown', onKeyDown);
+    document.body.style.overflow = 'hidden';
+    closeButtonRef.current?.focus();
+
+    return () => {
+      document.removeEventListener('keydown', onKeyDown);
+      document.body.style.overflow = '';
+    };
+  }, [selectedDoc]);
 
   return (
-    <section className="py-20 bg-transparent text-slate-900 dark:text-slate-100 transition-colors duration-300 relative border-t border-slate-200 dark:border-slate-800">
-      
-      {/* Glow Ambient Orbs */}
-      <div className="absolute top-1/3 left-10 w-96 h-96 bg-amber-400/10 rounded-full blur-3xl pointer-events-none"></div>
-      <div className="absolute bottom-10 right-10 w-96 h-96 bg-red-600/10 rounded-full blur-3xl pointer-events-none"></div>
+    <section className="section-y relative border-t border-slate-200 text-slate-900 dark:border-slate-800 dark:text-slate-100">
+      <div className="pointer-events-none absolute left-10 top-1/3 h-96 w-96 rounded-full bg-blue-400/8 blur-3xl" aria-hidden="true" />
+      <div className="pointer-events-none absolute bottom-10 right-10 h-96 w-96 rounded-full bg-blue-600/8 blur-3xl" aria-hidden="true" />
 
-      <div className="max-w-7xl mx-auto px-4 relative z-10">
-        
-        {/* Centered Uniform Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="text-center mb-14"
-        >
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-amber-100 dark:bg-amber-950/60 border border-amber-300 dark:border-amber-800 text-amber-900 dark:text-amber-300 text-xs font-black tracking-wider uppercase mb-3">
-            <Sparkles size={14} className="text-amber-600 dark:text-amber-400" />
-            <span>RESOURCE HUB & DIRECTORY</span>
-          </div>
+      <div className="shell relative">
+        <SectionHeading
+          eyebrow={t('quickLinksEyebrow')}
+          icon={Sparkles}
+          title={t('quickLinksTitle')}
+          description={t('quickLinksDescription')}
+        />
 
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-slate-900 dark:text-white mb-4 tracking-tight">
-            Essential Links & Official Reports
-          </h2>
-
-          <div className="w-32 h-1.5 bg-gradient-to-r from-red-700 via-amber-500 to-red-700 mx-auto rounded-full mb-6"></div>
-
-          <p className="text-slate-600 dark:text-slate-300 max-w-3xl mx-auto text-sm md:text-base font-semibold leading-relaxed">
-            Direct access to government refinancing portals, annual statistical data, scheme circulars, and official MSME publications.
-          </p>
-        </motion.div>
-
-        {/* Animated Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <RevealGroup stagger={90} className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-4">
           {linkCategories.map((category, idx) => (
-            <motion.div
-              key={category.id}
-              initial={{ opacity: 0, y: 35, scale: 0.95 }}
-              whileInView={{ opacity: 1, y: 0, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ delay: idx * 0.12, duration: 0.5, ease: 'easeOut' }}
-              whileHover={{ 
-                y: -10, 
-                scale: 1.02,
-                boxShadow: "0 25px 50px -12px rgba(15, 41, 66, 0.25)" 
-              }}
-              className="bg-white dark:bg-slate-900 rounded-3xl p-6 border-2 border-slate-200 dark:border-slate-800 hover:border-amber-400 dark:hover:border-amber-500/70 transition-all flex flex-col justify-between group relative overflow-hidden"
-            >
-              {/* Subtle Card Glow Line on Hover */}
-              <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-red-700 via-amber-500 to-red-700 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            <Reveal key={category.id} index={idx} className="h-full">
+              <article className="card-lift card-accent-top group relative flex h-full flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white p-6 shadow-sm hover:border-blue-300 dark:border-slate-800 dark:bg-slate-900 dark:hover:border-blue-600/50">
 
-              <div>
-                {/* Animated Header Badge & Icon */}
-                <div className="flex items-center justify-between mb-5">
-                  <motion.div 
-                    whileHover={{ rotate: 12, scale: 1.15 }}
-                    transition={{ type: 'spring', stiffness: 300 }}
-                    className={`w-13 h-13 w-12 h-12 rounded-2xl bg-gradient-to-br ${category.color} text-white flex items-center justify-center shadow-md`}
-                  >
-                    <category.icon size={22} />
-                  </motion.div>
-                  
-                  <span className={`text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-full border ${category.badgeBg}`}>
+                <div className="mb-5 flex items-start justify-between gap-3">
+                  <span className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br ${category.color} text-white shadow-sm transition-transform duration-300 group-hover:scale-105`}>
+                    <category.icon size={21} aria-hidden="true" />
+                  </span>
+
+                  <span className={`rounded-full border px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide ${category.badgeBg}`}>
                     {category.subtitle}
                   </span>
                 </div>
 
-                <h3 className="text-xl font-black text-slate-900 dark:text-white mb-2 tracking-tight group-hover:text-red-800 dark:group-hover:text-amber-400 transition-colors">
+                <h3 className="mb-2 text-lg font-extrabold tracking-tight text-slate-900 transition-colors duration-200 group-hover:text-blue-700 dark:text-white dark:group-hover:text-blue-400">
                   {category.title}
                 </h3>
-                <p className="text-[11px] text-slate-500 dark:text-slate-400 font-semibold mb-4 leading-relaxed">
+
+                <p className="mb-4 text-[11px] font-medium leading-relaxed text-slate-500 dark:text-slate-400">
                   {category.description}
                 </p>
 
-                {/* Animated List of Resource Items */}
-                <ul className="space-y-2">
+                <ul className="space-y-1">
                   {category.items.map((item, itemIdx) => (
-                    <motion.li 
-                      key={itemIdx}
-                      whileHover={{ x: 5 }}
-                      transition={{ duration: 0.15 }}
-                    >
+                    <li key={itemIdx}>
                       <button
                         type="button"
                         onClick={() => setSelectedDoc(item)}
-                        className="w-full text-left flex items-center justify-between p-2.5 rounded-xl text-slate-800 dark:text-slate-200 hover:text-red-800 dark:hover:text-amber-400 hover:bg-amber-50/80 dark:hover:bg-slate-800/80 font-bold text-xs transition-all group/item border border-transparent hover:border-amber-200 dark:hover:border-slate-700"
+                        className="group/item flex w-full items-center justify-between gap-2 rounded-lg border border-transparent px-2.5 py-2 text-left text-xs font-semibold text-slate-700 transition-all duration-200 hover:translate-x-0.5 hover:border-blue-200 hover:bg-blue-50/80 hover:text-blue-700 dark:text-slate-200 dark:hover:border-slate-700 dark:hover:bg-slate-800/80 dark:hover:text-blue-400"
                       >
-                        <span className="truncate pr-2">{item.label}</span>
-                        <div className="flex items-center gap-1 shrink-0">
-                          <span className="text-[9px] font-black px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 group-hover/item:bg-red-800 group-hover/item:text-white transition-colors">
+                        <span className="truncate pr-1">{item.label}</span>
+                        <span className="flex shrink-0 items-center gap-1">
+                          <span className="rounded bg-slate-100 px-1.5 py-0.5 text-[9px] font-bold text-slate-500 transition-colors duration-200 group-hover/item:bg-blue-700 group-hover/item:text-white dark:bg-slate-800 dark:text-slate-400">
                             {item.type}
                           </span>
-                          <ArrowRight size={13} className="opacity-0 -translate-x-2 group-hover/item:opacity-100 group-hover/item:translate-x-0 transition-all text-amber-500" />
-                        </div>
+                          <ArrowRight size={12} className="text-blue-600 opacity-0 transition-all duration-200 group-hover/item:translate-x-0.5 group-hover/item:opacity-100" aria-hidden="true" />
+                        </span>
                       </button>
-                    </motion.li>
+                    </li>
                   ))}
                 </ul>
-              </div>
 
-              {/* Card Footer Button */}
-              <div className="pt-4 mt-4 border-t border-slate-100 dark:border-slate-800">
-                <a 
-                  href="https://www.mudra.org.in"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center justify-between text-xs font-black text-red-800 dark:text-amber-400 uppercase tracking-wider group/link"
-                >
-                  <span>Explore Directory</span>
-                  <motion.div 
-                    whileHover={{ x: 4 }}
-                    className="w-8 h-8 rounded-full bg-amber-50 dark:bg-slate-800 flex items-center justify-center group-hover/link:bg-red-800 group-hover/link:text-white transition-colors shadow-sm"
+                <div className="mt-auto border-t border-slate-100 pt-4 dark:border-slate-800">
+                  <a 
+                    href="https://www.mudra.org.in"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group/link flex items-center justify-between text-xs font-bold uppercase tracking-wide text-blue-700 dark:text-blue-400"
                   >
-                    <ArrowRight size={14} />
-                  </motion.div>
-                </a>
-              </div>
-            </motion.div>
+                    <span>{t('quickLinksExploreDirectory')}</span>
+                    <span className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-50 transition-all duration-200 group-hover/link:translate-x-0.5 group-hover/link:bg-blue-700 group-hover/link:text-white dark:bg-slate-800">
+                      <ArrowRight size={14} aria-hidden="true" />
+                    </span>
+                  </a>
+                </div>
+              </article>
+            </Reveal>
           ))}
-        </div>
-
+        </RevealGroup>
       </div>
 
-      {/* Interactive Detail Modal Drawer */}
+      {/* Resource detail dialog */}
       <AnimatePresence>
         {selectedDoc && (
-          <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md">
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.18 }}
+            className="fixed inset-0 z-[9999] flex items-center justify-center bg-slate-950/70 p-4 backdrop-blur-sm"
+            onClick={() => setSelectedDoc(null)}
+          >
             <motion.div
-              initial={{ opacity: 0, scale: 0.9, y: 20 }}
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="resource-dialog-title"
+              initial={{ opacity: 0, scale: 0.97, y: 12 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.9, y: 20 }}
-              transition={{ duration: 0.2 }}
-              className="bg-white dark:bg-slate-900 rounded-3xl max-w-lg w-full p-6 md:p-8 border-2 border-slate-200 dark:border-slate-800 shadow-2xl relative"
+              exit={{ opacity: 0, scale: 0.97, y: 12 }}
+              transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
+              onClick={(e) => e.stopPropagation()}
+              className="relative w-full max-w-lg rounded-2xl border border-slate-200 bg-white p-6 shadow-2xl dark:border-slate-800 dark:bg-slate-900 md:p-8"
             >
               <button
+                ref={closeButtonRef}
                 type="button"
                 onClick={() => setSelectedDoc(null)}
-                className="absolute top-5 right-5 z-20 w-9 h-9 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-red-800 hover:text-white transition-colors flex items-center justify-center border border-slate-200 dark:border-slate-700"
+                className="absolute right-5 top-5 z-20 flex h-9 w-9 items-center justify-center rounded-full border border-slate-200 bg-slate-100 text-slate-700 transition-colors duration-200 hover:bg-blue-700 hover:text-white dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300"
                 aria-label="Close modal"
               >
-                <X size={18} />
+                <X size={18} aria-hidden="true" />
               </button>
 
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-100 dark:bg-red-950/60 text-red-800 dark:text-amber-400 text-xs font-black uppercase tracking-wider mb-4 border border-red-200 dark:border-red-800">
-                <FileText size={14} />
+              <span className="eyebrow mb-4">
+                <FileText size={13} aria-hidden="true" />
                 <span>OFFICIAL RESOURCE</span>
-              </div>
+              </span>
 
-              <h3 className="text-2xl font-black text-slate-900 dark:text-white mb-2 tracking-tight">
+              <h3 id="resource-dialog-title" className="mb-3 mt-1 text-2xl font-extrabold tracking-tight text-slate-900 dark:text-white">
                 {selectedDoc.label}
               </h3>
 
-              <p className="text-xs font-semibold text-slate-600 dark:text-slate-300 mb-6 bg-amber-50 dark:bg-slate-800 p-4 rounded-2xl border border-amber-200 dark:border-slate-700">
+              <p className="mb-5 rounded-xl border border-slate-200 bg-slate-50 p-4 text-xs font-medium leading-relaxed text-slate-600 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300">
                 {selectedDoc.desc}
               </p>
 
-              <div className="flex items-center justify-between text-xs font-extrabold text-slate-500 dark:text-slate-400 mb-6 px-3 py-2 bg-slate-50 dark:bg-slate-800/60 rounded-xl">
+              <div className="mb-6 flex items-center justify-between rounded-lg bg-slate-50 px-3 py-2.5 text-xs font-bold text-slate-500 dark:bg-slate-800/60 dark:text-slate-400">
                 <span>File Format / Gateway:</span>
-                <span className="text-red-800 dark:text-amber-400 font-black">{selectedDoc.type}</span>
+                <span className="text-blue-700 dark:text-blue-400">{selectedDoc.type}</span>
               </div>
 
-              <div className="flex items-center justify-end gap-3 pt-4 border-t border-slate-100 dark:border-slate-800">
+              <div className="flex flex-wrap items-center justify-end gap-3 border-t border-slate-100 pt-5 dark:border-slate-800">
                 <button
                   type="button"
                   onClick={() => setSelectedDoc(null)}
-                  className="px-5 py-2.5 rounded-xl text-xs font-bold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                  className="btn text-xs text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800"
                 >
                   Close
                 </button>
@@ -258,18 +244,16 @@ export default function QuickLinks() {
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={() => setSelectedDoc(null)}
-                  className="px-6 py-2.5 rounded-xl bg-red-800 hover:bg-red-900 text-white font-black text-xs shadow-lg transition-all flex items-center gap-2"
+                  className="btn btn-primary text-xs"
                 >
                   <span>Open Resource</span>
-                  <ExternalLink size={15} />
+                  <ExternalLink size={14} className="btn-icon" aria-hidden="true" />
                 </a>
               </div>
-
             </motion.div>
-          </div>
+          </motion.div>
         )}
       </AnimatePresence>
-
     </section>
   );
 }

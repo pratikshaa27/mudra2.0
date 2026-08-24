@@ -109,7 +109,7 @@ function AICreditScoreContent() {
         <div className="bg-white rounded-lg shadow-md p-8 mb-6">
           <div className="text-center mb-6">
             <div className="text-sm text-gray-600 mb-2">Your AI Credit Score</div>
-            <div className={`text-7xl font-bold ${getScoreColor(score)} mb-2`}>{score}</div>
+            <div className={`text-5xl sm:text-6xl md:text-7xl font-bold ${getScoreColor(score)} mb-2`}>{score}</div>
             <div className="text-gray-500 text-lg">out of 900</div>
             <div className={`inline-block px-4 py-2 rounded-full mt-3 ${
               score >= 750 ? 'bg-green-100 text-green-700' :

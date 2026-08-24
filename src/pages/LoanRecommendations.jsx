@@ -72,7 +72,7 @@ function LoanRecommendationsContent() {
             </div>
           </div>
           
-          <div className="grid grid-cols-3 gap-4 mb-4">
+          <div className="grid grid-cols-1 gap-4 mb-4 sm:grid-cols-3">
             <div className="bg-white/20 rounded-lg p-3">
               <div className="text-sm text-green-100">Loan Amount</div>
               <div className="text-xl font-bold">₹{recommended.recommendedAmount.toLocaleString('en-IN')}</div>
