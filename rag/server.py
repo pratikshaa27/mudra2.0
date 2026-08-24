@@ -81,6 +81,6 @@ def rag_query():
 
 if __name__ == "__main__":
     get_pipeline()
-    port = int(os.environ.get("RAG_SERVER_PORT", 8080))
+    port = int(os.environ.get("PORT", os.environ.get("RAG_SERVER_PORT", 8080)))
     print(f"MUDRA RAG API server running on http://localhost:{port}")
     app.run(host="0.0.0.0", port=port, threaded=True)
